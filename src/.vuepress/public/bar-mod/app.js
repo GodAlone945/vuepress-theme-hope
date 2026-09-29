@@ -189,30 +189,68 @@ function landHelpers(){
 function buildArmLandLua(s){
   if(!s.landUnits||!s.armLand)return "";
   const p=[landHelpers()];
-  p.push('  -- ARM: charged single-target energy weapons; strong alpha, slower cycles, little AoE.\n');
+  p.push('  -- ARM: charged single-target energy weapons; strong alpha, long cycles, low splash.\n');
+
+  -- Bots
   p.push('  W("armham","arm_ham",{name="Charged T1 Beam",weapontype="BeamLaser",gravityaffected=false,range=440,reloadtime=3.8,beamtime=0.18,areaofeffect=12,energypershot=100,weaponvelocity=1800,thickness=2.2,corethickness=0.24,laserflaresize=5,rgbcolor="0.35 0.7 1",rgbcolor2="0.9 0.98 1",explosiongenerator="custom:laserhit-small-blue",damage={default=260,vtol=20}})\n');
   p.push('  W("armwar","armwar_laser",{name="Dual Charged Combat Laser",range=360,reloadtime=1.2,beamtime=0.18,areaofeffect=8,energypershot=70,thickness=2.2,corethickness=0.2,damage={default=220,vtol=22}})\n');
   p.push('  W("armzeus","lightning",{name="Charged Lightning Lance",range=320,burst=6,burstrate=0.05,reloadtime=3.2,energypershot=22,customparams={spark_maxunits="0",spark_range="0",spark_forkdamage="0"},damage={default=75}})\n');
   p.push('  W("armfido","bfido",{name="Long-range Pulse Laser",weapontype="BeamLaser",gravityaffected=false,range=725,reloadtime=7.5,beamtime=0.16,areaofeffect=16,energypershot=350,weaponvelocity=2400,thickness=2.8,corethickness=0.3,laserflaresize=6,rgbcolor="0.3 0.65 1",rgbcolor2="0.9 0.98 1",explosiongenerator="custom:laserhit-medium-blue",damage={default=700,vtol=60}})\n');
   p.push('  W("armsnipe","armsnipe_weapon",{name="Extreme Charged Sniper Laser",range=1100,reloadtime=14,beamtime=0.12,energypershot=900,damage={default=4200,commanders=1400}})\n');
   p.push('  W("armmav","armmav_weapon",{name="Heavy Pulse Beam",weapontype="BeamLaser",gravityaffected=false,range=430,reloadtime=3.2,beamtime=0.2,areaofeffect=12,energypershot=300,weaponvelocity=2200,thickness=3.2,corethickness=0.32,laserflaresize=6,rgbcolor="0.25 0.6 1",rgbcolor2="0.95 1 1",explosiongenerator="custom:laserhit-medium-blue",impulsefactor=0,damage={default=950,vtol=100}})\n');
+
+  -- T1 Vehicles: fast chassis, but fire in deliberate high-energy pulses.
+  p.push('  W("armflash","emgx",{name="Pulse EM Cannon",burst=1,reloadtime=0.9,range=220,areaofeffect=8,damage={default=78,vtol=16}})\n');
+  p.push('  W("armpincer","arm_pincer_gauss",{name="Charged Amphibious Beam",weapontype="BeamLaser",gravityaffected=false,range=340,reloadtime=3.0,beamtime=0.16,areaofeffect=8,energypershot=90,weaponvelocity=1800,thickness=2.0,corethickness=0.2,rgbcolor="0.3 0.65 1",rgbcolor2="0.9 0.98 1",explosiongenerator="custom:laserhit-small-blue",damage={default=240,vtol=25}})\n');
+  p.push('  W("armstump","arm_lightcannon",{name="Medium Pulse Beam",weapontype="BeamLaser",gravityaffected=false,range=390,reloadtime=2.8,beamtime=0.18,areaofeffect=12,energypershot=120,weaponvelocity=1900,thickness=2.4,corethickness=0.24,rgbcolor="0.3 0.65 1",rgbcolor2="0.95 1 1",explosiongenerator="custom:laserhit-small-blue",damage={default=270,vtol=30}})\n');
+  p.push('  W("armart","tawf113_weapon",{range=760,reloadtime=6.2,areaofeffect=60,accuracy=120,damage={default=360,vtol=35}})\n');
+  p.push('  W("armjanus","janus_rocket",{range=430,reloadtime=10.5,areaofeffect=100,damage={default=700,vtol=90}})\n');
+
+  -- T2 Vehicles: expensive shots should remove priority targets, not erase swarms.
+  p.push('  W("armcroc","arm_triton",{name="Amphibious Heavy Pulse Beam",weapontype="BeamLaser",gravityaffected=false,range=550,reloadtime=4.5,beamtime=0.22,areaofeffect=20,energypershot=300,weaponvelocity=2200,thickness=3.2,corethickness=0.3,rgbcolor="0.25 0.6 1",rgbcolor2="0.95 1 1",explosiongenerator="custom:laserhit-medium-blue",damage={default=720,vtol=65}})\n');
+  p.push('  W("armlatnk","lightning",{range=330,burst=5,burstrate=0.05,reloadtime=3.2,energypershot=30,customparams={spark_maxunits="0",spark_range="0",spark_forkdamage="0"},damage={default=82}})\n');
+  p.push('  W("armbull","arm_bull",{name="Heavy Breakthrough Beam",weapontype="BeamLaser",gravityaffected=false,range=500,reloadtime=4.5,beamtime=0.24,areaofeffect=20,energypershot=520,weaponvelocity=2400,thickness=4.0,corethickness=0.4,laserflaresize=7,rgbcolor="0.22 0.58 1",rgbcolor2="0.95 1 1",explosiongenerator="custom:laserhit-large-blue",damage={default=1200,vtol=120}})\n');
+  p.push('  W("armgremlin","armgremlin_gauss",{name="Cloaked Assassin Beam",weapontype="BeamLaser",gravityaffected=false,range=320,reloadtime=7.5,beamtime=0.12,areaofeffect=8,energypershot=420,weaponvelocity=2600,thickness=2.6,corethickness=0.25,rgbcolor="0.3 0.7 1",rgbcolor2="1 1 1",explosiongenerator="custom:laserhit-medium-blue",damage={default=850,vtol=80}})\n');
+  p.push('  W("armmart","arm_artillery",{range=900,reloadtime=6.5,areaofeffect=100,accuracy=90,damage={default=650,vtol=55}})\n');
+  p.push('  W("armmerl","armtruck_rocket",{range=1450,reloadtime=22,areaofeffect=120,damage={default=3000,vtol=250}})\n');
   return wrapModule(p.join(""));
 }
 function buildCorLandLua(s){
   if(!s.landUnits||!s.corLand)return "";
   const p=[landHelpers()];
-  p.push('  -- COR: slower, heavier, fire/explosive frontline pressure.\n');
+  p.push('  -- COR: armor, flame and blast pressure. Strong when committed; deliberately slower to reposition.\n');
+
+  -- Bots
   p.push('  U("corthud",{health=1300}) W("corthud","arm_ham",{areaofeffect=48,reloadtime=1.6,damage={default=120,vtol=20}})\n');
   p.push('  U("corpyro",{health=1250}) W("corpyro","flamethrower",{range=220,areaofeffect=64,reloadtime=1.15,burst=16,burstrate=0.05,firestarter=100,damage={default=21,subs=7}})\n');
   p.push('  U("corcan",{health=7500,speed=35}) W("corcan","cor_canlaser",{reloadtime=0.9,damage={default=330,vtol=60}})\n');
   p.push('  U("corsumo",{health=18500,speed=20}) W("corsumo","corsumo_weapon",{reloadtime=0.65,damage={default=360,vtol=75}})\n');
   p.push('  U("cormort",{health=1100}) W("cormort","cor_mort",{range=850,reloadtime=1.8,areaofeffect=72,edgeeffectiveness=0.28,damage={default=150,vtol=15}})\n');
+
+  -- T1 Vehicles
+  p.push('  U("corgator",{health=950,speed=80}) W("corgator","gator_laserx",{range=225,reloadtime=0.72,beamtime=0.12,damage={default=82,vtol=15}})\n');
+  p.push('  U("corgarp",{health=1650,speed=55}) W("corgarp","arm_pincer_gauss",{areaofeffect=20,reloadtime=1.55,damage={default=135,vtol=24}})\n');
+  p.push('  U("corraid",{health=2350,speed=66}) W("corraid","arm_lightcannon",{areaofeffect=68,reloadtime=1.25,damage={default=125,vtol=24}})\n');
+  p.push('  U("corlevlr",{health=1800,speed=36}) W("corlevlr","corlevlr_weapon",{range=320,reloadtime=2.0,areaofeffect=180,edgeeffectiveness=0.45,impulsefactor=2.8,damage={default=250,vtol=40}})\n');
+  p.push('  U("corwolv",{health=900,speed=44}) W("corwolv","corwolv_gun",{range=730,reloadtime=7.5,areaofeffect=155,edgeeffectiveness=0.3,damage={default=430,vtol=45}})\n');
+
+  -- T2 Vehicles
+  p.push('  U("corsala",{health=2500,speed=65}) W("corsala","cor_heat_laser",{range=350,reloadtime=1.15,burst=10,areaofeffect=56,damage={default=22}})\n');
+  p.push('  U("correap",{health=6500,speed=58}) W("correap","cor_reap",{range=420,reloadtime=0.75,areaofeffect=84,damage={default=145,vtol=28}})\n');
+  p.push('  U("corparrow",{health=7600,speed=44}) W("corparrow","cor_parrow",{range=590,reloadtime=2.0,areaofeffect=195,edgeeffectiveness=0.4,damage={default=490,vtol=80}})\n');
+  p.push('  U("corgol",{health=10500,speed=31}) W("corgol","cor_gol",{range=650,reloadtime=4.0,areaofeffect=340,edgeeffectiveness=0.45,damage={default=1200,vtol=150}})\n');
+  p.push('  U("corban",{health=3200,speed=49}) W("corban","banisher",{range=820,reloadtime=8.5,areaofeffect=165,edgeeffectiveness=0.4,damage={default=1250},customparams={area_onhit_ceg="fire-area-150-repeat",area_onhit_damageceg="burnflamel-gen",area_onhit_resistance="fire",area_onhit_damage="120",area_onhit_range="140",area_onhit_time="6"}})\n');
+  p.push('  U("cormart",{health=1500,speed=52}) W("cormart","cor_artillery",{range=850,reloadtime=5.5,areaofeffect=190,edgeeffectiveness=0.35,damage={default=560,vtol=60}})\n');
+  p.push('  U("corvroc",{health=1650}) W("corvroc","cortruck_rocket",{range=1340,reloadtime=17.5,areaofeffect=190,edgeeffectiveness=0.35,damage={default=2200},customparams={area_onhit_ceg="fire-area-100-repeat",area_onhit_damageceg="burnflamel-gen",area_onhit_resistance="fire",area_onhit_damage="80",area_onhit_range="100",area_onhit_time="5"}})\n');
+  p.push('  U("cortrem",{health=3600,speed=34}) W("cortrem","tremor_spread_fire",{range=1470,reloadtime=0.55,areaofeffect=230,edgeeffectiveness=0.3,damage={default=230}})\n');
   return wrapModule(p.join(""));
 }
 function buildLegLandLua(s){
   if(!s.landUnits||!s.legLand)return "";
   const p=[landHelpers()];
-  p.push('  -- LEG: sustained pressure. Individual hits are modest; uptime, heat rays and suppression create value.\n');
+  p.push('  -- LEG: sustained pressure. Frequent fire, heat-ray uptime and selected slowing tools reward continuous contact.\n');
+
+  -- Bots
   p.push('  W("leggob","semiauto",{range=280,burst=4,burstrate=0.07,reloadtime=0.55,damage={default=10,vtol=3}})\n');
   p.push('  W("leglob","close_plasma",{range=400,reloadtime=0.75,areaofeffect=24,damage={default=45,vtol=12}})\n');
   p.push('  W("legkark","heat_ray",{range=380,reloadtime=0.45,beamtime=0.35,damage={default=70,vtol=16}})\n');
@@ -221,16 +259,37 @@ function buildLegLandLua(s){
   p.push('  W("legshot","legion_riot_cannon_t2",{range=300,reloadtime=1.5,areaofeffect=160,impulsefactor=3,damage={default=240,subs=90,vtol=35}})\n');
   p.push('  W("legsrail","railgunt2",{range=850,reloadtime=1.8,energypershot=180,damage={default=300,commanders=150}})\n');
   p.push('  W("legaheattank","heat_ray",{range=475,energypershot=18,damage={default=36,vtol=10},customparams={sweepfire_firetime="3.2",sweepfire_reloadtime="2.2",turretspeedx="65",turretspeedy="105"}})\n');
+
+  -- T1 Vehicles
+  p.push('  W("leghades","legion_shotgun",{range=225,reloadtime=1.25,projectiles=5,damage={default=10,vtol=3}})\n');
+  p.push('  W("leghades","gauss",{range=225,reloadtime=1.4,damage={default=55,vtol=15}})\n');
+  p.push('  W("leghelios","heat_ray",{range=340,reloadtime=0.55,beamtime=0.38,damage={default=78,vtol=18}})\n');
+  p.push('  W("leggat","armmg_weapon",{range=380,burst=10,burstrate=0.05,reloadtime=0.35,damage={default=9,vtol=3}})\n');
+  p.push('  W("legbar","clusternapalm",{range=550,reloadtime=3.2,areaofeffect=105,damage={default=45,subs=8,vtol=8},customparams={area_onhit_damage="40",area_onhit_range="55",area_onhit_time="5"}})\n');
+  p.push('  W("legrail","railgun",{range=680,reloadtime=1.6,energypershot=80,damage={default=85,commanders=45}})\n');
+  p.push('  W("legamphtank","leg_amph_gauss",{range=325,reloadtime=0.75,damage={default=80,vtol=18}})\n');
+
+  -- T2 Vehicles
+  p.push('  W("legmrv","quickshot_cannon",{range=260,burst=4,burstrate=0.12,reloadtime=1.3,areaofeffect=28,damage={default=45}})\n');
+  p.push('  W("legaskirmtank","legmgplasma",{range=620,burst=5,burstrate=0.16,reloadtime=1.2,areaofeffect=52,damage={default=55}})\n');
+  p.push('  W("legfloat","legfloat_gauss",{range=570,reloadtime=1.0,areaofeffect=24,damage={default=140}})\n');
+  p.push('  W("legfloat","legfloat_gatling",{range=420,burst=8,burstrate=0.05,reloadtime=0.3,damage={default=6,vtol=2}})\n');
+  p.push('  W("legmed","legmed_missile",{range=1000,burst=6,burstrate=0.25,reloadtime=6,areaofeffect=50,damage={default=320,commanders=160}})\n');
+  p.push('  W("legamcluster","cluster_artillery",{range=930,reloadtime=3.2,areaofeffect=115,damage={default=220,subs=55,vtol=55},customparams={cluster_number="4"}})\n');
+  p.push('  W("legamcluster","cluster_munition",{areaofeffect=95,damage={default=75,lboats=75,subs=14,vtol=14}})\n');
+  p.push('  W("legavroc","armtruck_rocket",{range=1300,reloadtime=5.5,areaofeffect=120,damage={default=700,vtol=80}})\n');
+  p.push('  W("leginf","rapidnapalm",{burst=8,burstrate=0.14,reloadtime=4.5,areaofeffect=130,damage={default=50,subs=12,vtol=12},customparams={area_onhit_damage="45",area_onhit_range="65",area_onhit_time="5"}})\n');
+
   if(s.legSlow){
     p.push('  local opts=(Spring.GetModOptions and Spring.GetModOptions()) or {} local emp=opts.emprework==true or opts.emprework==1 or opts.emprework=="1" or opts.emprework=="true"\n');
     p.push('  if emp then\n');
+    p.push('    W("leghades","legion_shotgun",{paralyzer=true,paralyzetime=1,damage={default=14,vtol=4}})\n');
     p.push('    W("legkark","legion_shotgun",{paralyzer=true,paralyzetime=1,damage={default=18,vtol=6}})\n');
     p.push('    W("legshot","legion_riot_cannon_t2",{paralyzer=true,paralyzetime=1,damage={default=280,subs=110,vtol=40}})\n');
     p.push('  end\n');
   }
   return wrapModule(p.join(""));
 }
-
 function buildUltimateLua(s){
   if(!s.ultimate)return "";
   const p=[];
