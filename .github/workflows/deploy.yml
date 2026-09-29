@@ -1,38 +1,31 @@
-name: Build and Deploy VuePress
+name: Build VuePress
 
 on:
-  # vuepress-theme-hope 的 main 分支有新提交时执行
   push:
     branches:
       - main
-
-  # 支持在 Actions 页面手动执行
   workflow_dispatch:
 
 permissions:
   contents: read
 
 concurrency:
-  group: vuepress-production-deploy
+  group: vuepress-build
   cancel-in-progress: true
 
 jobs:
-  build-and-deploy:
-    name: Build and deploy website
+  build:
+    name: Validate website build
     runs-on: ubuntu-latest
-
     steps:
-      # 1. 拉取 VuePress 源码仓库
       - name: Checkout source repository
         uses: actions/checkout@v6
 
-      # 2. 安装 pnpm
       - name: Setup pnpm
         uses: pnpm/action-setup@v6
         with:
           version: 10
 
-      # 3. 安装 Node.js
       - name: Setup Node.js
         uses: actions/setup-node@v6
         with:
@@ -40,55 +33,11 @@ jobs:
           cache: pnpm
           cache-dependency-path: pnpm-lock.yaml
 
-      # 4. 安装项目依赖
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      # 5. 构建 VuePress Theme Hope
       - name: Build VuePress
         run: pnpm docs:build
 
-      # 6. 检查构建产物
       - name: Verify build output
-        run: |
-          if [ ! -f "./src/.vuepress/dist/index.html" ]; then
-            echo "Build output not found: src/.vuepress/dist/index.html"
-            exit 1
-          fi
-
-      # 7. 拉取 GodAlone945.github.io 仓库
-      - name: Checkout website repository
-        uses: actions/checkout@v6
-        with:
-          repository: GodAlone945/GodAlone945.github.io
-          ref: main
-          token: ${{ secrets.DEPLOY_TOKEN }}
-          path: website
-          fetch-depth: 0
-
-      # 8. 将构建结果同步到网站仓库
-      - name: Sync build files
-        run: |
-          rsync -av --delete \
-            --exclude=".git/" \
-            ./src/.vuepress/dist/ \
-            ./website/
-
-          touch ./website/.nojekyll
-
-      # 9. 提交并推送网站文件
-      - name: Commit and push website
-        working-directory: website
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-
-          git add -A
-
-          if git diff --cached --quiet; then
-            echo "No website changes to deploy."
-            exit 0
-          fi
-
-          git commit -m "deploy: update website from ${GITHUB_SHA::7}"
-          git push origin main
+        run: test -f ./src/.vuepress/dist/index.html
