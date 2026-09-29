@@ -58,8 +58,8 @@ const PLAYER_DEFENSES=[
 ];
 let enabledDefenseUnits=new Set(PLAYER_DEFENSES.map(x=>x.id));
 
-const CONFIG_IDS=["playerDefense","landUnits","armLand","corLand","legLand","legSlow","ultimate","teamColorFx","teamColorMode","armUltRange","armUltDamage","armUltBeam","armUltReload","armUltAoe","corUltRange","corUltDamage","corUltReload","corUltAoe","corUltFireDps","corUltFireRange","corUltFireTime","legUltRange","legUltDamage","legUltBurst","legUltBurstRate","legUltBeam","legUltReload","legUltAoe","elite","roles","colossus","egg","intercept","boss","hp","damage","capn","roleCount","chance","roleWeight","giantHp","giantCap","eggMult","aggroDist","aggroChance","queenHp","stagger","staggerCost"];
-const BOOL_IDS=new Set(["playerDefense","landUnits","armLand","corLand","legLand","legSlow","ultimate","teamColorFx","elite","roles","colossus","egg","intercept","boss"]);
+const CONFIG_IDS=["playerDefense","landUnits","armLand","corLand","legLand","legSlow","t3Units","armT3","corT3","legT3","bossSupport","bossSupportStagger","bossSupportQueenBonus","ultimate","teamColorFx","teamColorMode","armUltRange","armUltDamage","armUltBeam","armUltReload","armUltAoe","corUltRange","corUltDamage","corUltReload","corUltAoe","corUltFireDps","corUltFireRange","corUltFireTime","legUltRange","legUltDamage","legUltBurst","legUltBurstRate","legUltBeam","legUltReload","legUltAoe","elite","roles","colossus","egg","intercept","boss","hp","damage","capn","roleCount","chance","roleWeight","giantHp","giantCap","eggMult","aggroDist","aggroChance","queenHp","stagger","staggerCost"];
+const BOOL_IDS=new Set(["playerDefense","landUnits","armLand","corLand","legLand","legSlow","t3Units","armT3","corT3","legT3","bossSupport","ultimate","teamColorFx","elite","roles","colossus","egg","intercept","boss"]);
 const TEXT_IDS=new Set(["teamColorMode"]);
 function getConfig(){
   const s={};
@@ -82,12 +82,12 @@ function setConfig(s){
   renderConfig();
 }
 const BUILTIN={
-  balanced:{title:"低单位防线",desc:"精英化 + 职业 + 巨兽 + Queen 分工，优先降低后期场上单位数。",tags:["推荐","PVE","低单位"],state:{playerDefense:true,landUnits:true,armLand:true,corLand:true,legLand:true,legSlow:true,ultimate:true,teamColorFx:true,teamColorMode:"hybrid",armUltRange:6200,armUltDamage:45000,armUltBeam:4,armUltReload:5,armUltAoe:40,corUltRange:6100,corUltDamage:6000,corUltReload:1.05,corUltAoe:260,corUltFireDps:240,corUltFireRange:200,corUltFireTime:9,legUltRange:6100,legUltDamage:2000,legUltBurst:63,legUltBurstRate:.03,legUltBeam:.15,legUltReload:14,legUltAoe:120,elite:true,roles:true,colossus:true,egg:false,intercept:false,boss:true,hp:1.8,damage:1.35,capn:20,roleCount:4,chance:.75,roleWeight:4,giantHp:2.5,giantCap:4,eggMult:1.25,aggroDist:1800,aggroChance:1,queenHp:1.5,stagger:3,staggerCost:5000}},
-  elite:{title:"精英虫群",desc:"更少、更硬、更危险的普通虫；避免简单把伤害与血量同比例放大。",tags:["精英","低人口"],state:{playerDefense:true,landUnits:true,armLand:true,corLand:true,legLand:true,legSlow:true,ultimate:true,teamColorFx:true,teamColorMode:"hybrid",armUltRange:6200,armUltDamage:45000,armUltBeam:4,armUltReload:5,armUltAoe:40,corUltRange:6100,corUltDamage:6000,corUltReload:1.05,corUltAoe:260,corUltFireDps:240,corUltFireRange:200,corUltFireTime:9,legUltRange:6100,legUltDamage:2000,legUltBurst:63,legUltBurstRate:.03,legUltBeam:.15,legUltReload:14,legUltAoe:120,elite:true,roles:true,colossus:false,egg:false,intercept:false,boss:true,hp:2.5,damage:1.55,capn:12,roleCount:3,chance:.7,roleWeight:3,giantHp:2.5,giantCap:4,eggMult:1.25,aggroDist:1800,aggroChance:1,queenHp:1.5,stagger:3,staggerCost:5000}},
-  colossus:{title:"巨兽挑战",desc:"普通虫更少，中后期依靠 T4 Assault 与 Matriarch 制造压力。",tags:["巨兽","后期"],state:{playerDefense:true,landUnits:true,armLand:true,corLand:true,legLand:true,legSlow:true,ultimate:true,teamColorFx:true,teamColorMode:"hybrid",armUltRange:6200,armUltDamage:45000,armUltBeam:4,armUltReload:5,armUltAoe:40,corUltRange:6100,corUltDamage:6000,corUltReload:1.05,corUltAoe:260,corUltFireDps:240,corUltFireRange:200,corUltFireTime:9,legUltRange:6100,legUltDamage:2000,legUltBurst:63,legUltBurstRate:.03,legUltBeam:.15,legUltReload:14,legUltAoe:120,elite:true,roles:true,colossus:true,egg:false,intercept:false,boss:true,hp:1.5,damage:1.25,capn:10,roleCount:3,chance:.7,roleWeight:3,giantHp:4,giantCap:2,eggMult:1.25,aggroDist:1800,aggroChance:1,queenHp:1.75,stagger:3,staggerCost:5000}},
-  economy:{title:"虫卵经济",desc:"启用战利品经济实验，提高 Raptor metalCost，从而影响蛋资源价值。",tags:["经济","回收"],state:{playerDefense:true,landUnits:true,armLand:true,corLand:true,legLand:true,legSlow:true,ultimate:true,teamColorFx:true,teamColorMode:"hybrid",armUltRange:6200,armUltDamage:45000,armUltBeam:4,armUltReload:5,armUltAoe:40,corUltRange:6100,corUltDamage:6000,corUltReload:1.05,corUltAoe:260,corUltFireDps:240,corUltFireRange:200,corUltFireTime:9,legUltRange:6100,legUltDamage:2000,legUltBurst:63,legUltBurstRate:.03,legUltBeam:.15,legUltReload:14,legUltAoe:120,elite:true,roles:true,colossus:true,egg:true,intercept:false,boss:true,hp:1.7,damage:1.3,capn:18,roleCount:4,chance:.75,roleWeight:4,giantHp:2.5,giantCap:3,eggMult:1.75,aggroDist:1800,aggroChance:1,queenHp:1.5,stagger:3,staggerCost:5000}}
+  balanced:{title:"低单位防线",desc:"精英化 + 职业 + 巨兽 + Queen 分工，优先降低后期场上单位数。",tags:["推荐","PVE","低单位"],state:{playerDefense:true,landUnits:true,armLand:true,corLand:true,legLand:true,legSlow:true,t3Units:true,armT3:true,corT3:true,legT3:true,bossSupport:true,bossSupportStagger:4.5,bossSupportQueenBonus:1.25,ultimate:true,teamColorFx:true,teamColorMode:"hybrid",armUltRange:6200,armUltDamage:45000,armUltBeam:4,armUltReload:5,armUltAoe:40,corUltRange:6100,corUltDamage:6000,corUltReload:1.05,corUltAoe:260,corUltFireDps:240,corUltFireRange:200,corUltFireTime:9,legUltRange:6100,legUltDamage:2000,legUltBurst:63,legUltBurstRate:.03,legUltBeam:.15,legUltReload:14,legUltAoe:120,elite:true,roles:true,colossus:true,egg:false,intercept:false,boss:true,hp:1.8,damage:1.35,capn:20,roleCount:4,chance:.75,roleWeight:4,giantHp:2.5,giantCap:4,eggMult:1.25,aggroDist:1800,aggroChance:1,queenHp:1.5,stagger:3,staggerCost:5000}},
+  elite:{title:"精英虫群",desc:"更少、更硬、更危险的普通虫；避免简单把伤害与血量同比例放大。",tags:["精英","低人口"],state:{playerDefense:true,landUnits:true,armLand:true,corLand:true,legLand:true,legSlow:true,t3Units:true,armT3:true,corT3:true,legT3:true,bossSupport:true,bossSupportStagger:4.5,bossSupportQueenBonus:1.25,ultimate:true,teamColorFx:true,teamColorMode:"hybrid",armUltRange:6200,armUltDamage:45000,armUltBeam:4,armUltReload:5,armUltAoe:40,corUltRange:6100,corUltDamage:6000,corUltReload:1.05,corUltAoe:260,corUltFireDps:240,corUltFireRange:200,corUltFireTime:9,legUltRange:6100,legUltDamage:2000,legUltBurst:63,legUltBurstRate:.03,legUltBeam:.15,legUltReload:14,legUltAoe:120,elite:true,roles:true,colossus:false,egg:false,intercept:false,boss:true,hp:2.5,damage:1.55,capn:12,roleCount:3,chance:.7,roleWeight:3,giantHp:2.5,giantCap:4,eggMult:1.25,aggroDist:1800,aggroChance:1,queenHp:1.5,stagger:3,staggerCost:5000}},
+  colossus:{title:"巨兽挑战",desc:"普通虫更少，中后期依靠 T4 Assault 与 Matriarch 制造压力。",tags:["巨兽","后期"],state:{playerDefense:true,landUnits:true,armLand:true,corLand:true,legLand:true,legSlow:true,t3Units:true,armT3:true,corT3:true,legT3:true,bossSupport:true,bossSupportStagger:4.5,bossSupportQueenBonus:1.25,ultimate:true,teamColorFx:true,teamColorMode:"hybrid",armUltRange:6200,armUltDamage:45000,armUltBeam:4,armUltReload:5,armUltAoe:40,corUltRange:6100,corUltDamage:6000,corUltReload:1.05,corUltAoe:260,corUltFireDps:240,corUltFireRange:200,corUltFireTime:9,legUltRange:6100,legUltDamage:2000,legUltBurst:63,legUltBurstRate:.03,legUltBeam:.15,legUltReload:14,legUltAoe:120,elite:true,roles:true,colossus:true,egg:false,intercept:false,boss:true,hp:1.5,damage:1.25,capn:10,roleCount:3,chance:.7,roleWeight:3,giantHp:4,giantCap:2,eggMult:1.25,aggroDist:1800,aggroChance:1,queenHp:1.75,stagger:3,staggerCost:5000}},
+  economy:{title:"虫卵经济",desc:"启用战利品经济实验，提高 Raptor metalCost，从而影响蛋资源价值。",tags:["经济","回收"],state:{playerDefense:true,landUnits:true,armLand:true,corLand:true,legLand:true,legSlow:true,t3Units:true,armT3:true,corT3:true,legT3:true,bossSupport:true,bossSupportStagger:4.5,bossSupportQueenBonus:1.25,ultimate:true,teamColorFx:true,teamColorMode:"hybrid",armUltRange:6200,armUltDamage:45000,armUltBeam:4,armUltReload:5,armUltAoe:40,corUltRange:6100,corUltDamage:6000,corUltReload:1.05,corUltAoe:260,corUltFireDps:240,corUltFireRange:200,corUltFireTime:9,legUltRange:6100,legUltDamage:2000,legUltBurst:63,legUltBurstRate:.03,legUltBeam:.15,legUltReload:14,legUltAoe:120,elite:true,roles:true,colossus:true,egg:true,intercept:false,boss:true,hp:1.7,damage:1.3,capn:18,roleCount:4,chance:.75,roleWeight:4,giantHp:2.5,giantCap:3,eggMult:1.75,aggroDist:1800,aggroChance:1,queenHp:1.5,stagger:3,staggerCost:5000}}
 };
-function resetState(){return {playerDefense:false,defenseUnits:[],landUnits:false,armLand:false,corLand:false,legLand:false,legSlow:false,ultimate:false,teamColorFx:false,teamColorMode:"hybrid",armUltRange:6200,armUltDamage:45000,armUltBeam:4,armUltReload:5,armUltAoe:40,corUltRange:6100,corUltDamage:6000,corUltReload:1.05,corUltAoe:260,corUltFireDps:240,corUltFireRange:200,corUltFireTime:9,legUltRange:6100,legUltDamage:2000,legUltBurst:63,legUltBurstRate:.03,legUltBeam:.15,legUltReload:14,legUltAoe:120,elite:false,roles:false,colossus:false,egg:false,intercept:false,boss:false,hp:1,damage:1,capn:20,roleCount:4,chance:.75,roleWeight:4,giantHp:2,giantCap:4,eggMult:1,aggroDist:1800,aggroChance:1,queenHp:1,stagger:1,staggerCost:5000}}
+function resetState(){return {playerDefense:false,defenseUnits:[],landUnits:false,armLand:false,corLand:false,legLand:false,legSlow:false,t3Units:false,armT3:false,corT3:false,legT3:false,bossSupport:false,bossSupportStagger:4.5,bossSupportQueenBonus:1.25,ultimate:false,teamColorFx:false,teamColorMode:"hybrid",armUltRange:6200,armUltDamage:45000,armUltBeam:4,armUltReload:5,armUltAoe:40,corUltRange:6100,corUltDamage:6000,corUltReload:1.05,corUltAoe:260,corUltFireDps:240,corUltFireRange:200,corUltFireTime:9,legUltRange:6100,legUltDamage:2000,legUltBurst:63,legUltBurstRate:.03,legUltBeam:.15,legUltReload:14,legUltAoe:120,elite:false,roles:false,colossus:false,egg:false,intercept:false,boss:false,hp:1,damage:1,capn:20,roleCount:4,chance:.75,roleWeight:4,giantHp:2,giantCap:4,eggMult:1,aggroDist:1800,aggroChance:1,queenHp:1,stagger:1,staggerCost:5000}}
 
 function squadLine(name,minA,maxA,behavior,rarity,count,weight,distance,chance){
   return '  setRaptorSquad("'+name+'",'+minA+','+maxA+',"'+behavior+'","'+rarity+'",'+count+','+weight+','+distance+','+chance+')\n';
@@ -173,7 +173,7 @@ function buildBossLua(s){
     p.push('  local queenHp='+s.queenHp+' local stagger='+s.stagger+' local costGate='+Math.max(0,Math.round(s.staggerCost))+'\n');
     p.push('  for name,ud in pairs(UnitDefs) do\n');
     p.push('    if name:match("^raptor_queen_") and ud.health then ud.health=ud.health*queenHp end\n');
-    p.push('    if not name:match("^raptor_") and ud.canmove and not ud.canfly and ud.metalcost and ud.metalcost>=costGate then ud.customparams=ud.customparams or {} ud.customparams.bossstaggermultiplier=tostring(stagger) end\n');
+    p.push('    if not name:match("^raptor_") and ud.canmove and not ud.canfly and ud.metalcost and ud.metalcost>=costGate then ud.customparams=ud.customparams or {} if not ud.customparams.bossstaggermultiplier and not ud.customparams.bossStaggerMultiplier then ud.customparams.bossstaggermultiplier=tostring(stagger) ud.customparams.bossStaggerMultiplier=tostring(stagger) end end\n');
     p.push('  end\n');
   }
   return wrapModule(p.join(""));
@@ -290,6 +290,76 @@ function buildLegLandLua(s){
   }
   return wrapModule(p.join(""));
 }
+function t3Helpers(withBuild){
+  let s=landHelpers();
+  if(withBuild){
+    s+='  local function B(builder,target) local b=UnitDefs[builder] if not b or not UnitDefs[target] then return end b.buildoptions=b.buildoptions or {} for _,v in ipairs(b.buildoptions) do if v==target then return end end table.insert(b.buildoptions,target) end\n';
+  }
+  return s;
+}
+function buildArmT3Lua(s){
+  if(!s.t3Units||!s.armT3)return "";
+  const p=[t3Helpers(false)];
+  p.push('  -- ARM T3: decisive charged volleys and priority-target deletion.\n');
+  p.push('  U("armbanth",{health=72000,customparams={bossstaggermultiplier="2.2",bossStaggerMultiplier="2.2"}}) W("armbanth","tehlazerofdewm",{range=900,reloadtime=10,beamtime=0.9,areaofeffect=16,energypershot=2600,damage={default=9000,raptorqueen=10500,commanders=4000}}) W("armbanth","armbantha_fire",{range=520,reloadtime=2.4,areaofeffect=32,damage={default=1150,vtol=100}})\n');
+  p.push('  U("armraz",{health=14000}) W("armraz","mech_rapidlaser",{range=520,burst=3,burstrate=0.08,reloadtime=2.6,beamtime=0.09,areaofeffect=16,energypershot=180,damage={default=380,vtol=55}})\n');
+  p.push('  U("armmar",{health=5200}) W("armmar","armmech_cannon",{name="T3 Charged Amphibious Beam",weapontype="BeamLaser",gravityaffected=false,range=430,reloadtime=3.2,beamtime=0.18,areaofeffect=12,energypershot=360,weaponvelocity=2400,thickness=3,corethickness=0.3,rgbcolor="0.25 0.65 1",rgbcolor2="0.95 1 1",explosiongenerator="custom:laserhit-medium-blue",damage={default=820,vtol=80}})\n');
+  p.push('  W("armvang","shocker_high",{range=1600,reloadtime=12,areaofeffect=160,accuracy=80,damage={default=2400,vtol=150}}) W("armvang","shocker_low",{range=1600,reloadtime=12,areaofeffect=160,accuracy=80,damage={default=2400,vtol=150}})\n');
+  p.push('  U("armlun",{health=6000}) W("armlun","cannon",{range=650,reloadtime=4.5,areaofeffect=100,damage={default=900,vtol=80}}) W("armlun","armlun_rocket",{range=650,reloadtime=10,areaofeffect=96,damage={default=900,vtol=100}})\n');
+  p.push('  U("armthor",{health=62000,customparams={bossstaggermultiplier="3.5",bossStaggerMultiplier="3.5"}}) W("armthor","thunder",{range=600,burst=6,burstrate=0.06,reloadtime=4.2,energypershot=180,customparams={spark_maxunits="0",spark_range="0",spark_forkdamage="0"},damage={default=180,raptorqueen=220}})\n');
+  p.push('  U("armmeatball",{health=9500}) W("armmeatball","armmech_cannon",{range=1050,reloadtime=2.5,areaofeffect=16,damage={default=900,vtol=80}}) W("armmeatball","lrpc",{range=900,reloadtime=1.8,areaofeffect=64,damage={default=500,vtol=40}})\n');
+  p.push('  U("armassimilator",{health=9000}) W("armassimilator","machinegun",{range=850,reloadtime=0.8,beamtime=0.12,areaofeffect=12,energypershot=100,damage={default=240,vtol=30}})\n');
+  return wrapModule(p.join(""));
+}
+function buildCorT3Lua(s){
+  if(!s.t3Units||!s.corT3)return "";
+  const p=[t3Helpers(false)];
+  p.push('  -- COR T3: slow moving fortresses, huge blast zones and fire saturation.\n');
+  p.push('  U("corkorg",{health=175000,speed=32,customparams={bossstaggermultiplier="1.8",bossStaggerMultiplier="1.8"}}) W("corkorg","corkorg_laser",{range=925,reloadtime=4.5,beamtime=0.7,areaofeffect=80,damage={default=7200,raptorqueen=7600}}) W("corkorg","corkorg_fire",{range=620,reloadtime=1.2,areaofeffect=140,damage={default=240}}) W("corkorg","corkorg_rocket",{range=1000,reloadtime=6,areaofeffect=230,damage={default=1200},customparams={area_onhit_ceg="fire-area-100-repeat",area_onhit_damageceg="burnflamel-gen",area_onhit_resistance="fire",area_onhit_damage="90",area_onhit_range="100",area_onhit_time="5"}})\n');
+  p.push('  U("corkarg",{health=16000,speed=40}) W("corkarg","karg_shoulder",{range=740,reloadtime=0.55,areaofeffect=28,damage={default=135}}) W("corkarg","super_missile",{range=640,reloadtime=0.32,areaofeffect=78,damage={default=220}})\n');
+  p.push('  U("corjugg",{health=400000,speed=14}) W("corjugg","juggernaut_bottom",{reloadtime=0.28,areaofeffect=24,damage={default=90}}) W("corjugg","juggernaut_top",{reloadtime=0.45,areaofeffect=24,damage={default=185}}) W("corjugg","juggernaut_fire",{range=620,reloadtime=4,areaofeffect=100,damage={default=1600,raptorqueen=1800}})\n');
+  p.push('  U("corshiva",{health=12000,speed=43}) W("corshiva","shiva_gun",{range=675,reloadtime=2.1,areaofeffect=210,edgeeffectiveness=0.4,damage={default=780}}) W("corshiva","shiva_rocket",{range=840,reloadtime=7,areaofeffect=90,damage={default=900},customparams={area_onhit_ceg="fire-area-100-repeat",area_onhit_damageceg="burnflamel-gen",area_onhit_resistance="fire",area_onhit_damage="80",area_onhit_range="95",area_onhit_time="5"}})\n');
+  p.push('  U("corcat",{health=7200,speed=42}) W("corcat","exp_heavyrocket",{range=1400,burst=20,burstrate=0.12,reloadtime=14,areaofeffect=120,edgeeffectiveness=0.35,damage={default=520}})\n');
+  p.push('  U("corsok",{health=5400}) W("corsok","corsok_laser",{range=775,reloadtime=5,areaofeffect=24,damage={default=950}})\n');
+  p.push('  U("cordemon",{health=23000,speed=55}) W("cordemon","newdmaw",{range=550,reloadtime=0.36,burst=14,areaofeffect=150,damage={default=58}}) W("cordemon","dmaw",{range=550,reloadtime=0.06,burst=5,areaofeffect=150,damage={default=58}})\n');
+  p.push('  U("corves",{health=120000,speed=20,maxthisunit=2,customparams={bossstaggermultiplier="2.2",bossStaggerMultiplier="2.2"}}) W("corves","corlevlr_weapon",{range=1100,reloadtime=5.5,areaofeffect=380,edgeeffectiveness=0.5,damage={default=9000,raptorqueen=9500}}) W("corves","banisher",{range=900,reloadtime=7,areaofeffect=170,damage={default=1300},customparams={area_onhit_ceg="fire-area-150-repeat",area_onhit_damageceg="burnflamel-gen",area_onhit_resistance="fire",area_onhit_damage="120",area_onhit_range="140",area_onhit_time="7"}})\n');
+  return wrapModule(p.join(""));
+}
+function buildLegT3Lua(s){
+  if(!s.t3Units||!s.legT3)return "";
+  const p=[t3Helpers(false)];
+  p.push('  -- LEG T3: continuous beam uptime, short firing cycles and suppression.\n');
+  p.push('  U("legeheatraymech",{health=115000,customparams={bossstaggermultiplier="1.8",bossStaggerMultiplier="1.8"}}) W("legeheatraymech","heatray1",{range=850,reloadtime=0.033,beamtime=0.033,areaofeffect=90,damage={default=42,raptorqueen=48}}) W("legeheatraymech","ultraheavyriotcannon",{range=575,burst=3,burstrate=0.12,reloadtime=1.0,areaofeffect=150,damage={default=350}})\n');
+  p.push('  U("legeallterrainmech",{health=10500}) W("legeallterrainmech","plasma_low",{range=1125,reloadtime=1.25,areaofeffect=105,damage={default=260}}) W("legeallterrainmech","plasma_high",{range=1125,reloadtime=1.25,areaofeffect=105,damage={default=260}})\n');
+  p.push('  U("legjav",{health=8000}) W("legjav","mg_guns",{range=475,burst=18,burstrate=0.04,reloadtime=0.3,damage={default=10}})\n');
+  p.push('  U("legelrpcmech",{health=19000}) W("legelrpcmech","shocker_low",{range=3100,burst=4,burstrate=0.18,reloadtime=4.8,areaofeffect=135,damage={default=320}})\n');
+  p.push('  U("legehovertank",{health=5600}) W("legehovertank","heat_ray",{range=475,reloadtime=0.42,beamtime=0.28,areaofeffect=48,damage={default=70}})\n');
+  p.push('  U("legerailtank",{health=18000}) W("legerailtank","t3_rail_accelerator",{range=1050,reloadtime=0.95,areaofeffect=48,energypershot=150,damage={default=320,raptorqueen=360}})\n');
+  p.push('  U("legeshotgunmech",{health=24000}) W("legeshotgunmech","shotgun",{range=450,reloadtime=0.55,damage={default=42}}) W("legeshotgunmech","adv_rocket",{range=750,burst=12,burstrate=0.08,reloadtime=4.5,areaofeffect=82,damage={default=120}})\n');
+  p.push('  U("legkeres",{health=23000}) W("legkeres","legkeres_cannon",{range=475,reloadtime=0.9,areaofeffect=165,damage={default=260}}) W("legkeres","legkeres_gatling",{range=510,burst=10,burstrate=0.045,reloadtime=0.28,damage={default=9}})\n');
+  p.push('  U("legbunk",{health=10500}) W("legbunk","railgunt2",{range=700,reloadtime=1.25,areaofeffect=24,damage={default=220}})\n');
+  p.push('  U("legapollyon",{health=65000,maxthisunit=2,customparams={bossstaggermultiplier="1.7",bossStaggerMultiplier="1.7"}}) W("legapollyon","legapollyon_gatling_big",{range=800,burst=8,burstrate=0.05,reloadtime=0.3,damage={default=48,raptorqueen=55}}) W("legapollyon","legapollyon_gatling_small",{burst=8,burstrate=0.05,reloadtime=0.3,damage={default=19}})\n');
+  if(s.legSlow){
+    p.push('  local opts=(Spring.GetModOptions and Spring.GetModOptions()) or {} local emp=opts.emprework==true or opts.emprework==1 or opts.emprework=="1" or opts.emprework=="true"\n');
+    p.push('  if emp then W("legeshotgunmech","shotgun",{paralyzer=true,paralyzetime=1,damage={default=48}}) end\n');
+  }
+  return wrapModule(p.join(""));
+}
+function buildBossSupportLua(s){
+  if(!s.t3Units||!s.bossSupport)return "";
+  const p=[t3Helpers(true)];
+  const stagger=Math.max(1,Number(s.bossSupportStagger)||4.5);
+  const qbonus=Math.max(1,Number(s.bossSupportQueenBonus)||1.25);
+  p.push('  -- Shared Scavenger boss support. Requires scavunitsforplayers so these UnitDefs are loaded.\n');
+  p.push('  B("armshltx","armrattet4") B("corgant","armrattet4") B("leggant","armrattet4")\n');
+  p.push('  B("armshltx","legsrailt4") B("corgant","legsrailt4") B("leggant","legsrailt4")\n');
+  p.push('  B("armshltx","leggobt3") B("corgant","leggobt3") B("leggant","leggobt3")\n');
+  p.push('  U("armrattet4",{health=120000,speed=20,maxthisunit=1,autoheal=30,customparams={bossstaggermultiplier="2",bossStaggerMultiplier="2"}}) W("armrattet4","arm_bosscannon",{range=1050,reloadtime=1.7,areaofeffect=260,damage={default=1100,raptorqueen=1300}})\n');
+  p.push('  U("legsrailt4",{health=45000,speed=20,maxthisunit=2,customparams={bossstaggermultiplier="'+stagger+'",bossStaggerMultiplier="'+stagger+'"}}) W("legsrailt4","railgunt2",{range=1650,reloadtime=5.5,areaofeffect=16,energypershot=900,damage={default=6500,raptorqueen='+Math.round(6500*qbonus)+',commanders=2500}})\n');
+  p.push('  U("leggobt3",{health=18000,maxthisunit=4,customparams={bossstaggermultiplier="1.5",bossStaggerMultiplier="1.5"}}) W("leggobt3","semiauto",{range=525,burst=4,burstrate=0.07,reloadtime=0.7,damage={default=120,raptorqueen='+Math.round(120*qbonus)+'}})\n');
+  return wrapModule(p.join(""));
+}
+
 function buildUltimateLua(s){
   if(!s.ultimate)return "";
   const p=[];
@@ -326,6 +396,10 @@ function buildConfigModules(){
   push(10,"ARM 地面兵种 · 蓄能激光",buildArmLandLua(s));
   push(11,"COR 地面兵种 · 重装火力",buildCorLandLua(s));
   push(12,"LEG 地面兵种 · 持续压制",buildLegLandLua(s));
+  push(13,"ARM T3 · 蓄能决战",buildArmT3Lua(s));
+  push(14,"COR T3 · 移动要塞",buildCorT3Lua(s));
+  push(15,"LEG T3 · 持续压制",buildLegT3Lua(s));
+  push(16,"公共 Boss 补位 · Scavenger",buildBossSupportLua(s));
   return mods;
 }
 function renderConfig(){
@@ -355,10 +429,26 @@ function renderConfig(){
     $("landPreview").textContent=parts.join("\n\n")||"-- 地面兵种模块未启用";
   }
 }
+  if($("t3Preview")){
+    const s=getConfig();
+    const parts=[
+      ["tweakdefs13 · ARM T3",buildArmT3Lua(s)],
+      ["tweakdefs14 · COR T3",buildCorT3Lua(s)],
+      ["tweakdefs15 · LEG T3",buildLegT3Lua(s)],
+      ["tweakdefs16 · Boss 补位",buildBossSupportLua(s)]
+    ].filter(x=>x[1]).map(x=>"-- "+x[0]+"\n"+x[1]);
+    $("t3Preview").textContent=parts.join("\n\n")||"-- T3 模块未启用";
+  }
+}
 CONFIG_IDS.forEach(id=>$(id)?.addEventListener("input",renderConfig));
 $("openPlayerDefense")?.addEventListener("click",()=>switchTab("players"));
 $("openUltimate")?.addEventListener("click",()=>switchTab("ultimate"));
 $("openLand")?.addEventListener("click",()=>switchTab("land"));
+$("openT3")?.addEventListener("click",()=>switchTab("t3"));
+$("copyArmT3")?.addEventListener("click",()=>{const lua=buildArmT3Lua(getConfig());copyText(lua?"!bset tweakdefs13 "+encode64(lua):"-- ARM T3 模块未启用",$("copyArmT3"))});
+$("copyCorT3")?.addEventListener("click",()=>{const lua=buildCorT3Lua(getConfig());copyText(lua?"!bset tweakdefs14 "+encode64(lua):"-- COR T3 模块未启用",$("copyCorT3"))});
+$("copyLegT3")?.addEventListener("click",()=>{const lua=buildLegT3Lua(getConfig());copyText(lua?"!bset tweakdefs15 "+encode64(lua):"-- LEG T3 模块未启用",$("copyLegT3"))});
+$("copyBossSupport")?.addEventListener("click",()=>{const lua=buildBossSupportLua(getConfig());copyText(lua?"!bset tweakdefs16 "+encode64(lua):"-- Boss 补位模块未启用",$("copyBossSupport"))});
 $("copyArmLand")?.addEventListener("click",()=>{const lua=buildArmLandLua(getConfig());copyText(lua?"!bset tweakdefs10 "+encode64(lua):"-- ARM 地面兵种模块未启用",$("copyArmLand"))});
 $("copyCorLand")?.addEventListener("click",()=>{const lua=buildCorLandLua(getConfig());copyText(lua?"!bset tweakdefs11 "+encode64(lua):"-- COR 地面兵种模块未启用",$("copyCorLand"))});
 $("copyLegLand")?.addEventListener("click",()=>{const lua=buildLegLandLua(getConfig());copyText(lua?"!bset tweakdefs12 "+encode64(lua):"-- LEG 地面兵种模块未启用",$("copyLegLand"))});
