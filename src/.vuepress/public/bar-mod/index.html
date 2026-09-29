@@ -22,6 +22,7 @@
     <button class="tab" data-tab="presets">Presets</button>
     <button class="tab" data-tab="players">玩家防御</button>
     <button class="tab" data-tab="land">地面兵种</button>
+    <button class="tab" data-tab="t3">T3 / Boss</button>
     <button class="tab" data-tab="ultimate">终极武器</button>
     <button class="tab" data-tab="raptors">Raptor 数据</button>
     <button class="tab" data-tab="scavs">Scavenger 数据</button>
@@ -46,7 +47,7 @@
       <button class="btn" data-config-preset="economy">虫卵经济</button>
       <button class="btn" data-config-preset="reset">清空</button>
       <span class="grow"></span>
-      <span class="small muted">模块化输出：防御 0/1/2 · Raptor 4/5 · Boss 6 · 经济 7 · 终极武器 8 · 联合科技 9 · 陆军 ARM/COR/LEG 10/11/12</span>
+      <span class="small muted">模块化输出：防御 0/1/2 · Raptor 4/5 · Boss 6 · 经济 7 · 终极武器 8 · 联合科技 9 · 陆军 10/11/12 · T3 13/14/15 · Boss补位 16</span>
     </div>
 
     <div class="grid2">
@@ -64,6 +65,19 @@
           <label>LEG 减速支援</label><label class="switch"><input id="legSlow" type="checkbox" checked><span></span></label>
         </div>
         <div class="toolbar"><span class="small muted">独立输出 tweakdefs10 / 11 / 12</span><span class="grow"></span><button id="openLand" class="btn small">查看兵种</button></div>
+      </article>
+
+      <article class="card">
+        <div class="cardhead"><div><h3>T3 / Boss 单位 V1</h3><p>阵营T3继续极端化，同时用少量 Scavenger 单位补 Boss 破韧、持续伤害和前排承伤。</p></div><label class="switch"><input id="t3Units" type="checkbox" checked><span></span></label></div>
+        <div class="form">
+          <label>ARM T3</label><label class="switch"><input id="armT3" type="checkbox" checked><span></span></label>
+          <label>COR T3</label><label class="switch"><input id="corT3" type="checkbox" checked><span></span></label>
+          <label>LEG T3</label><label class="switch"><input id="legT3" type="checkbox" checked><span></span></label>
+          <label>公共 Boss 补位</label><label class="switch"><input id="bossSupport" type="checkbox" checked><span></span></label>
+          <label>Boss Breaker Stagger</label><input id="bossSupportStagger" type="number" value="4.5" min="1" step=".5">
+          <label>Queen 专伤倍率</label><input id="bossSupportQueenBonus" type="number" value="1.25" min="1" step=".05">
+        </div>
+        <div class="toolbar"><span class="small muted">tweakdefs13 / 14 / 15 / 16</span><span class="grow"></span><button id="openT3" class="btn small">查看 T3</button></div>
       </article>
 
       <article class="card">
@@ -189,6 +203,49 @@
     <div class="box" style="padding:14px;margin-top:14px">
       <h3 style="margin-top:0">当前模块预览</h3>
       <pre id="landPreview" class="code"></pre>
+    </div>
+  </section>
+
+  <section id="t3" class="panel">
+    <div class="hero">
+      <h2>T3 / Boss 单位 V1</h2>
+      <p>T3 不再做三阵营镜像：ARM 把高能蓄力和单体爆发推到极端；COR 变成缓慢推进的移动堡垒与火海制造机；LEG 用高开火占空比、Heat Ray、轨道连续射击和减速持续压制。</p>
+      <div class="notice"><b>Boss抗性处理：</b>Raptor Queen 的适应性抗性按 <span class="mono">attackerDefID</span> 分开累计。公共补位故意使用 3 个不同 Scavenger UnitDef，让玩家可以轮换伤害来源；其中 Arquebus 额外获得高 <span class="mono">bossStaggerMultiplier</span>，用于更快打出 Queen Stagger。</div>
+      <div class="notice"><b>前提：</b>公共补位需要房间开启 <span class="mono">Scavengers Units Pack</span>，否则对应 UnitDef 不会加载，配置器代码会自动跳过建造菜单追加。</div>
+    </div>
+
+    <div class="grid3">
+      <article class="card">
+        <h3>ARM T3 · 蓄能决战</h3>
+        <p>Bantha / Razorback / Vanguard / Thor 等继续放大高单发、长冷却、高能耗。Thor 专门强化 Boss Stagger，承担“破韧”而不是纯DPS。</p>
+        <div class="chips"><span class="chip">armbanth</span><span class="chip">armraz</span><span class="chip">armmar</span><span class="chip">armvang</span><span class="chip">armlun</span><span class="chip">armthor</span><span class="chip">armmeatball</span><span class="chip">armassimilator</span></div>
+        <p class="small muted">Bantha 主束 9000/10s；Vanguard 2400/12s 超远程；Thor Boss Stagger 3.5。</p>
+        <div class="toolbar"><button id="copyArmT3" class="btn primary">复制 tweakdefs13</button></div>
+      </article>
+
+      <article class="card">
+        <h3>COR T3 · 移动要塞</h3>
+        <p>Korgoth / Juggernaut / Demon / Vesuvius 用更高HP、更低速度、更大爆炸和燃烧区换取正面推进能力。</p>
+        <div class="chips"><span class="chip">corkorg</span><span class="chip">corkarg</span><span class="chip">corjugg</span><span class="chip">corshiva</span><span class="chip">corcat</span><span class="chip">corsok</span><span class="chip">cordemon</span><span class="chip">corves</span></div>
+        <p class="small muted">Juggernaut 400000HP / 14速度；Vesuvius 120000HP、重炮+火区；Demon继续强化近距离火焰。</p>
+        <div class="toolbar"><button id="copyCorT3" class="btn primary">复制 tweakdefs14</button></div>
+      </article>
+
+      <article class="card">
+        <h3>LEG T3 · 持续压制</h3>
+        <p>Sol Invictus、Rail Tank、Shotgun Mech、Keres、Apollyon 都以更短射击周期换持续火力；单发通常低于ARM，但长时间接触更强。</p>
+        <div class="chips"><span class="chip">legeheatraymech</span><span class="chip">legeallterrainmech</span><span class="chip">legjav</span><span class="chip">legelrpcmech</span><span class="chip">legehovertank</span><span class="chip">legerailtank</span><span class="chip">legeshotgunmech</span><span class="chip">legkeres</span><span class="chip">legbunk</span><span class="chip">legapollyon</span></div>
+        <p class="small muted">Sol Invictus 持续Heat Ray；Rail Tank 320/0.95s；LRPC Mech 从长空窗改成 4×320 / 4.8s。</p>
+        <div class="toolbar"><button id="copyLegT3" class="btn primary">复制 tweakdefs15</button></div>
+      </article>
+    </div>
+
+    <div class="box" style="padding:14px;margin-top:14px">
+      <h3 style="margin-top:0">公共 Scavenger Boss 补位</h3>
+      <p>只补三个明确缺口，不承担阵营主力：<b>Ratte</b> 是前排承伤；<b>Arquebus</b> 是高 Stagger / Queen 专伤的 Boss Breaker；<b>Epic Goblin</b> 提供较便宜的持续补伤。默认分别限 1 / 2 / 4 台。</p>
+      <div class="chips"><span class="chip">armrattet4</span><span class="chip">legsrailt4</span><span class="chip">leggobt3</span></div>
+      <div class="toolbar"><button id="copyBossSupport" class="btn primary">复制 tweakdefs16</button></div>
+      <pre id="t3Preview" class="code"></pre>
     </div>
   </section>
 
