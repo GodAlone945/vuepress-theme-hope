@@ -58,8 +58,8 @@ const PLAYER_DEFENSES=[
 ];
 let enabledDefenseUnits=new Set(PLAYER_DEFENSES.map(x=>x.id));
 
-const CONFIG_IDS=["playerDefense","ultimate","teamColorFx","teamColorMode","armUltRange","armUltDamage","armUltBeam","armUltReload","armUltAoe","corUltRange","corUltDamage","corUltReload","corUltAoe","corUltFireDps","corUltFireRange","corUltFireTime","legUltRange","legUltDamage","legUltBurst","legUltBurstRate","legUltBeam","legUltReload","legUltAoe","elite","roles","colossus","egg","intercept","boss","hp","damage","capn","roleCount","chance","roleWeight","giantHp","giantCap","eggMult","aggroDist","aggroChance","queenHp","stagger","staggerCost"];
-const BOOL_IDS=new Set(["playerDefense","ultimate","teamColorFx","elite","roles","colossus","egg","intercept","boss"]);
+const CONFIG_IDS=["playerDefense","landUnits","armLand","corLand","legLand","legSlow","ultimate","teamColorFx","teamColorMode","armUltRange","armUltDamage","armUltBeam","armUltReload","armUltAoe","corUltRange","corUltDamage","corUltReload","corUltAoe","corUltFireDps","corUltFireRange","corUltFireTime","legUltRange","legUltDamage","legUltBurst","legUltBurstRate","legUltBeam","legUltReload","legUltAoe","elite","roles","colossus","egg","intercept","boss","hp","damage","capn","roleCount","chance","roleWeight","giantHp","giantCap","eggMult","aggroDist","aggroChance","queenHp","stagger","staggerCost"];
+const BOOL_IDS=new Set(["playerDefense","landUnits","armLand","corLand","legLand","legSlow","ultimate","teamColorFx","elite","roles","colossus","egg","intercept","boss"]);
 const TEXT_IDS=new Set(["teamColorMode"]);
 function getConfig(){
   const s={};
@@ -82,12 +82,12 @@ function setConfig(s){
   renderConfig();
 }
 const BUILTIN={
-  balanced:{title:"低单位防线",desc:"精英化 + 职业 + 巨兽 + Queen 分工，优先降低后期场上单位数。",tags:["推荐","PVE","低单位"],state:{playerDefense:true,ultimate:true,teamColorFx:true,teamColorMode:"hybrid",armUltRange:6200,armUltDamage:45000,armUltBeam:4,armUltReload:5,armUltAoe:40,corUltRange:6100,corUltDamage:6000,corUltReload:1.05,corUltAoe:260,corUltFireDps:240,corUltFireRange:200,corUltFireTime:9,legUltRange:6100,legUltDamage:2000,legUltBurst:63,legUltBurstRate:.03,legUltBeam:.15,legUltReload:14,legUltAoe:120,elite:true,roles:true,colossus:true,egg:false,intercept:false,boss:true,hp:1.8,damage:1.35,capn:20,roleCount:4,chance:.75,roleWeight:4,giantHp:2.5,giantCap:4,eggMult:1.25,aggroDist:1800,aggroChance:1,queenHp:1.5,stagger:3,staggerCost:5000}},
-  elite:{title:"精英虫群",desc:"更少、更硬、更危险的普通虫；避免简单把伤害与血量同比例放大。",tags:["精英","低人口"],state:{playerDefense:true,ultimate:true,teamColorFx:true,teamColorMode:"hybrid",armUltRange:6200,armUltDamage:45000,armUltBeam:4,armUltReload:5,armUltAoe:40,corUltRange:6100,corUltDamage:6000,corUltReload:1.05,corUltAoe:260,corUltFireDps:240,corUltFireRange:200,corUltFireTime:9,legUltRange:6100,legUltDamage:2000,legUltBurst:63,legUltBurstRate:.03,legUltBeam:.15,legUltReload:14,legUltAoe:120,elite:true,roles:true,colossus:false,egg:false,intercept:false,boss:true,hp:2.5,damage:1.55,capn:12,roleCount:3,chance:.7,roleWeight:3,giantHp:2.5,giantCap:4,eggMult:1.25,aggroDist:1800,aggroChance:1,queenHp:1.5,stagger:3,staggerCost:5000}},
-  colossus:{title:"巨兽挑战",desc:"普通虫更少，中后期依靠 T4 Assault 与 Matriarch 制造压力。",tags:["巨兽","后期"],state:{playerDefense:true,ultimate:true,teamColorFx:true,teamColorMode:"hybrid",armUltRange:6200,armUltDamage:45000,armUltBeam:4,armUltReload:5,armUltAoe:40,corUltRange:6100,corUltDamage:6000,corUltReload:1.05,corUltAoe:260,corUltFireDps:240,corUltFireRange:200,corUltFireTime:9,legUltRange:6100,legUltDamage:2000,legUltBurst:63,legUltBurstRate:.03,legUltBeam:.15,legUltReload:14,legUltAoe:120,elite:true,roles:true,colossus:true,egg:false,intercept:false,boss:true,hp:1.5,damage:1.25,capn:10,roleCount:3,chance:.7,roleWeight:3,giantHp:4,giantCap:2,eggMult:1.25,aggroDist:1800,aggroChance:1,queenHp:1.75,stagger:3,staggerCost:5000}},
-  economy:{title:"虫卵经济",desc:"启用战利品经济实验，提高 Raptor metalCost，从而影响蛋资源价值。",tags:["经济","回收"],state:{playerDefense:true,ultimate:true,teamColorFx:true,teamColorMode:"hybrid",armUltRange:6200,armUltDamage:45000,armUltBeam:4,armUltReload:5,armUltAoe:40,corUltRange:6100,corUltDamage:6000,corUltReload:1.05,corUltAoe:260,corUltFireDps:240,corUltFireRange:200,corUltFireTime:9,legUltRange:6100,legUltDamage:2000,legUltBurst:63,legUltBurstRate:.03,legUltBeam:.15,legUltReload:14,legUltAoe:120,elite:true,roles:true,colossus:true,egg:true,intercept:false,boss:true,hp:1.7,damage:1.3,capn:18,roleCount:4,chance:.75,roleWeight:4,giantHp:2.5,giantCap:3,eggMult:1.75,aggroDist:1800,aggroChance:1,queenHp:1.5,stagger:3,staggerCost:5000}}
+  balanced:{title:"低单位防线",desc:"精英化 + 职业 + 巨兽 + Queen 分工，优先降低后期场上单位数。",tags:["推荐","PVE","低单位"],state:{playerDefense:true,landUnits:true,armLand:true,corLand:true,legLand:true,legSlow:true,ultimate:true,teamColorFx:true,teamColorMode:"hybrid",armUltRange:6200,armUltDamage:45000,armUltBeam:4,armUltReload:5,armUltAoe:40,corUltRange:6100,corUltDamage:6000,corUltReload:1.05,corUltAoe:260,corUltFireDps:240,corUltFireRange:200,corUltFireTime:9,legUltRange:6100,legUltDamage:2000,legUltBurst:63,legUltBurstRate:.03,legUltBeam:.15,legUltReload:14,legUltAoe:120,elite:true,roles:true,colossus:true,egg:false,intercept:false,boss:true,hp:1.8,damage:1.35,capn:20,roleCount:4,chance:.75,roleWeight:4,giantHp:2.5,giantCap:4,eggMult:1.25,aggroDist:1800,aggroChance:1,queenHp:1.5,stagger:3,staggerCost:5000}},
+  elite:{title:"精英虫群",desc:"更少、更硬、更危险的普通虫；避免简单把伤害与血量同比例放大。",tags:["精英","低人口"],state:{playerDefense:true,landUnits:true,armLand:true,corLand:true,legLand:true,legSlow:true,ultimate:true,teamColorFx:true,teamColorMode:"hybrid",armUltRange:6200,armUltDamage:45000,armUltBeam:4,armUltReload:5,armUltAoe:40,corUltRange:6100,corUltDamage:6000,corUltReload:1.05,corUltAoe:260,corUltFireDps:240,corUltFireRange:200,corUltFireTime:9,legUltRange:6100,legUltDamage:2000,legUltBurst:63,legUltBurstRate:.03,legUltBeam:.15,legUltReload:14,legUltAoe:120,elite:true,roles:true,colossus:false,egg:false,intercept:false,boss:true,hp:2.5,damage:1.55,capn:12,roleCount:3,chance:.7,roleWeight:3,giantHp:2.5,giantCap:4,eggMult:1.25,aggroDist:1800,aggroChance:1,queenHp:1.5,stagger:3,staggerCost:5000}},
+  colossus:{title:"巨兽挑战",desc:"普通虫更少，中后期依靠 T4 Assault 与 Matriarch 制造压力。",tags:["巨兽","后期"],state:{playerDefense:true,landUnits:true,armLand:true,corLand:true,legLand:true,legSlow:true,ultimate:true,teamColorFx:true,teamColorMode:"hybrid",armUltRange:6200,armUltDamage:45000,armUltBeam:4,armUltReload:5,armUltAoe:40,corUltRange:6100,corUltDamage:6000,corUltReload:1.05,corUltAoe:260,corUltFireDps:240,corUltFireRange:200,corUltFireTime:9,legUltRange:6100,legUltDamage:2000,legUltBurst:63,legUltBurstRate:.03,legUltBeam:.15,legUltReload:14,legUltAoe:120,elite:true,roles:true,colossus:true,egg:false,intercept:false,boss:true,hp:1.5,damage:1.25,capn:10,roleCount:3,chance:.7,roleWeight:3,giantHp:4,giantCap:2,eggMult:1.25,aggroDist:1800,aggroChance:1,queenHp:1.75,stagger:3,staggerCost:5000}},
+  economy:{title:"虫卵经济",desc:"启用战利品经济实验，提高 Raptor metalCost，从而影响蛋资源价值。",tags:["经济","回收"],state:{playerDefense:true,landUnits:true,armLand:true,corLand:true,legLand:true,legSlow:true,ultimate:true,teamColorFx:true,teamColorMode:"hybrid",armUltRange:6200,armUltDamage:45000,armUltBeam:4,armUltReload:5,armUltAoe:40,corUltRange:6100,corUltDamage:6000,corUltReload:1.05,corUltAoe:260,corUltFireDps:240,corUltFireRange:200,corUltFireTime:9,legUltRange:6100,legUltDamage:2000,legUltBurst:63,legUltBurstRate:.03,legUltBeam:.15,legUltReload:14,legUltAoe:120,elite:true,roles:true,colossus:true,egg:true,intercept:false,boss:true,hp:1.7,damage:1.3,capn:18,roleCount:4,chance:.75,roleWeight:4,giantHp:2.5,giantCap:3,eggMult:1.75,aggroDist:1800,aggroChance:1,queenHp:1.5,stagger:3,staggerCost:5000}}
 };
-function resetState(){return {playerDefense:false,defenseUnits:[],ultimate:false,teamColorFx:false,teamColorMode:"hybrid",armUltRange:6200,armUltDamage:45000,armUltBeam:4,armUltReload:5,armUltAoe:40,corUltRange:6100,corUltDamage:6000,corUltReload:1.05,corUltAoe:260,corUltFireDps:240,corUltFireRange:200,corUltFireTime:9,legUltRange:6100,legUltDamage:2000,legUltBurst:63,legUltBurstRate:.03,legUltBeam:.15,legUltReload:14,legUltAoe:120,elite:false,roles:false,colossus:false,egg:false,intercept:false,boss:false,hp:1,damage:1,capn:20,roleCount:4,chance:.75,roleWeight:4,giantHp:2,giantCap:4,eggMult:1,aggroDist:1800,aggroChance:1,queenHp:1,stagger:1,staggerCost:5000}}
+function resetState(){return {playerDefense:false,defenseUnits:[],landUnits:false,armLand:false,corLand:false,legLand:false,legSlow:false,ultimate:false,teamColorFx:false,teamColorMode:"hybrid",armUltRange:6200,armUltDamage:45000,armUltBeam:4,armUltReload:5,armUltAoe:40,corUltRange:6100,corUltDamage:6000,corUltReload:1.05,corUltAoe:260,corUltFireDps:240,corUltFireRange:200,corUltFireTime:9,legUltRange:6100,legUltDamage:2000,legUltBurst:63,legUltBurstRate:.03,legUltBeam:.15,legUltReload:14,legUltAoe:120,elite:false,roles:false,colossus:false,egg:false,intercept:false,boss:false,hp:1,damage:1,capn:20,roleCount:4,chance:.75,roleWeight:4,giantHp:2,giantCap:4,eggMult:1,aggroDist:1800,aggroChance:1,queenHp:1,stagger:1,staggerCost:5000}}
 
 function squadLine(name,minA,maxA,behavior,rarity,count,weight,distance,chance){
   return '  setRaptorSquad("'+name+'",'+minA+','+maxA+',"'+behavior+'","'+rarity+'",'+count+','+weight+','+distance+','+chance+')\n';
@@ -182,6 +182,55 @@ function buildEggLua(s){
   if(!s.egg)return "";
   return wrapModule('  local eggCostMult='+s.eggMult+'\n  for name,ud in pairs(UnitDefs) do if name:match("^raptor_") and not name:match("^raptor_queen_") and ud.metalcost then ud.metalcost=math.max(1,math.floor(ud.metalcost*eggCostMult)) end end\n');
 }
+function landHelpers(){
+  return '  local function U(n,t) local d=UnitDefs[n] if not d then return end for k,v in pairs(t) do if k=="customparams" then d.customparams=d.customparams or {} for ck,cv in pairs(v) do d.customparams[ck]=cv end else d[k]=v end end end\n'
+    +'  local function W(n,k,t) local d=UnitDefs[n] local w=d and d.weapondefs and d.weapondefs[k] if not w then return end for a,v in pairs(t) do if a=="damage" then w.damage=w.damage or {} for dk,dv in pairs(v) do w.damage[dk]=dv end elseif a=="customparams" then w.customparams=w.customparams or {} for ck,cv in pairs(v) do w.customparams[ck]=cv end else w[a]=v end end end\n';
+}
+function buildArmLandLua(s){
+  if(!s.landUnits||!s.armLand)return "";
+  const p=[landHelpers()];
+  p.push('  -- ARM: charged single-target energy weapons; strong alpha, slower cycles, little AoE.\n');
+  p.push('  W("armham","arm_ham",{name="Charged T1 Beam",weapontype="BeamLaser",gravityaffected=false,range=440,reloadtime=3.8,beamtime=0.18,areaofeffect=12,energypershot=100,weaponvelocity=1800,thickness=2.2,corethickness=0.24,laserflaresize=5,rgbcolor="0.35 0.7 1",rgbcolor2="0.9 0.98 1",explosiongenerator="custom:laserhit-small-blue",damage={default=260,vtol=20}})\n');
+  p.push('  W("armwar","armwar_laser",{name="Dual Charged Combat Laser",range=360,reloadtime=1.2,beamtime=0.18,areaofeffect=8,energypershot=70,thickness=2.2,corethickness=0.2,damage={default=220,vtol=22}})\n');
+  p.push('  W("armzeus","lightning",{name="Charged Lightning Lance",range=320,burst=6,burstrate=0.05,reloadtime=3.2,energypershot=22,customparams={spark_maxunits="0",spark_range="0",spark_forkdamage="0"},damage={default=75}})\n');
+  p.push('  W("armfido","bfido",{name="Long-range Pulse Laser",weapontype="BeamLaser",gravityaffected=false,range=725,reloadtime=7.5,beamtime=0.16,areaofeffect=16,energypershot=350,weaponvelocity=2400,thickness=2.8,corethickness=0.3,laserflaresize=6,rgbcolor="0.3 0.65 1",rgbcolor2="0.9 0.98 1",explosiongenerator="custom:laserhit-medium-blue",damage={default=700,vtol=60}})\n');
+  p.push('  W("armsnipe","armsnipe_weapon",{name="Extreme Charged Sniper Laser",range=1100,reloadtime=14,beamtime=0.12,energypershot=900,damage={default=4200,commanders=1400}})\n');
+  p.push('  W("armmav","armmav_weapon",{name="Heavy Pulse Beam",weapontype="BeamLaser",gravityaffected=false,range=430,reloadtime=3.2,beamtime=0.2,areaofeffect=12,energypershot=300,weaponvelocity=2200,thickness=3.2,corethickness=0.32,laserflaresize=6,rgbcolor="0.25 0.6 1",rgbcolor2="0.95 1 1",explosiongenerator="custom:laserhit-medium-blue",impulsefactor=0,damage={default=950,vtol=100}})\n');
+  return wrapModule(p.join(""));
+}
+function buildCorLandLua(s){
+  if(!s.landUnits||!s.corLand)return "";
+  const p=[landHelpers()];
+  p.push('  -- COR: slower, heavier, fire/explosive frontline pressure.\n');
+  p.push('  U("corthud",{health=1300}) W("corthud","arm_ham",{areaofeffect=48,reloadtime=1.6,damage={default=120,vtol=20}})\n');
+  p.push('  U("corpyro",{health=1250}) W("corpyro","flamethrower",{range=220,areaofeffect=64,reloadtime=1.15,burst=16,burstrate=0.05,firestarter=100,damage={default=21,subs=7}})\n');
+  p.push('  U("corcan",{health=7500,speed=35}) W("corcan","cor_canlaser",{reloadtime=0.9,damage={default=330,vtol=60}})\n');
+  p.push('  U("corsumo",{health=18500,speed=20}) W("corsumo","corsumo_weapon",{reloadtime=0.65,damage={default=360,vtol=75}})\n');
+  p.push('  U("cormort",{health=1100}) W("cormort","cor_mort",{range=850,reloadtime=1.8,areaofeffect=72,edgeeffectiveness=0.28,damage={default=150,vtol=15}})\n');
+  return wrapModule(p.join(""));
+}
+function buildLegLandLua(s){
+  if(!s.landUnits||!s.legLand)return "";
+  const p=[landHelpers()];
+  p.push('  -- LEG: sustained pressure. Individual hits are modest; uptime, heat rays and suppression create value.\n');
+  p.push('  W("leggob","semiauto",{range=280,burst=4,burstrate=0.07,reloadtime=0.55,damage={default=10,vtol=3}})\n');
+  p.push('  W("leglob","close_plasma",{range=400,reloadtime=0.75,areaofeffect=24,damage={default=45,vtol=12}})\n');
+  p.push('  W("legkark","heat_ray",{range=380,reloadtime=0.45,beamtime=0.35,damage={default=70,vtol=16}})\n');
+  p.push('  W("legkark","legion_shotgun",{reloadtime=1.6,burst=2,burstrate=0.3,damage={default=12,vtol=4}})\n');
+  p.push('  W("legstr","armmg_weapon",{range=300,burst=18,burstrate=0.045,reloadtime=0.25,damage={default=7,vtol=2}})\n');
+  p.push('  W("legshot","legion_riot_cannon_t2",{range=300,reloadtime=1.5,areaofeffect=160,impulsefactor=3,damage={default=240,subs=90,vtol=35}})\n');
+  p.push('  W("legsrail","railgunt2",{range=850,reloadtime=1.8,energypershot=180,damage={default=300,commanders=150}})\n');
+  p.push('  W("legaheattank","heat_ray",{range=475,energypershot=18,damage={default=36,vtol=10},customparams={sweepfire_firetime="3.2",sweepfire_reloadtime="2.2",turretspeedx="65",turretspeedy="105"}})\n');
+  if(s.legSlow){
+    p.push('  local opts=(Spring.GetModOptions and Spring.GetModOptions()) or {} local emp=opts.emprework==true or opts.emprework==1 or opts.emprework=="1" or opts.emprework=="true"\n');
+    p.push('  if emp then\n');
+    p.push('    W("legkark","legion_shotgun",{paralyzer=true,paralyzetime=1,damage={default=18,vtol=6}})\n');
+    p.push('    W("legshot","legion_riot_cannon_t2",{paralyzer=true,paralyzetime=1,damage={default=280,subs=110,vtol=40}})\n');
+    p.push('  end\n');
+  }
+  return wrapModule(p.join(""));
+}
+
 function buildUltimateLua(s){
   if(!s.ultimate)return "";
   const p=[];
@@ -215,6 +264,9 @@ function buildConfigModules(){
   push(6,"巨兽与 Queen Boss",buildBossLua(s));
   push(7,"虫卵经济",buildEggLua(s));
   push(8,"终极武器 V1",buildUltimateLua(s));
+  push(10,"ARM 地面兵种 · 蓄能激光",buildArmLandLua(s));
+  push(11,"COR 地面兵种 · 重装火力",buildCorLandLua(s));
+  push(12,"LEG 地面兵种 · 持续压制",buildLegLandLua(s));
   return mods;
 }
 function renderConfig(){
@@ -234,10 +286,24 @@ function renderConfig(){
     const ult=buildUltimateLua(getConfig());
     $("ultimatePreview").textContent=ult||"-- 终极武器模块未启用";
   }
+  if($("landPreview")){
+    const s=getConfig();
+    const parts=[
+      ["tweakdefs10 · ARM",buildArmLandLua(s)],
+      ["tweakdefs11 · COR",buildCorLandLua(s)],
+      ["tweakdefs12 · LEG",buildLegLandLua(s)]
+    ].filter(x=>x[1]).map(x=>"-- "+x[0]+"\n"+x[1]);
+    $("landPreview").textContent=parts.join("\n\n")||"-- 地面兵种模块未启用";
+  }
 }
 CONFIG_IDS.forEach(id=>$(id)?.addEventListener("input",renderConfig));
 $("openPlayerDefense")?.addEventListener("click",()=>switchTab("players"));
 $("openUltimate")?.addEventListener("click",()=>switchTab("ultimate"));
+$("openLand")?.addEventListener("click",()=>switchTab("land"));
+$("copyArmLand")?.addEventListener("click",()=>{const lua=buildArmLandLua(getConfig());copyText(lua?"!bset tweakdefs10 "+encode64(lua):"-- ARM 地面兵种模块未启用",$("copyArmLand"))});
+$("copyCorLand")?.addEventListener("click",()=>{const lua=buildCorLandLua(getConfig());copyText(lua?"!bset tweakdefs11 "+encode64(lua):"-- COR 地面兵种模块未启用",$("copyCorLand"))});
+$("copyLegLand")?.addEventListener("click",()=>{const lua=buildLegLandLua(getConfig());copyText(lua?"!bset tweakdefs12 "+encode64(lua):"-- LEG 地面兵种模块未启用",$("copyLegLand"))});
+$("copyEmpRework")?.addEventListener("click",()=>copyText("!bset emprework true",$("copyEmpRework")));
 $("copyUltimateLua")?.addEventListener("click",()=>copyText(buildUltimateLua(getConfig())||"-- 终极武器模块未启用",$("copyUltimateLua")));
 $("copyUltimateCmd")?.addEventListener("click",()=>{const lua=buildUltimateLua(getConfig());copyText(lua?"!bset tweakdefs8 "+encode64(lua):"-- 终极武器模块未启用",$("copyUltimateCmd"))});
 qa("[data-config-preset]").forEach(b=>b.addEventListener("click",()=>{const k=b.dataset.configPreset;if(k==="reset")setConfig(resetState());else setConfig(BUILTIN[k].state)}));
