@@ -20,6 +20,7 @@
   <nav class="tabs">
     <button class="tab active" data-tab="config">配置器</button>
     <button class="tab" data-tab="presets">Presets</button>
+    <button class="tab" data-tab="players">玩家防御</button>
     <button class="tab" data-tab="raptors">Raptor 数据</button>
     <button class="tab" data-tab="scavs">Scavenger 数据</button>
     <button class="tab" data-tab="custom">Custom Tweak</button>
@@ -48,6 +49,11 @@
     </div>
 
     <div class="grid2">
+      <article class="card">
+        <div class="cardhead"><div><h3>玩家基础防御 V1</h3><p>ARM / COR / LEG 共 18 个核心防御单位。默认应用当前讨论的阵营特色和平衡基线，可在“玩家防御”页逐个启用或关闭。</p></div><label class="switch"><input id="playerDefense" type="checkbox" checked><span></span></label></div>
+        <div class="toolbar"><span id="playerDefenseSummary" class="small muted">18 / 18 已启用</span><span class="grow"></span><button id="openPlayerDefense" class="btn small">查看 18 个单位</button></div>
+      </article>
+
       <article class="card">
         <div class="cardhead"><div><h3>精英化 + 存量限制</h3><p>修改全部 <span class="mono">raptor_*</span> 非 Queen 单位的 HP、武器伤害与单 UnitDef 存量上限。</p></div><label class="switch"><input id="elite" type="checkbox" checked><span></span></label></div>
         <div class="form"><label>HP 倍率</label><input id="hp" type="number" value="1.8" min=".1" step=".1"><label>伤害倍率</label><input id="damage" type="number" value="1.35" min=".1" step=".05"><label>maxThisUnit</label><input id="capn" type="number" value="20" min="1" step="1"></div>
@@ -92,6 +98,33 @@
     <div class="toolbar"><input id="presetName" class="field" style="max-width:280px" placeholder="自定义预设名称"><button id="savePreset" class="btn good">保存当前配置</button><button id="exportPresets" class="btn">导出 JSON</button><button id="clearPresets" class="btn danger">清空本地预设</button></div>
     <div id="savedPresets" class="grid3"></div>
     <div class="box" style="padding:14px;margin-top:14px"><h3 style="margin-top:0">导入 Preset JSON</h3><textarea id="presetImport" class="mini-editor" placeholder='粘贴导出的 JSON'></textarea><div class="toolbar"><button id="importPresets" class="btn primary">导入</button></div></div>
+  </section>
+
+
+  <section id="players" class="panel">
+    <div class="hero">
+      <h2>玩家基础防御 V1</h2>
+      <p>这 18 个单位作为当前模式的玩家侧平衡基准：ARM 强调电链、精确和高频；COR 强调火焰、爆炸和阵地压制；LEG 强调击退、穿透和高价值目标处理。这里的数值是第一轮 PvE 测试值，后续会继续按实战调整。</p>
+      <div class="notice">T1 与 T2 攻击墙目前按“功能错位、同时存在”设计，不再默认把 T1 自动替换为现有 T2。关闭某一行后，生成的 tweakdefs 不再修改该 UnitDef。</div>
+    </div>
+    <div class="toolbar">
+      <input id="playerDefenseSearch" class="field grow" placeholder="搜索 UnitDef / 定位">
+      <select id="playerDefenseFaction" class="field" style="max-width:160px">
+        <option value="">全部阵营</option>
+        <option value="ARM">ARM</option>
+        <option value="COR">COR</option>
+        <option value="LEG">LEG</option>
+      </select>
+      <button id="enableAllDefense" class="btn good">全部启用</button>
+      <button id="disableAllDefense" class="btn">全部关闭</button>
+      <span id="playerDefenseCount" class="small muted"></span>
+    </div>
+    <div class="tablebox">
+      <table>
+        <thead><tr><th>启用</th><th>阵营</th><th>阶段</th><th>UnitDef</th><th>定位</th><th>官方基线</th><th>PvE V1 默认</th></tr></thead>
+        <tbody id="playerDefenseRows"></tbody>
+      </table>
+    </div>
   </section>
 
   <section id="raptors" class="panel">
