@@ -428,7 +428,6 @@ function renderConfig(){
     ].filter(x=>x[1]).map(x=>"-- "+x[0]+"\n"+x[1]);
     $("landPreview").textContent=parts.join("\n\n")||"-- 地面兵种模块未启用";
   }
-}
   if($("t3Preview")){
     const s=getConfig();
     const parts=[
