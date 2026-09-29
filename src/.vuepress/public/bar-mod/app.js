@@ -206,7 +206,7 @@ CONFIG_IDS.forEach(id=>$(id)?.addEventListener("input",renderConfig));
 $("openPlayerDefense")?.addEventListener("click",()=>switchTab("players"));
 qa("[data-config-preset]").forEach(b=>b.addEventListener("click",()=>{const k=b.dataset.configPreset;if(k==="reset")setConfig(resetState());else setConfig(BUILTIN[k].state)}));
 $("copyConfigLua").onclick=()=>copyText($("configLua").textContent,$("copyConfigLua"));
-$("copyConfigCmd").onclick=()=>copyText($("configCommand").textContent,$("copyConfigCmd"));
+$("copyConfigCmd").onclick=()=>{const cmds=buildConfigModules().map(m=>"!bset "+m.key+" "+encode64(m.lua)).join("\n");copyText(cmds,$("copyConfigCmd"))};
 $("sendConfigToEditor").onclick=()=>{$("editorText").value=$("configLua").textContent;renderEditor();switchTab("editor")};
 
 function renderBuiltinPresets(){
