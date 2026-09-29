@@ -146,6 +146,7 @@
       <h2>终极武器 V1</h2>
       <p>三门 End-game LRPC 不再只是同一套炮弹的不同射速：ARM 负责超远程精确切割，COR 负责高爆与持续燃烧，LEG 负责多管热能射线齐射。三者默认每 Team 限 1 门。</p>
       <div class="notice"><b>Team Color：</b><span class="mono">tweakdefs8</span> 会写入 <span class="mono">pve_teamcolor_fx</span> / <span class="mono">pve_teamcolor_fx_mode</span> 标记并提供固定阵营色回退；真正按每个玩家当前 Team Color 动态换色，需要游戏侧视觉 Gadget 读取这些标记。这个限制来自 WeaponDef 全局共享，不是配置器能单独绕过的。</div>
+      <div class="notice"><b>脚本兼容性：</b>Ragnarok 与 Starfall 的原版 COB 是按远程炮设计的；V1 会通过 tweak 把武器类型改成 BeamLaser。数值与字段可以直接生成，但持续光束、多炮口 63 连发与现有动画的最终表现需要在实际 BAR 房间里重点测试。</div>
     </div>
 
     <div class="grid3">
