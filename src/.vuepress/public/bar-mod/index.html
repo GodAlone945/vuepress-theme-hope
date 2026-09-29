@@ -21,6 +21,7 @@
     <button class="tab active" data-tab="config">配置器</button>
     <button class="tab" data-tab="presets">Presets</button>
     <button class="tab" data-tab="players">玩家防御</button>
+    <button class="tab" data-tab="land">地面兵种</button>
     <button class="tab" data-tab="ultimate">终极武器</button>
     <button class="tab" data-tab="raptors">Raptor 数据</button>
     <button class="tab" data-tab="scavs">Scavenger 数据</button>
@@ -45,13 +46,24 @@
       <button class="btn" data-config-preset="economy">虫卵经济</button>
       <button class="btn" data-config-preset="reset">清空</button>
       <span class="grow"></span>
-      <span class="small muted">模块化输出：ARM 0 · COR 1 · LEG 2 · Raptor 4/5 · Boss 6 · 经济 7 · 终极武器 8 · 联合科技 9</span>
+      <span class="small muted">模块化输出：防御 0/1/2 · Raptor 4/5 · Boss 6 · 经济 7 · 终极武器 8 · 联合科技 9 · 陆军 ARM/COR/LEG 10/11/12</span>
     </div>
 
     <div class="grid2">
       <article class="card">
         <div class="cardhead"><div><h3>玩家基础防御 V1</h3><p>ARM / COR / LEG 共 18 个核心防御单位。默认应用当前讨论的阵营特色和平衡基线，可在“玩家防御”页逐个启用或关闭。</p></div><label class="switch"><input id="playerDefense" type="checkbox" checked><span></span></label></div>
         <div class="toolbar"><span id="playerDefenseSummary" class="small muted">18 / 18 已启用</span><span class="grow"></span><button id="openPlayerDefense" class="btn small">查看 18 个单位</button></div>
+      </article>
+
+      <article class="card">
+        <div class="cardhead"><div><h3>地面兵种特色 V1</h3><p>不做镜像平衡：ARM 高蓄能高单发；COR 厚重火焰爆炸；LEG 持续输出与减速压制。</p></div><label class="switch"><input id="landUnits" type="checkbox" checked><span></span></label></div>
+        <div class="form">
+          <label>ARM 蓄能激光</label><label class="switch"><input id="armLand" type="checkbox" checked><span></span></label>
+          <label>COR 重装火力</label><label class="switch"><input id="corLand" type="checkbox" checked><span></span></label>
+          <label>LEG 持续压制</label><label class="switch"><input id="legLand" type="checkbox" checked><span></span></label>
+          <label>LEG 减速支援</label><label class="switch"><input id="legSlow" type="checkbox" checked><span></span></label>
+        </div>
+        <div class="toolbar"><span class="small muted">独立输出 tweakdefs10 / 11 / 12</span><span class="grow"></span><button id="openLand" class="btn small">查看兵种</button></div>
       </article>
 
       <article class="card">
@@ -138,6 +150,45 @@
         <thead><tr><th>启用</th><th>阵营</th><th>阶段</th><th>UnitDef</th><th>定位</th><th>官方基线</th><th>PvE V1 默认</th></tr></thead>
         <tbody id="playerDefenseRows"></tbody>
       </table>
+    </div>
+  </section>
+
+  <section id="land" class="panel">
+    <div class="hero">
+      <h2>地面兵种特色 V1</h2>
+      <p>这一版不追求三阵营“同成本同DPS”。核心是让选阵营等于选玩法：ARM 用蓄能激光打一轮高价值单体；COR 用厚甲、火焰和爆炸顶住正面；LEG 依靠连续射击、Heat Ray 与减速把目标压住后持续磨穿。</p>
+      <div class="notice"><b>LEG 减速：</b>当前直接复用 BAR 官方隐藏实验选项 <span class="mono">emprework</span> 的减速系统。只有开启 EMP Rework 后，配置器给 Karkinos 副武器与 Shotgunner 设置的 paralyzer 才会表现为移动/射速减速。默认不会把这个隐藏选项自动混进 tweakdefs；可用下方按钮复制房间命令。</div>
+    </div>
+
+    <div class="grid3">
+      <article class="card">
+        <h3>ARM · 一轮打穿</h3>
+        <p>牺牲射速、AoE 和持续性，换高单发、长射程与高能耗。被虫海贴身时明显难受。</p>
+        <div class="chips"><span class="chip">armham</span><span class="chip">armwar</span><span class="chip">armzeus</span><span class="chip">armfido</span><span class="chip">armsnipe</span><span class="chip">armmav</span></div>
+        <p class="small muted">代表变化：Fido → 725射程脉冲激光；Sniper → 1100射程/4200单发；Maverick → 950单发重脉冲。</p>
+        <div class="toolbar"><button id="copyArmLand" class="btn primary">复制 tweakdefs10</button></div>
+      </article>
+
+      <article class="card">
+        <h3>COR · 正面碾压</h3>
+        <p>不追求灵活：更厚、更慢、更依赖火焰与爆炸。只要阵型站住，持续正面交换非常强。</p>
+        <div class="chips"><span class="chip">corthud</span><span class="chip">corpyro</span><span class="chip">corcan</span><span class="chip">corsumo</span><span class="chip">cormort</span></div>
+        <p class="small muted">代表变化：Can 7500HP/35速度；Sumo 18500HP/20速度；Morty AoE扩大到72。</p>
+        <div class="toolbar"><button id="copyCorLand" class="btn primary">复制 tweakdefs11</button></div>
+      </article>
+
+      <article class="card">
+        <h3>LEG · 持续压制</h3>
+        <p>降低“打一炮等很久”的比重，强化高速循环火力、Heat Ray 持续照射与压制减速；需要持续接触才能把价值打出来。</p>
+        <div class="chips"><span class="chip">leggob</span><span class="chip">leglob</span><span class="chip">legkark</span><span class="chip">legstr</span><span class="chip">legshot</span><span class="chip">legsrail</span><span class="chip">legaheattank</span></div>
+        <p class="small muted">代表变化：S-Rail 850伤/7秒 → 300伤/1.8秒；Heat Tank 延长持续照射；Shotgunner/Karkinos 提供减速支援。</p>
+        <div class="toolbar"><button id="copyLegLand" class="btn primary">复制 tweakdefs12</button><button id="copyEmpRework" class="btn">复制 !bset emprework true</button></div>
+      </article>
+    </div>
+
+    <div class="box" style="padding:14px;margin-top:14px">
+      <h3 style="margin-top:0">当前模块预览</h3>
+      <pre id="landPreview" class="code"></pre>
     </div>
   </section>
 
