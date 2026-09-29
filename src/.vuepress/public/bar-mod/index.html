@@ -1,74 +1,178 @@
 <!doctype html>
 <html lang="zh-CN">
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>BAR PVE Tweak Configurator</title>
-<style>
-:root{color-scheme:dark;--bg:#091018;--panel:#111b26;--line:#26394b;--text:#e9f1f8;--muted:#91a5b8;--accent:#4fc3ff;--ok:#67daa3;--warn:#ffd071}
-*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 15% 0,#12304a 0,#091018 35%);color:var(--text);font-family:system-ui,-apple-system,Segoe UI,sans-serif}
-.wrap{max-width:1180px;margin:auto;padding:22px}a{color:var(--accent);text-decoration:none}header{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:22px}.brand h1{margin:0;font-size:21px}.brand p{margin:5px 0 0;color:var(--muted);font-size:13px}
-.nav,.presets,.actions{display:flex;gap:8px;flex-wrap:wrap}.nav button,.btn,.preset{border:1px solid var(--line);background:var(--panel);color:var(--text);padding:9px 13px;border-radius:9px;cursor:pointer}.nav button.active,.btn.primary{background:#123650;border-color:#2b739e}
-section{display:none}section.active{display:block}.hero,.card,.output,.tablebox{border:1px solid var(--line);background:rgba(17,27,38,.94);border-radius:14px}.hero{padding:22px;margin-bottom:16px}.hero h2{margin:0 0 8px}.hero p{color:var(--muted);line-height:1.7;margin:0}.warn{margin-top:12px;padding:10px 12px;background:#241e11;border-left:3px solid var(--warn);color:#ead7a5;font-size:13px}.presets{margin:15px 0}
-.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px}.card{padding:15px}.head{display:flex;justify-content:space-between;gap:12px}.card h3{margin:0 0 5px;font-size:16px}.desc{color:var(--muted);font-size:13px;line-height:1.55}
-.switch{width:44px;height:24px;position:relative;flex:0 0 auto}.switch input{display:none}.track{position:absolute;inset:0;border-radius:16px;background:#2b3b4c;cursor:pointer}.track:after{content:"";position:absolute;left:3px;top:3px;width:18px;height:18px;border-radius:50%;background:white;transition:.16s}.switch input:checked+.track{background:#277ead}.switch input:checked+.track:after{transform:translateX(20px)}
-.controls{display:grid;grid-template-columns:1fr 110px;gap:9px;align-items:center;margin-top:12px}.controls label{font-size:13px}.controls input{width:100%;border:1px solid var(--line);background:#0c151e;color:var(--text);border-radius:7px;padding:8px}
-.output{margin-top:16px;overflow:hidden}.outhead{display:flex;justify-content:space-between;gap:10px;align-items:center;padding:12px 14px;border-bottom:1px solid var(--line)}pre{margin:0;padding:14px;max-height:330px;overflow:auto;white-space:pre-wrap;word-break:break-all;font:12px/1.55 ui-monospace,SFMono-Regular,Consolas,monospace;color:#cae4f5}.stats{font-size:12px;color:var(--muted)}
-.tablebox{overflow:auto}table{width:100%;border-collapse:collapse;min-width:760px}th,td{padding:11px;border-bottom:1px solid var(--line);font-size:13px;text-align:left;vertical-align:top}th{background:#142331}.yes{color:var(--ok)}.mid{color:var(--warn)}.tag{display:inline-block;padding:3px 7px;margin:2px;border:1px solid #31495c;border-radius:999px;background:#192936;color:#c0d3e3;font-size:11px}
-.docs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:13px}.docs .card p,.docs .card li{color:var(--muted);font-size:13px;line-height:1.6}.footer{text-align:center;color:var(--muted);font-size:12px;margin:22px 0 5px}@media(max-width:800px){.grid,.docs{grid-template-columns:1fr}header{align-items:flex-start;flex-direction:column}.wrap{padding:13px}}
-</style></head>
-<body><div class="wrap">
-<header><div class="brand"><h1>🦖 BAR PVE Tweak Configurator</h1><p>GodAlone945 · 低单位数高质量 Raptor PVE 实验配置器</p></div>
-<div class="nav"><button class="active" data-tab="config">配置器</button><button data-tab="cap">能力清单</button><button data-tab="about">说明</button><a class="btn" href="/">返回主页</a></div></header>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="BAR tweakdefs / tweakunits configurator and official spawn roster explorer">
+  <title>BAR Mod Toolkit</title>
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+<div class="shell">
+  <header class="topbar">
+    <div class="brand">
+      <div class="mark">🦖</div>
+      <div><h1>BAR Mod Toolkit</h1><p>低单位数 PVE · TweakDefs / Custom Squads · 官方 master 优先</p></div>
+    </div>
+    <div class="source-badge">主参考：beyond-all-reason/Beyond-All-Reason · master</div>
+  </header>
 
-<section id="config" class="active">
-<div class="hero"><h2>从“虫海”转向“精英 + 职业 + 巨兽”</h2><p>参考 Community NuttyB 的模块化配置与一键生成房间命令方式，为当前 BAR 分支生成纯 <b>tweakdefs</b> 方案。第一版不新增 Gadget。</p><div class="warn">当前目标是验证低单位数 PVE。Boss 击杀事件链、真正 threat table、逐波精确重写等需要 Gadget 的功能不会伪装成纯 tweak。</div></div>
-<div class="presets"><button class="preset" data-preset="balanced">推荐：低单位防线</button><button class="preset" data-preset="elite">精英虫群</button><button class="preset" data-preset="colossus">巨兽挑战</button><button class="preset" data-preset="economy">虫卵经济</button><button class="preset" data-preset="reset">全部关闭</button></div>
-<div class="grid">
-<div class="card"><div class="head"><div><h3>精英化 + 数量限制</h3><div class="desc">提高 Raptor HP/伤害，用 maxThisUnit 压低单个 UnitDef 的实际存量。</div></div><label class="switch"><input id="elite" type="checkbox" checked><span class="track"></span></label></div><div class="controls"><label>Raptor HP 倍率</label><input id="hp" type="number" value="1.8" step=".1"><label>Raptor 伤害倍率</label><input id="damage" type="number" value="1.35" step=".1"><label>单 UnitDef 存量上限</label><input id="capn" type="number" value="20" step="1"></div></div>
-<div class="card"><div class="head"><div><h3>职业虫族</h3><div class="desc">使用官方 Custom Squads：raider / berserk / skirmisher / healer / artillery / kamikaze。</div></div><label class="switch"><input id="roles" type="checkbox" checked><span class="track"></span></label></div><div class="controls"><label>职业小队基础数量</label><input id="roleCount" type="number" value="4" step="1"><label>行为触发概率</label><input id="chance" type="number" value=".75" step=".05"></div></div>
-<div class="card"><div class="head"><div><h3>巨兽化</h3><div class="desc">强化 Matriarch 与 T4 Assault，使后期压力转向少量高威胁目标。</div></div><label class="switch"><input id="colossus" type="checkbox" checked><span class="track"></span></label></div><div class="controls"><label>巨兽 HP 倍率</label><input id="giantHp" type="number" value="2.5" step=".25"><label>巨兽存量上限</label><input id="giantCap" type="number" value="4" step="1"></div></div>
-<div class="card"><div class="head"><div><h3>虫卵经济</h3><div class="desc">利用现有 Raptor Egg 回收机制，通过死亡虫子的 metalCost 调整战利品经济强度。</div></div><label class="switch"><input id="egg" type="checkbox" checked><span class="track"></span></label></div><div class="controls"><label>虫卵价值倍率</label><input id="eggMult" type="number" value="1.25" step=".25"></div></div>
-<div class="card"><div class="head"><div><h3>机动迎击 / 拉怪</h3><div class="desc">利用 Berserk 的受击追击反应，形成弱仇恨和主动迎击玩法。</div></div><label class="switch"><input id="intercept" type="checkbox"><span class="track"></span></label></div><div class="controls"><label>Berserk 反应距离</label><input id="aggroDist" type="number" value="1800" step="100"></div></div>
-<div class="card"><div class="head"><div><h3>Queen Boss 工具</h3><div class="desc">调整 Queen HP；将高金属成本可移动地面单位设为更高 Boss Stagger 贡献者。</div></div><label class="switch"><input id="boss" type="checkbox" checked><span class="track"></span></label></div><div class="controls"><label>Queen HP 倍率</label><input id="queenHp" type="number" value="1.5" step=".25"><label>反 Boss 硬直倍率</label><input id="stagger" type="number" value="3" step=".5"></div></div>
+  <nav class="tabs">
+    <button class="tab active" data-tab="config">配置器</button>
+    <button class="tab" data-tab="presets">Presets</button>
+    <button class="tab" data-tab="raptors">Raptor 数据</button>
+    <button class="tab" data-tab="scavs">Scavenger 数据</button>
+    <button class="tab" data-tab="custom">Custom Tweak</button>
+    <button class="tab" data-tab="base64">Base64</button>
+    <button class="tab" data-tab="editor">Editor</button>
+    <button class="tab" data-tab="docs">文档</button>
+    <a class="btn" href="/">返回主页</a>
+  </nav>
+
+  <section id="config" class="panel active">
+    <div class="hero">
+      <h2>低单位数 Raptor PVE 配置器</h2>
+      <p>先压低单位存量，再用职业、巨兽、虫卵经济和 Queen 分工补回玩法强度。输出是官方 BAR 当前支持的 <b>tweakdefs</b> Lua + Base64URL 房间命令。</p>
+      <div class="notice">Custom Squad 会把单位额外加入刷怪池，并给该 UnitDef 注册相应行为；它不只是“职业标签”。第一版数值属于实验预设，建议先在单人房逐项测试。</div>
+    </div>
+
+    <div class="toolbar">
+      <button class="btn primary" data-config-preset="balanced">低单位防线</button>
+      <button class="btn" data-config-preset="elite">精英虫群</button>
+      <button class="btn" data-config-preset="colossus">巨兽挑战</button>
+      <button class="btn" data-config-preset="economy">虫卵经济</button>
+      <button class="btn" data-config-preset="reset">清空</button>
+      <span class="grow"></span>
+      <label class="small muted">输出槽位</label>
+      <select id="configSlot" class="field" style="width:130px"></select>
+    </div>
+
+    <div class="grid2">
+      <article class="card">
+        <div class="cardhead"><div><h3>精英化 + 存量限制</h3><p>修改全部 <span class="mono">raptor_*</span> 非 Queen 单位的 HP、武器伤害与单 UnitDef 存量上限。</p></div><label class="switch"><input id="elite" type="checkbox" checked><span></span></label></div>
+        <div class="form"><label>HP 倍率</label><input id="hp" type="number" value="1.8" min=".1" step=".1"><label>伤害倍率</label><input id="damage" type="number" value="1.35" min=".1" step=".05"><label>maxThisUnit</label><input id="capn" type="number" value="20" min="1" step="1"></div>
+      </article>
+
+      <article class="card">
+        <div class="cardhead"><div><h3>职业虫族 / Custom Squads</h3><p>为已验证的 T2 虫种增加 raider、berserk、skirmisher、healer、artillery、kamikaze 自定义刷怪项。</p></div><label class="switch"><input id="roles" type="checkbox" checked><span></span></label></div>
+        <div class="form"><label>基础 Squad 数量</label><input id="roleCount" type="number" value="4" min="1" step="1"><label>行为 chance</label><input id="chance" type="number" value=".75" min="0" max="1" step=".05"><label>相对 weight</label><input id="roleWeight" type="number" value="4" min="1" step="1"></div>
+      </article>
+
+      <article class="card">
+        <div class="cardhead"><div><h3>巨兽化</h3><p>强化 Matriarch 与 T4 Assault，限制数量，让后期压力从虫海转为少量高价值目标。</p></div><label class="switch"><input id="colossus" type="checkbox" checked><span></span></label></div>
+        <div class="form"><label>巨兽 HP 倍率</label><input id="giantHp" type="number" value="2.5" min=".1" step=".25"><label>巨兽存量上限</label><input id="giantCap" type="number" value="4" min="1" step="1"></div>
+      </article>
+
+      <article class="card">
+        <div class="cardhead"><div><h3>虫卵经济</h3><p>通过 Raptor 的 metalCost 间接影响死亡后虫卵资源价值。注意：改变 cost 也可能影响其它依赖 cost 的逻辑。</p></div><label class="switch"><input id="egg" type="checkbox"><span></span></label></div>
+        <div class="form"><label>Raptor metalCost 倍率</label><input id="eggMult" type="number" value="1.25" min=".1" step=".25"></div>
+      </article>
+
+      <article class="card">
+        <div class="cardhead"><div><h3>机动迎击 / Berserk 拉怪</h3><p>额外给两个 Assault 变体加入 berserk Squad，用官方受击/命中后的追击逻辑形成弱仇恨。</p></div><label class="switch"><input id="intercept" type="checkbox"><span></span></label></div>
+        <div class="form"><label>反应距离</label><input id="aggroDist" type="number" value="1800" min="100" step="100"><label>触发 chance</label><input id="aggroChance" type="number" value="1" min="0" max="1" step=".05"></div>
+      </article>
+
+      <article class="card">
+        <div class="cardhead"><div><h3>Queen Boss 分工</h3><p>调整 Queen HP，并让达到金属成本阈值的非空地面移动单位获得更高 bossStaggerMultiplier。</p></div><label class="switch"><input id="boss" type="checkbox" checked><span></span></label></div>
+        <div class="form"><label>Queen HP 倍率</label><input id="queenHp" type="number" value="1.5" min=".1" step=".25"><label>Stagger 倍率</label><input id="stagger" type="number" value="3" min=".1" step=".5"><label>玩家单位 metalCost 阈值</label><input id="staggerCost" type="number" value="5000" min="0" step="500"></div>
+      </article>
+    </div>
+
+    <div class="output">
+      <div class="outhead"><div><b>生成命令</b><div id="configStats" class="small muted"></div></div><div class="actions"><button id="sendConfigToEditor" class="btn">发送到 Editor</button><button id="copyConfigLua" class="btn">复制 Lua</button><button id="copyConfigCmd" class="btn primary">复制命令</button></div></div>
+      <pre id="configCommand" class="code"></pre>
+    </div>
+    <div class="output"><div class="outhead"><b>Lua 预览</b><span class="small muted">官方 tweakdefs 在 UnitDefs 后处理阶段执行</span></div><pre id="configLua" class="code"></pre></div>
+  </section>
+
+  <section id="presets" class="panel">
+    <div class="hero"><h2>Presets</h2><p>内置预设用于快速起步；你可以把当前配置保存到浏览器、本地导出 JSON，再导入回来继续调整。</p></div>
+    <div id="builtinPresets" class="grid3"></div>
+    <div class="toolbar"><input id="presetName" class="field" style="max-width:280px" placeholder="自定义预设名称"><button id="savePreset" class="btn good">保存当前配置</button><button id="exportPresets" class="btn">导出 JSON</button><button id="clearPresets" class="btn danger">清空本地预设</button></div>
+    <div id="savedPresets" class="grid3"></div>
+    <div class="box" style="padding:14px;margin-top:14px"><h3 style="margin-top:0">导入 Preset JSON</h3><textarea id="presetImport" class="mini-editor" placeholder='粘贴导出的 JSON'></textarea><div class="toolbar"><button id="importPresets" class="btn primary">导入</button></div></div>
+  </section>
+
+  <section id="raptors" class="panel">
+    <div class="hero"><h2>Raptor 官方刷怪池数据</h2><p>数据从官方 <span class="mono">luarules/configs/raptor_spawn_defs.lua</span> 的 <span class="mono">addNewSquad</span> 项生成。这里只展示刷怪池引用，不等于完整 UnitDef 图鉴。</p></div>
+    <div class="toolbar"><input id="raptorSearch" class="field grow" placeholder="搜索单位 ID / Squad 类型"><select id="raptorTier" class="field" style="max-width:150px"><option value="">全部 Tier</option></select><select id="raptorRole" class="field" style="max-width:170px"><option value="">全部角色</option></select><span id="raptorCount" class="small muted"></span></div>
+    <div class="tablebox"><table><thead><tr><th>UnitDef</th><th>Tier</th><th>推断角色</th><th>原版 Squad Type</th><th>Anger 范围</th><th></th></tr></thead><tbody id="raptorRows"></tbody></table></div>
+  </section>
+
+  <section id="scavs" class="panel">
+    <div class="hero"><h2>Scavenger 官方刷怪池数据</h2><p>数据从官方 <span class="mono">luarules/configs/scav_spawn_defs.lua</span> 的 <span class="mono">addNewSquad</span> 项生成。Scavenger 本身大量复用 Armada/Cortex/Legion 单位的 _scav 版本。</p></div>
+    <div class="toolbar"><input id="scavSearch" class="field grow" placeholder="搜索单位 ID / Squad 类型"><span id="scavCount" class="small muted"></span></div>
+    <div class="tablebox"><table><thead><tr><th>UnitDef</th><th>Tier</th><th>分类</th><th>原版 Squad Type</th><th>Anger/Tech 范围</th><th></th></tr></thead><tbody id="scavRows"></tbody></table></div>
+  </section>
+
+  <section id="custom" class="panel">
+    <div class="hero"><h2>Custom Tweak Builder</h2><p>这里不替你猜机制，而是把官方确认存在的 UnitDef 与 Custom Squad 参数组合成 Lua。生成后可以直接追加到 Editor。</p></div>
+    <div class="split">
+      <article class="card">
+        <h3>单单位属性修改</h3>
+        <div class="form">
+          <label>UnitDef ID</label><input id="unitId" placeholder="raptor_land_assault_basic_t2_v1">
+          <label>属性</label><select id="unitProp"><option>health</option><option>speed</option><option>metalcost</option><option>buildtime</option><option>maxthisunit</option><option>sightdistance</option></select>
+          <label>操作</label><select id="unitOp"><option value="mul">乘以</option><option value="set">设为</option></select>
+          <label>数值</label><input id="unitValue" type="number" value="2" step=".1">
+        </div>
+        <div class="toolbar"><button id="buildUnitTweak" class="btn primary">生成并加入 Editor</button></div>
+      </article>
+
+      <article class="card">
+        <h3>Custom Squad</h3>
+        <div class="form">
+          <label>阵营逻辑</label><select id="squadMode"><option value="raptor">Raptor</option><option value="scav">Scavenger</option></select>
+          <label>UnitDef ID</label><input id="squadUnit" placeholder="raptor_land_spiker_basic_t2_v1">
+          <label>数量</label><input id="squadAmount" type="number" value="2" min="1">
+          <label>最小 Anger/Tech</label><input id="squadMin" type="number" value="20">
+          <label>最大 Anger/Tech</label><input id="squadMax" type="number" value="1000">
+          <label>Weight</label><input id="squadWeight" type="number" value="3" min="1">
+          <label>Rarity</label><select id="squadRarity"><option value="special">special</option><option value="basic">basic</option></select>
+          <label>Behavior</label><select id="squadBehavior"></select>
+          <label>Behavior distance</label><input id="squadDistance" type="number" value="700">
+          <label>Behavior chance</label><input id="squadChance" type="number" value=".75" min="0" max="1" step=".05">
+          <label>Scav surface</label><select id="squadSurface"><option value="mixed">mixed</option><option value="land">land</option><option value="sea">sea</option></select>
+        </div>
+        <div class="toolbar"><button id="buildSquad" class="btn primary">生成并加入 Editor</button></div>
+      </article>
+    </div>
+  </section>
+
+  <section id="base64" class="panel">
+    <div class="hero"><h2>TweakDefs Base64URL</h2><p>官方 <span class="mono">tweakdefs</span> 会先 Base64 解码，再把结果当 Lua 执行。这里使用和 NuttyB 一样的 URL-safe Base64 思路，并去掉末尾 padding。</p></div>
+    <div class="split">
+      <article class="card"><h3>Lua → 房间命令</h3><div class="toolbar"><select id="b64Slot" class="field" style="max-width:160px"></select></div><textarea id="b64Input" class="mini-editor" placeholder="输入 Lua"></textarea><div class="toolbar"><button id="encodeB64" class="btn primary">编码</button><button id="copyB64" class="btn">复制结果</button></div><pre id="b64Output" class="code"></pre></article>
+      <article class="card"><h3>房间命令 / Base64URL → Lua</h3><textarea id="b64DecodeInput" class="mini-editor" placeholder="!bset tweakdefs ... 或纯 Base64URL"></textarea><div class="toolbar"><button id="decodeB64" class="btn primary">解码</button></div><pre id="b64Decoded" class="code"></pre></article>
+    </div>
+  </section>
+
+  <section id="editor" class="panel">
+    <div class="hero"><h2>Lua Editor</h2><p>用于合并配置器与自定义片段。当前 Editor 专注 <b>tweakdefs</b>；官方 tweakunits 虽然也使用编码字符串，但解析路径不同，后续单独做专用表格编辑器，避免混用格式。</p></div>
+    <div class="toolbar"><select id="editorSlot" class="field" style="max-width:160px"></select><button id="formatEditor" class="btn">基础整理</button><button id="clearEditor" class="btn danger">清空</button><span class="grow"></span><button id="copyEditorLua" class="btn">复制 Lua</button><button id="copyEditorCmd" class="btn primary">复制命令</button></div>
+    <textarea id="editorText" class="editor" spellcheck="false">do
+  -- 在这里编辑 tweakdefs Lua
+end</textarea>
+    <div class="output"><div class="outhead"><b>命令</b><span id="editorStats" class="small muted"></span></div><pre id="editorCommand" class="code"></pre></div>
+  </section>
+
+  <section id="docs" class="panel">
+    <div class="hero"><h2>能力与边界</h2><p>本页以 BAR 官方 master 为主。个人分支只用于兼容性核对；Community NuttyB 主要作为配置器交互与命令生成方式的参考。</p></div>
+    <div class="grid3">
+      <article class="card"><h3>官方执行顺序</h3><p><span class="mono">tweakunits</span> 先执行，<span class="mono">tweakdefs</span> 后执行，所以可以先用 tweakunits 做基础覆盖，再用 tweakdefs 精细处理。</p></article>
+      <article class="card"><h3>低单位数核心</h3><p><span class="mono">maxThisUnit</span> 能限制某个 UnitDef 的实际存量，但不能直接改原版每个 Squad 里写死的 count。</p></article>
+      <article class="card"><h3>事件逻辑边界</h3><p>击杀 A 触发 B、真正仇恨表、动态目标、严格护送等仍属于 Gadget / LuaRules 逻辑，不应包装成“纯 tweak”。</p></article>
+    </div>
+    <h3>Raptor CustomParams</h3><div class="tablebox"><table class="param-table"><thead><tr><th>参数</th><th>类型</th><th>官方含义</th></tr></thead><tbody id="raptorParamRows"></tbody></table></div>
+    <h3>Scavenger CustomParams</h3><div class="tablebox"><table class="param-table"><thead><tr><th>参数</th><th>类型</th><th>官方含义</th></tr></thead><tbody id="scavParamRows"></tbody></table></div>
+    <h3>Behavior Classes</h3><div id="behaviorCards" class="grid3"></div>
+    <div class="card" style="margin-top:12px"><h3>源码</h3><div class="source-list"><a href="https://github.com/beyond-all-reason/Beyond-All-Reason" target="_blank">BAR 官方仓库</a><a href="https://github.com/beyond-all-reason/Beyond-All-Reason/blob/master/luarules/configs/raptor_spawn_defs.lua" target="_blank">raptor_spawn_defs.lua</a><a href="https://github.com/beyond-all-reason/Beyond-All-Reason/blob/master/luarules/configs/scav_spawn_defs.lua" target="_blank">scav_spawn_defs.lua</a><a href="https://github.com/beyond-all-reason/Beyond-All-Reason/blob/master/gamedata/unitdefs_post.lua" target="_blank">unitdefs_post.lua</a><a href="https://github.com/nuttyb-community/nuttyb" target="_blank">Community NuttyB</a></div></div>
+  </section>
+
+  <footer class="footer">BAR Mod Toolkit · experimental · official BAR master first</footer>
 </div>
-<div class="output"><div class="outhead"><div><b>Generated Command</b><div id="stats" class="stats"></div></div><div class="actions"><button class="btn primary" id="copyCmd">复制命令</button><button class="btn" id="copyLua">复制 Lua</button></div></div><pre id="command"></pre></div>
-<div class="output"><div class="outhead"><b>Lua 预览</b><span class="stats">tweakdefs0 原文</span></div><pre id="lua"></pre></div>
-</section>
-
-<section id="cap"><div class="hero"><h2>仅 tweakdefs / tweakunits 能力清单</h2><p>后续玩法只从已验证接口组合，避免把 Gadget 逻辑误判成 tweak 能力。</p></div>
-<div class="tablebox"><table><thead><tr><th>方向</th><th>可实现性</th><th>入口</th><th>限制</th></tr></thead><tbody>
-<tr><td>精英虫族</td><td class="yes">高</td><td><span class="tag">health</span><span class="tag">weapondefs</span><span class="tag">maxThisUnit</span></td><td>不能直接逐波重写原版 Squad count；可限制实际存量。</td></tr>
-<tr><td>职业虫族</td><td class="yes">很高</td><td><span class="tag">raptorcustomsquad</span><span class="tag">behavior</span></td><td>复杂混编主要借用原版 Squad。</td></tr>
-<tr><td>拾荒职业小队</td><td class="yes">高</td><td><span class="tag">scavcustomsquad</span><span class="tag">surface</span></td><td>严格阵型仍属于 AI 逻辑。</td></tr>
-<tr><td>巨兽虫族</td><td class="yes">很高</td><td><span class="tag">T4</span><span class="tag">Matriarch</span><span class="tag">maxThisUnit</span></td><td>核心风险是数值和碰撞体平衡。</td></tr>
-<tr><td>Boss 阶段战</td><td class="mid">中</td><td><span class="tag">anger range</span><span class="tag">Queen</span><span class="tag">stagger</span></td><td>不能纯 tweak 可靠实现“击杀 A → 生成 B”。</td></tr>
-<tr><td>防线打虫</td><td class="yes">很高</td><td><span class="tag">turret stats</span><span class="tag">buildoptions</span></td><td>不是固定路径 TD。</td></tr>
-<tr><td>机动迎击</td><td class="yes">中高</td><td><span class="tag">BERSERK</span><span class="tag">UnitDamaged</span></td><td>属于弱仇恨，不是真正 threat table。</td></tr>
-<tr><td>Boss 玩家 vs 多人</td><td class="mid">中</td><td><span class="tag">Faction UnitDef</span></td><td>适合固定 Boss 阵营，不适合任意玩家动态强化。</td></tr>
-<tr><td>虫卵经济</td><td class="yes">很高</td><td><span class="tag">metalCost</span><span class="tag">Raptor Egg</span></td><td>掉蛋概率和衰减算法仍在 Gadget 内。</td></tr>
-</tbody></table></div></section>
-
-<section id="about"><div class="hero"><h2>代码与设计说明</h2><p>交互方式参考 Community NuttyB Configurator；玩法判断与 Lua 方案以 Beyond All Reason 官方 master 为主要基准，并额外核对 GodAlone945 分支的兼容性。后续会继续加入预设管理、Data 浏览、Custom Lua、Base64 编解码、单位图鉴与修改前后对比。</p></div>
-<div class="docs"><div class="card"><h3>官方 BAR 源码</h3><p>所有机制判断优先跟随官方 master。</p><p><a href="https://github.com/beyond-all-reason/Beyond-All-Reason" target="_blank">beyond-all-reason/Beyond-All-Reason →</a></p><p><a href="https://github.com/GodAlone945/Beyond-All-Reason" target="_blank">个人分支兼容性核对 →</a></p></div><div class="card"><h3>Community NuttyB</h3><p><a href="https://nuttyb-community.github.io/nuttyb/" target="_blank">NuttyB Configurator →</a></p></div><div class="card"><h3>第一版原则</h3><ul><li>不修改 Gadget / LuaRules。</li><li>优先复用现成 Raptor/Scavenger 行为。</li><li>所有生成 Lua 可直接查看和复制。</li></ul></div></div></section>
-<div class="footer">BAR PVE Tweak Configurator · Experimental</div></div>
-<script>
-const $=id=>document.getElementById(id),ids=["elite","roles","colossus","egg","intercept","boss","hp","damage","capn","roleCount","chance","giantHp","giantCap","eggMult","aggroDist","queenHp","stagger"];
-const num=(id,d)=>{const x=Number($(id).value);return Number.isFinite(x)?x:d};
-const b64=s=>btoa(unescape(encodeURIComponent(s))).replaceAll("+","-").replaceAll("/","_").replace(/=+$/,"");
-const squad=(name,a,b,behavior,rarity,count,weight,distance,chance)=>'  setSquad("'+name+'",'+a+','+b+',"'+behavior+'","'+rarity+'",'+count+','+weight+','+distance+','+chance+')\n';
-function buildLua(){
- let p=["do\n"];
- if($("elite").checked)p.push('  local hp='+num("hp",1.8)+' local dmg='+num("damage",1.35)+' local cap='+Math.round(num("capn",20))+'\n  for name,ud in pairs(UnitDefs) do\n    if name:match("^raptor_") and not name:match("^raptor_queen_") then\n      if ud.health then ud.health=ud.health*hp end\n      ud.maxthisunit=math.min(ud.maxthisunit or cap,cap)\n      if ud.weapondefs then for _,wd in pairs(ud.weapondefs) do if wd.damage and wd.damage.default then wd.damage.default=wd.damage.default*dmg end end end\n    end\n  end\n');
- if($("egg").checked)p.push('  local eggMult='+num("eggMult",1.25)+'\n  for name,ud in pairs(UnitDefs) do if name:match("^raptor_") and not name:match("^raptor_queen_") and ud.metalcost then ud.metalcost=math.max(1,math.floor(ud.metalcost*eggMult)) end end\n');
- if($("roles").checked||$("intercept").checked)p.push('  local function setSquad(name,minA,maxA,behavior,rarity,amount,weight,distance,chance)\n    local ud=UnitDefs[name] if not ud then return end\n    ud.customparams=ud.customparams or {} local q=ud.customparams\n    q.raptorcustomsquad=true q.raptorsquadunitsamount=amount q.raptorsquadminanger=minA q.raptorsquadmaxanger=maxA q.raptorsquadweight=weight q.raptorsquadrarity=rarity q.raptorsquadbehavior=behavior q.raptorsquadbehaviordistance=distance q.raptorsquadbehaviorchance=chance\n  end\n');
- if($("roles").checked){const c=Math.round(num("roleCount",4)),ch=num("chance",.75);p.push(squad("raptor_land_swarmer_basic_t2_v1",0,1000,"raider","basic",c,8,500,ch),squad("raptor_land_assault_basic_t2_v1",15,1000,"berserk","basic",Math.max(1,Math.ceil(c/2)),4,1400,ch),squad("raptor_land_spiker_basic_t2_v1",20,1000,"skirmisher","special",Math.max(1,Math.ceil(c/2)),4,500,ch),squad("raptor_allterrain_arty_basic_t2_v1",30,1000,"artillery","special",1,3,700,ch),squad("raptor_land_swarmer_heal_t2_v1",25,1000,"healer","special",1,2,550,ch),squad("raptor_land_kamikaze_basic_t2_v1",35,1000,"kamikaze","special",Math.max(2,c),3,700,ch))}
- if($("intercept").checked){const d=Math.round(num("aggroDist",1800));p.push(squad("raptor_land_assault_basic_t2_v2",10,1000,"berserk","basic",3,6,d,1),squad("raptor_land_assault_basic_t2_v3",20,1000,"berserk","basic",3,6,d,1))}
- if($("colossus").checked)p.push('  local gh='+num("giantHp",2.5)+' local gc='+Math.round(num("giantCap",4))+'\n  local giants={"raptor_matriarch_basic","raptor_matriarch_fire","raptor_matriarch_acid","raptor_matriarch_electric","raptor_land_assault_basic_t4_v1","raptor_land_assault_basic_t4_v2"}\n  for _,name in ipairs(giants) do local ud=UnitDefs[name] if ud then if ud.health then ud.health=ud.health*gh end ud.maxthisunit=math.min(ud.maxthisunit or gc,gc) end end\n');
- if($("boss").checked)p.push('  local qhp='+num("queenHp",1.5)+' local sm='+num("stagger",3)+'\n  for name,ud in pairs(UnitDefs) do\n    if name:match("^raptor_queen_") and ud.health then ud.health=ud.health*qhp end\n    if not name:match("^raptor_") and ud.canmove and not ud.canfly and ud.metalcost and ud.metalcost>=5000 then ud.customparams=ud.customparams or {} ud.customparams.bossstaggermultiplier=sm end\n  end\n');
- p.push("end");return p.join("");
-}
-function render(){const s=buildLua(),cmd="!bset tweakdefs0 "+b64(s);$("lua").textContent=s;$("command").textContent=cmd;$("stats").textContent="tweakdefs slots: 1 / 10 · "+cmd.length+" chars"}
-ids.forEach(i=>$(i).addEventListener("input",render));document.querySelectorAll("[data-tab]").forEach(b=>b.addEventListener("click",()=>{document.querySelectorAll("[data-tab]").forEach(x=>x.classList.remove("active"));b.classList.add("active");document.querySelectorAll("section").forEach(x=>x.classList.remove("active"));$(b.dataset.tab).classList.add("active")}));
-document.querySelectorAll("[data-preset]").forEach(b=>b.addEventListener("click",()=>{["elite","roles","colossus","egg","intercept","boss"].forEach(x=>$(x).checked=false);const p=b.dataset.preset;if(p==="balanced")["elite","roles","colossus","egg","boss"].forEach(x=>$(x).checked=true);if(p==="elite"){["elite","roles","boss"].forEach(x=>$(x).checked=true);$("hp").value=2.5;$("damage").value=1.55;$("capn").value=12}if(p==="colossus"){["elite","roles","colossus","boss"].forEach(x=>$(x).checked=true);$("capn").value=10;$("giantHp").value=4;$("giantCap").value=2}if(p==="economy"){["elite","roles","egg","boss"].forEach(x=>$(x).checked=true);$("eggMult").value=1.75}render()}));
-async function cp(t,b){await navigator.clipboard.writeText(t);const o=b.textContent;b.textContent="已复制";setTimeout(()=>b.textContent=o,1200)}$("copyCmd").onclick=()=>cp($("command").textContent,$("copyCmd"));$("copyLua").onclick=()=>cp($("lua").textContent,$("copyLua"));render();
-</script></body></html>
+<script src="./data.js"></script>
+<script src="./app.js"></script>
+</body>
+</html>
