@@ -48,8 +48,8 @@ section{display:none}section.active{display:block}.hero,.card,.output,.tablebox{
 <tr><td>虫卵经济</td><td class="yes">很高</td><td><span class="tag">metalCost</span><span class="tag">Raptor Egg</span></td><td>掉蛋概率和衰减算法仍在 Gadget 内。</td></tr>
 </tbody></table></div></section>
 
-<section id="about"><div class="hero"><h2>代码与设计说明</h2><p>交互方式参考 Community NuttyB Configurator；玩法数据与 Lua 方案面向 GodAlone945 的 BAR 分支。后续会继续加入预设管理、Data 浏览、Custom Lua、Base64 编解码、单位图鉴与修改前后对比。</p></div>
-<div class="docs"><div class="card"><h3>我们的 BAR 分支</h3><p><a href="https://github.com/GodAlone945/Beyond-All-Reason" target="_blank">GodAlone945/Beyond-All-Reason →</a></p></div><div class="card"><h3>Community NuttyB</h3><p><a href="https://nuttyb-community.github.io/nuttyb/" target="_blank">NuttyB Configurator →</a></p></div><div class="card"><h3>第一版原则</h3><ul><li>不修改 Gadget / LuaRules。</li><li>优先复用现成 Raptor/Scavenger 行为。</li><li>所有生成 Lua 可直接查看和复制。</li></ul></div></div></section>
+<section id="about"><div class="hero"><h2>代码与设计说明</h2><p>交互方式参考 Community NuttyB Configurator；玩法判断与 Lua 方案以 Beyond All Reason 官方 master 为主要基准，并额外核对 GodAlone945 分支的兼容性。后续会继续加入预设管理、Data 浏览、Custom Lua、Base64 编解码、单位图鉴与修改前后对比。</p></div>
+<div class="docs"><div class="card"><h3>官方 BAR 源码</h3><p>所有机制判断优先跟随官方 master。</p><p><a href="https://github.com/beyond-all-reason/Beyond-All-Reason" target="_blank">beyond-all-reason/Beyond-All-Reason →</a></p><p><a href="https://github.com/GodAlone945/Beyond-All-Reason" target="_blank">个人分支兼容性核对 →</a></p></div><div class="card"><h3>Community NuttyB</h3><p><a href="https://nuttyb-community.github.io/nuttyb/" target="_blank">NuttyB Configurator →</a></p></div><div class="card"><h3>第一版原则</h3><ul><li>不修改 Gadget / LuaRules。</li><li>优先复用现成 Raptor/Scavenger 行为。</li><li>所有生成 Lua 可直接查看和复制。</li></ul></div></div></section>
 <div class="footer">BAR PVE Tweak Configurator · Experimental</div></div>
 <script>
 const $=id=>document.getElementById(id),ids=["elite","roles","colossus","egg","intercept","boss","hp","damage","capn","roleCount","chance","giantHp","giantCap","eggMult","aggroDist","queenHp","stagger"];
