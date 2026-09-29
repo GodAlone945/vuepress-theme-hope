@@ -84,9 +84,9 @@ function resetState(){return {playerDefense:false,defenseUnits:[],elite:false,ro
 function squadLine(name,minA,maxA,behavior,rarity,count,weight,distance,chance){
   return '  setRaptorSquad("'+name+'",'+minA+','+maxA+',"'+behavior+'","'+rarity+'",'+count+','+weight+','+distance+','+chance+')\n';
 }
-function buildDefenseLua(){
+function buildDefenseLua(faction){
   const rows=[];
-  const add=(id,code)=>{if(enabledDefenseUnits.has(id))rows.push(code)};
+  const add=(id,code)=>{const meta=PLAYER_DEFENSES.find(x=>x.id===id);if(enabledDefenseUnits.has(id)&&(!faction||meta?.faction===faction))rows.push(code)};
   rows.push('  local function U(n,t) local d=UnitDefs[n] if not d then return end for k,v in pairs(t) do if k=="customparams" then d.customparams=d.customparams or {} for ck,cv in pairs(v) do d.customparams[ck]=cv end else d[k]=v end end end\n');
   rows.push('  local function W(n,k,t) local d=UnitDefs[n] local w=d and d.weapondefs and d.weapondefs[k] if not w then return end for a,v in pairs(t) do if a=="damage" then w.damage=w.damage or {} for dk,dv in pairs(v) do w.damage[dk]=dv end elseif a=="customparams" then w.customparams=w.customparams or {} for ck,cv in pairs(v) do w.customparams[ck]=cv end else w[a]=v end end end\n');
 
@@ -113,24 +113,25 @@ function buildDefenseLua(){
   return rows.join("");
 }
 
-function buildConfigLua(){
-  const s=getConfig(),p=["do\n"];
-  if(s.playerDefense && enabledDefenseUnits.size) p.push(buildDefenseLua());
+function wrapModule(body){
+  if(!body||!body.trim()) return "";
+  return "do\n"+body+"end";
+}
+function buildRaptorCoreLua(s){
+  const p=[];
   if(s.elite){
     p.push('  local hp='+s.hp+' local dmg='+s.damage+' local cap='+Math.max(1,Math.round(s.capn))+'\n');
     p.push('  for name,ud in pairs(UnitDefs) do\n');
     p.push('    if name:match("^raptor_") and not name:match("^raptor_queen_") then\n');
     p.push('      if ud.health then ud.health=ud.health*hp end\n');
     p.push('      ud.maxthisunit=math.min(ud.maxthisunit or cap,cap)\n');
-    p.push('      for _,wd in pairs(ud.weapondefs or {}) do\n');
-    p.push('        if wd.damage then for armor,v in pairs(wd.damage) do if type(v)=="number" then wd.damage[armor]=v*dmg end end end\n');
-    p.push('      end\n');
+    p.push('      for _,wd in pairs(ud.weapondefs or {}) do if wd.damage then for armor,v in pairs(wd.damage) do if type(v)=="number" then wd.damage[armor]=v*dmg end end end end\n');
     p.push('    end\n  end\n');
   }
-  if(s.egg){
-    p.push('  local eggCostMult='+s.eggMult+'\n');
-    p.push('  for name,ud in pairs(UnitDefs) do if name:match("^raptor_") and not name:match("^raptor_queen_") and ud.metalcost then ud.metalcost=math.max(1,math.floor(ud.metalcost*eggCostMult)) end end\n');
-  }
+  return wrapModule(p.join(""));
+}
+function buildRaptorRolesLua(s){
+  const p=[];
   if(s.roles||s.intercept){
     p.push('  local function setRaptorSquad(name,minA,maxA,behavior,rarity,amount,weight,distance,chance)\n');
     p.push('    local ud=UnitDefs[name] if not ud then return end ud.customparams=ud.customparams or {} local q=ud.customparams\n');
@@ -138,19 +139,23 @@ function buildConfigLua(){
     p.push('  end\n');
   }
   if(s.roles){
-    const c=Math.max(1,Math.round(s.roleCount)),w=Math.max(1,Math.round(s.roleWeight)),ch=s.chance;
-    p.push(squadLine("raptor_land_swarmer_basic_t2_v1",0,1000,"raider","basic",c,w+4,500,ch));
-    p.push(squadLine("raptor_land_assault_basic_t2_v1",15,1000,"berserk","basic",Math.max(1,Math.ceil(c/2)),w,1400,ch));
-    p.push(squadLine("raptor_land_spiker_basic_t2_v1",20,1000,"skirmisher","special",Math.max(1,Math.ceil(c/2)),w,500,ch));
-    p.push(squadLine("raptor_allterrain_arty_basic_t2_v1",30,1000,"artillery","special",1,Math.max(1,w-1),700,ch));
-    p.push(squadLine("raptor_land_swarmer_heal_t2_v1",25,1000,"healer","special",1,Math.max(1,w-2),550,ch));
-    p.push(squadLine("raptor_land_kamikaze_basic_t2_v1",35,1000,"kamikaze","special",Math.max(2,c),Math.max(1,w-1),700,ch));
+    const count=Math.max(1,Math.round(s.roleCount)),weight=Math.max(1,Math.round(s.roleWeight)),chance=s.chance;
+    p.push(squadLine("raptor_land_swarmer_basic_t2_v1",0,1000,"raider","basic",count,weight+4,500,chance));
+    p.push(squadLine("raptor_land_assault_basic_t2_v1",15,1000,"berserk","basic",Math.max(1,Math.ceil(count/2)),weight,1400,chance));
+    p.push(squadLine("raptor_land_spiker_basic_t2_v1",20,1000,"skirmisher","special",Math.max(1,Math.ceil(count/2)),weight,500,chance));
+    p.push(squadLine("raptor_allterrain_arty_basic_t2_v1",30,1000,"artillery","special",1,Math.max(1,weight-1),700,chance));
+    p.push(squadLine("raptor_land_swarmer_heal_t2_v1",25,1000,"healer","special",1,Math.max(1,weight-2),550,chance));
+    p.push(squadLine("raptor_land_kamikaze_basic_t2_v1",35,1000,"kamikaze","special",Math.max(2,count),Math.max(1,weight-1),700,chance));
   }
   if(s.intercept){
-    const d=Math.max(100,Math.round(s.aggroDist)),ch=s.aggroChance;
-    p.push(squadLine("raptor_land_assault_basic_t2_v2",10,1000,"berserk","basic",3,6,d,ch));
-    p.push(squadLine("raptor_land_assault_basic_t2_v3",20,1000,"berserk","basic",3,6,d,ch));
+    const d=Math.max(100,Math.round(s.aggroDist)),chance=s.aggroChance;
+    p.push(squadLine("raptor_land_assault_basic_t2_v2",10,1000,"berserk","basic",3,6,d,chance));
+    p.push(squadLine("raptor_land_assault_basic_t2_v3",20,1000,"berserk","basic",3,6,d,chance));
   }
+  return wrapModule(p.join(""));
+}
+function buildBossLua(s){
+  const p=[];
   if(s.colossus){
     p.push('  local giantHp='+s.giantHp+' local giantCap='+Math.max(1,Math.round(s.giantCap))+'\n');
     p.push('  local giants={"raptor_matriarch_basic","raptor_matriarch_fire","raptor_matriarch_acid","raptor_matriarch_electric","raptor_land_assault_basic_t4_v1","raptor_land_assault_basic_t4_v2"}\n');
@@ -163,22 +168,46 @@ function buildConfigLua(){
     p.push('    if not name:match("^raptor_") and ud.canmove and not ud.canfly and ud.metalcost and ud.metalcost>=costGate then ud.customparams=ud.customparams or {} ud.customparams.bossstaggermultiplier=tostring(stagger) end\n');
     p.push('  end\n');
   }
-  p.push("end");
-  return p.join("");
+  return wrapModule(p.join(""));
+}
+function buildEggLua(s){
+  if(!s.egg)return "";
+  return wrapModule('  local eggCostMult='+s.eggMult+'\n  for name,ud in pairs(UnitDefs) do if name:match("^raptor_") and not name:match("^raptor_queen_") and ud.metalcost then ud.metalcost=math.max(1,math.floor(ud.metalcost*eggCostMult)) end end\n');
+}
+function buildConfigModules(){
+  const s=getConfig(),mods=[];
+  const push=(slot,title,lua,type="tweakdefs")=>{if(lua&&lua.trim())mods.push({slot,title,lua,type,key:type+(slot===0?"":slot)})};
+  if(s.playerDefense){
+    push(0,"ARM 基础防御",wrapModule(buildDefenseLua("ARM")));
+    push(1,"COR 基础防御",wrapModule(buildDefenseLua("COR")));
+    push(2,"LEG 基础防御",wrapModule(buildDefenseLua("LEG")));
+  }
+  push(4,"Raptor 基础数值与存量",buildRaptorCoreLua(s));
+  push(5,"Raptor 职业与机动迎击",buildRaptorRolesLua(s));
+  push(6,"巨兽与 Queen Boss",buildBossLua(s));
+  push(7,"虫卵经济",buildEggLua(s));
+  return mods;
 }
 function renderConfig(){
-  const lua=buildConfigLua(),key=slotKey($("configSlot").value),cmd="!bset "+key+" "+encode64(lua);
-  const warn=cmd.length>16000?" · ⚠ 命令超过 16000 字符，建议拆分槽位":"";
-  $("configLua").textContent=lua;$("configCommand").textContent=cmd;$("configStats").textContent=key+" · Lua "+lua.length+" chars · command "+cmd.length+" chars"+warn;
+  const mods=buildConfigModules();
+  const blocks=mods.map(m=>{
+    const cmd="!bset "+m.key+" "+encode64(m.lua);
+    const warn=cmd.length>16000?"  ⚠ 超过16000字符":"";
+    return "-- "+m.title+" ["+m.key+"]"+warn+"\n"+cmd;
+  });
+  const combined=mods.map(m=>"-- "+m.title+" ["+m.key+"]\n"+m.lua).join("\n\n");
+  $("configLua").textContent=combined||"-- 当前没有启用任何模块";
+  $("configCommand").textContent=blocks.join("\n\n")||"-- 当前没有可生成的命令";
+  const over=mods.filter(m=>("!bset "+m.key+" "+encode64(m.lua)).length>16000).length;
+  $("configStats").textContent=mods.length+" 个模块 · "+mods.map(m=>m.key).join(" / ")+(over?" · ⚠ "+over+" 个模块超长":"");
   if($("playerDefenseSummary"))$("playerDefenseSummary").textContent=enabledDefenseUnits.size+" / "+PLAYER_DEFENSES.length+" 已启用";
 }
 CONFIG_IDS.forEach(id=>$(id)?.addEventListener("input",renderConfig));
-$("configSlot").addEventListener("change",renderConfig);
 $("openPlayerDefense")?.addEventListener("click",()=>switchTab("players"));
 qa("[data-config-preset]").forEach(b=>b.addEventListener("click",()=>{const k=b.dataset.configPreset;if(k==="reset")setConfig(resetState());else setConfig(BUILTIN[k].state)}));
 $("copyConfigLua").onclick=()=>copyText($("configLua").textContent,$("copyConfigLua"));
 $("copyConfigCmd").onclick=()=>copyText($("configCommand").textContent,$("copyConfigCmd"));
-$("sendConfigToEditor").onclick=()=>{$("editorText").value=$("configLua").textContent;$("editorSlot").value=$("configSlot").value;renderEditor();switchTab("editor")};
+$("sendConfigToEditor").onclick=()=>{$("editorText").value=$("configLua").textContent;renderEditor();switchTab("editor")};
 
 function renderBuiltinPresets(){
   $("builtinPresets").innerHTML=Object.entries(BUILTIN).map(([k,p])=>'<article class="card preset-card"><h3>'+p.title+'</h3><p>'+p.desc+'</p><div class="chips">'+p.tags.map(t=>'<span class="chip">'+t+'</span>').join("")+'</div><button class="btn primary" data-apply-built="'+k+'">应用</button></article>').join("");
