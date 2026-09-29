@@ -11,15 +11,25 @@ export default sidebar({
       children: "structure",
     },
     {
-      text: "文档",
-      icon: "book",
-      prefix: "guide/",
-      children: "structure",
+      text: "BAR",
+      icon: "gamepad",
+      prefix: "guide/bar/",
+      children: [
+        "",
+        {
+          text: "PVE 配置器",
+          icon: "sliders",
+          link: "https://godalone945.github.io/bar-mod/",
+        },
+        "tweak-capabilities",
+        "baz",
+      ],
     },
     {
-      text: "幻灯片",
-      icon: "person-chalkboard",
-      link: "https://ecosystem.vuejs.press/zh/plugins/markdown/revealjs/demo.html",
+      text: "其它文档",
+      icon: "book",
+      prefix: "guide/foo/",
+      children: "structure",
     },
   ],
 });
