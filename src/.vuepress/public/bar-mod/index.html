@@ -21,6 +21,7 @@
     <button class="tab active" data-tab="config">配置器</button>
     <button class="tab" data-tab="presets">Presets</button>
     <button class="tab" data-tab="players">玩家防御</button>
+    <button class="tab" data-tab="ultimate">终极武器</button>
     <button class="tab" data-tab="raptors">Raptor 数据</button>
     <button class="tab" data-tab="scavs">Scavenger 数据</button>
     <button class="tab" data-tab="custom">Custom Tweak</button>
@@ -51,6 +52,20 @@
       <article class="card">
         <div class="cardhead"><div><h3>玩家基础防御 V1</h3><p>ARM / COR / LEG 共 18 个核心防御单位。默认应用当前讨论的阵营特色和平衡基线，可在“玩家防御”页逐个启用或关闭。</p></div><label class="switch"><input id="playerDefense" type="checkbox" checked><span></span></label></div>
         <div class="toolbar"><span id="playerDefenseSummary" class="small muted">18 / 18 已启用</span><span class="grow"></span><button id="openPlayerDefense" class="btn small">查看 18 个单位</button></div>
+      </article>
+
+      <article class="card">
+        <div class="cardhead"><div><h3>终极武器 V1</h3><p>将 Ragnarok / Calamity / Starfall 改造成三种完全不同的末期武器，并独立输出到 <span class="mono">tweakdefs8</span>。</p></div><label class="switch"><input id="ultimate" type="checkbox" checked><span></span></label></div>
+        <div class="form">
+          <label>玩家颜色特效标记</label><label class="switch"><input id="teamColorFx" type="checkbox" checked><span></span></label>
+          <label>配色模式</label>
+          <select id="teamColorMode" class="field">
+            <option value="hybrid" selected>阵营色 + 玩家色</option>
+            <option value="team">完全跟随玩家色</option>
+            <option value="faction">固定阵营色</option>
+          </select>
+        </div>
+        <div class="toolbar"><span class="small muted">ARM 长持续激光 · COR 高爆火海 · LEG 多管热能射线</span><span class="grow"></span><button id="openUltimate" class="btn small">查看参数</button></div>
       </article>
 
       <article class="card">
@@ -123,6 +138,66 @@
         <thead><tr><th>启用</th><th>阵营</th><th>阶段</th><th>UnitDef</th><th>定位</th><th>官方基线</th><th>PvE V1 默认</th></tr></thead>
         <tbody id="playerDefenseRows"></tbody>
       </table>
+    </div>
+  </section>
+
+  <section id="ultimate" class="panel">
+    <div class="hero">
+      <h2>终极武器 V1</h2>
+      <p>三门 End-game LRPC 不再只是同一套炮弹的不同射速：ARM 负责超远程精确切割，COR 负责高爆与持续燃烧，LEG 负责多管热能射线齐射。三者默认每 Team 限 1 门。</p>
+      <div class="notice"><b>Team Color：</b><span class="mono">tweakdefs8</span> 会写入 <span class="mono">pve_teamcolor_fx</span> / <span class="mono">pve_teamcolor_fx_mode</span> 标记并提供固定阵营色回退；真正按每个玩家当前 Team Color 动态换色，需要游戏侧视觉 Gadget 读取这些标记。这个限制来自 WeaponDef 全局共享，不是配置器能单独绕过的。</div>
+    </div>
+
+    <div class="grid3">
+      <article class="card">
+        <h3>ARM · Ragnarok</h3>
+        <p><b>超长持续高能激光</b><br>低 AoE、高精度，专门切精英、巨兽、Matriarch 与 Queen。</p>
+        <div class="form">
+          <label>Range</label><input id="armUltRange" type="number" value="6200" step="100">
+          <label>单次伤害</label><input id="armUltDamage" type="number" value="45000" step="1000">
+          <label>BeamTime</label><input id="armUltBeam" type="number" value="4" step=".1">
+          <label>Reload</label><input id="armUltReload" type="number" value="5" step=".1">
+          <label>AoE</label><input id="armUltAoe" type="number" value="40" step="4">
+        </div>
+        <div class="small muted">目标：约 9000 单体 DPS；蓝白/玩家色巨型光束。</div>
+      </article>
+
+      <article class="card">
+        <h3>COR · Calamity</h3>
+        <p><b>高爆燃烧重炮</b><br>大 AoE 直接爆炸，命中区域继续燃烧，专门处理密集虫潮与防线前拥堵。</p>
+        <div class="form">
+          <label>Range</label><input id="corUltRange" type="number" value="6100" step="100">
+          <label>直接伤害</label><input id="corUltDamage" type="number" value="6000" step="250">
+          <label>Reload</label><input id="corUltReload" type="number" value="1.05" step=".05">
+          <label>爆炸 AoE</label><input id="corUltAoe" type="number" value="260" step="10">
+          <label>火区 DPS</label><input id="corUltFireDps" type="number" value="240" step="10">
+          <label>火区半径</label><input id="corUltFireRange" type="number" value="200" step="10">
+          <label>火区时间</label><input id="corUltFireTime" type="number" value="9" step="1">
+        </div>
+        <div class="small muted">目标：约 5700 直接单体 DPS + 大面积持续火焰。</div>
+      </article>
+
+      <article class="card">
+        <h3>LEG · Starfall</h3>
+        <p><b>多管热能射线阵列</b><br>保留 63 连发/多炮口节奏，把每发改成短时 Heat Ray，形成终极热能齐射。</p>
+        <div class="form">
+          <label>Range</label><input id="legUltRange" type="number" value="6100" step="100">
+          <label>每束伤害</label><input id="legUltDamage" type="number" value="2000" step="100">
+          <label>Burst</label><input id="legUltBurst" type="number" value="63" step="1">
+          <label>BurstRate</label><input id="legUltBurstRate" type="number" value=".03" step=".01">
+          <label>BeamTime</label><input id="legUltBeam" type="number" value=".15" step=".01">
+          <label>Reload</label><input id="legUltReload" type="number" value="14" step=".5">
+          <label>AoE</label><input id="legUltAoe" type="number" value="120" step="10">
+        </div>
+        <div class="small muted">目标：63 × 2000 / 14 ≈ 9000 理论平均 DPS；橙白/玩家色热射线风暴。</div>
+      </article>
+    </div>
+
+    <div class="box" style="padding:14px;margin-top:14px">
+      <h3 style="margin-top:0">玩家颜色特效</h3>
+      <p>配置器目前会把视觉类型写进 UnitDef / WeaponDef 的 <span class="mono">customparams</span>：ARM=<span class="mono">arm_beam</span>、COR=<span class="mono">cor_inferno</span>、LEG=<span class="mono">leg_heatray</span>。后续视觉 Gadget 只需要处理带这些标记的三门终极武器，不需要扫描全部普通武器。</p>
+      <div class="toolbar"><button id="copyUltimateLua" class="btn">复制 tweakdefs8 Lua</button><button id="copyUltimateCmd" class="btn primary">复制 tweakdefs8 命令</button></div>
+      <pre id="ultimatePreview" class="code"></pre>
     </div>
   </section>
 
