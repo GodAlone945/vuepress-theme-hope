@@ -4,6 +4,16 @@ export default navbar([
   "/",
   "/Note/",
   {
+    text: "BAR",
+    icon: "gamepad",
+    prefix: "/guide/bar/",
+    children: [
+      { text: "PVE 配置器", icon: "sliders", link: "/bar-mod/" },
+      { text: "Tweak 能力清单", icon: "list-check", link: "tweak-capabilities" },
+      "baz",
+    ],
+  },
+  {
     text: "指南",
     icon: "lightbulb",
     prefix: "/guide/",
@@ -12,7 +22,11 @@ export default navbar([
         text: "Bar",
         icon: "lightbulb",
         prefix: "bar/",
-        children: ["baz", { text: "...", icon: "ellipsis", link: "" }],
+        children: [
+          { text: "PVE 配置器", icon: "sliders", link: "/bar-mod/" },
+          { text: "Tweak 能力清单", icon: "list-check", link: "tweak-capabilities" },
+          "baz",
+        ],
       },
       {
         text: "Foo",
