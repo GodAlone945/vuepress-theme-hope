@@ -34,30 +34,88 @@ function switchTab(id){
 }
 qa(".tab[data-tab]").forEach(b=>b.addEventListener("click",()=>switchTab(b.dataset.tab)));
 
-const CONFIG_IDS=["elite","roles","colossus","egg","intercept","boss","hp","damage","capn","roleCount","chance","roleWeight","giantHp","giantCap","eggMult","aggroDist","aggroChance","queenHp","stagger","staggerCost"];
-const BOOL_IDS=new Set(["elite","roles","colossus","egg","intercept","boss"]);
+const PLAYER_DEFENSES=[
+  {id:"armclaw",faction:"ARM",tier:"T1",role:"电链攻击墙",official:"340M · 1330HP · 430射程 · 连锁2",v1:"320M · 1450HP · 连锁距离70"},
+  {id:"armlwall",faction:"ARM",tier:"T2",role:"近程连锁电网",official:"1020M · 5320HP · 315射程 · 连锁3",v1:"980M · 5000HP · 350射程 · 连锁4 / 100距离"},
+  {id:"armamb",faction:"ARM",tier:"T2",role:"高频远程群攻",official:"2500M · 4000HP · 350/1.8s · AoE152",v1:"2400M · 4300HP · 330/1.6s · AoE140"},
+  {id:"armanni",faction:"ARM",tier:"T2",role:"反巨兽重单体",official:"3500M · 6100HP · 10800/9.9s · 1400射程",v1:"3400M · 6500HP · 1450射程 · Boss Stagger 2.25"},
+  {id:"armflak",faction:"ARM",tier:"T2",role:"大范围防空",official:"820M · 1750HP · 250/0.5s · AoE172",v1:"2000HP · 230/0.45s · AoE190"},
+  {id:"armbrtha",faction:"ARM",tier:"T2",role:"高频远程重炮",official:"4500M · 4650射程 · 1625/13.2s",v1:"BuildTime -15% · 1625/12s"},
+
+  {id:"cormaw",faction:"COR",tier:"T1",role:"近距喷火墙",official:"290M · 1610HP · 410射程 · 16×22",v1:"300M · 1700HP · 保留近距持续喷火"},
+  {id:"cormwall",faction:"COR",tier:"T2",role:"燃烧区域墙",official:"1020M · 5320HP · 7×450/15s · AoE96",v1:"1000M · 5400HP · 6×380/12s · 125火区 / 40DPS / 6s"},
+  {id:"cortoast",faction:"COR",tier:"T2",role:"重爆炸群攻",official:"2500M · 4250HP · 420/2.1s · AoE164",v1:"4700HP · 500/2.4s · AoE190"},
+  {id:"cordoom",faction:"COR",tier:"T2",role:"泛用重堡垒",official:"3000M · 9400HP · 三层武器体系",v1:"10000HP · 保留多距离武器结构"},
+  {id:"corflak",faction:"COR",tier:"T2",role:"重型高爆防空",official:"850M · 1840HP · 250/0.5s · AoE172",v1:"2100HP · 300/0.6s · AoE170"},
+  {id:"corint",faction:"COR",tier:"T2",role:"最重单发LRPC",official:"4600M · 4950射程 · 2000/16s · AoE157",v1:"BuildTime -15% · 5000射程 · 2150/16.5s · AoE180"},
+
+  {id:"legdtr",faction:"LEG",tier:"T1",role:"冲击击退墙",official:"290M · 1610HP · 240/2s · AoE140 · Impulse2",v1:"300M · 1750HP · 230/1.8s · AoE150 · Impulse2.4"},
+  {id:"legrwall",faction:"LEG",tier:"T2",role:"轨道穿透墙",official:"1250M · 9600HP · 950射程 · 1000/4.5s",v1:"1150M · 6500HP · 925射程 · 1150/5s · 保留穿透"},
+  {id:"legacluster",faction:"LEG",tier:"T2",role:"集束覆盖炮",official:"2300M · 3700HP · 主弹414 + 8×105",v1:"3900HP · 主弹420 + 6×120 · 3.6s"},
+  {id:"legbastion",faction:"LEG",tier:"T2",role:"持续扫射重塔",official:"4200M · 12000HP · DM0.25 · 155 · 1100射程",v1:"4000M · 9500HP · DM0.33 · 170 · 1150射程"},
+  {id:"legflak",faction:"LEG",tier:"T2",role:"高频微型防空",official:"820M · 1750HP · 3×58/0.166s · AoE44",v1:"1900HP · 900射程 · 3×55/0.18s · AoE48"},
+  {id:"leglrpc",faction:"LEG",tier:"T2",role:"集束LRPC",official:"5200M · 4800射程 · 3×600 + Cluster",v1:"BuildTime -15% · 保留3连发与Cluster"}
+];
+let enabledDefenseUnits=new Set(PLAYER_DEFENSES.map(x=>x.id));
+
+const CONFIG_IDS=["playerDefense","elite","roles","colossus","egg","intercept","boss","hp","damage","capn","roleCount","chance","roleWeight","giantHp","giantCap","eggMult","aggroDist","aggroChance","queenHp","stagger","staggerCost"];
+const BOOL_IDS=new Set(["playerDefense","elite","roles","colossus","egg","intercept","boss"]);
 function getConfig(){
   const s={};
   for(const id of CONFIG_IDS){const e=$(id);s[id]=BOOL_IDS.has(id)?e.checked:Number(e.value)}
+  s.defenseUnits=[...enabledDefenseUnits];
   return s;
 }
 function setConfig(s){
   for(const id of CONFIG_IDS){if(s[id]===undefined)continue;const e=$(id);if(BOOL_IDS.has(id))e.checked=!!s[id];else e.value=s[id]}
+  if(Array.isArray(s.defenseUnits)) enabledDefenseUnits=new Set(s.defenseUnits);
+  else if(s.playerDefense===true) enabledDefenseUnits=new Set(PLAYER_DEFENSES.map(x=>x.id));
+  renderPlayerDefenseRows();
   renderConfig();
 }
 const BUILTIN={
-  balanced:{title:"低单位防线",desc:"精英化 + 职业 + 巨兽 + Queen 分工，优先降低后期场上单位数。",tags:["推荐","PVE","低单位"],state:{elite:true,roles:true,colossus:true,egg:false,intercept:false,boss:true,hp:1.8,damage:1.35,capn:20,roleCount:4,chance:.75,roleWeight:4,giantHp:2.5,giantCap:4,eggMult:1.25,aggroDist:1800,aggroChance:1,queenHp:1.5,stagger:3,staggerCost:5000}},
-  elite:{title:"精英虫群",desc:"更少、更硬、更危险的普通虫；避免简单把伤害与血量同比例放大。",tags:["精英","低人口"],state:{elite:true,roles:true,colossus:false,egg:false,intercept:false,boss:true,hp:2.5,damage:1.55,capn:12,roleCount:3,chance:.7,roleWeight:3,giantHp:2.5,giantCap:4,eggMult:1.25,aggroDist:1800,aggroChance:1,queenHp:1.5,stagger:3,staggerCost:5000}},
-  colossus:{title:"巨兽挑战",desc:"普通虫更少，中后期依靠 T4 Assault 与 Matriarch 制造压力。",tags:["巨兽","后期"],state:{elite:true,roles:true,colossus:true,egg:false,intercept:false,boss:true,hp:1.5,damage:1.25,capn:10,roleCount:3,chance:.7,roleWeight:3,giantHp:4,giantCap:2,eggMult:1.25,aggroDist:1800,aggroChance:1,queenHp:1.75,stagger:3,staggerCost:5000}},
-  economy:{title:"虫卵经济",desc:"启用战利品经济实验，提高 Raptor metalCost，从而影响蛋资源价值。",tags:["经济","回收"],state:{elite:true,roles:true,colossus:true,egg:true,intercept:false,boss:true,hp:1.7,damage:1.3,capn:18,roleCount:4,chance:.75,roleWeight:4,giantHp:2.5,giantCap:3,eggMult:1.75,aggroDist:1800,aggroChance:1,queenHp:1.5,stagger:3,staggerCost:5000}}
+  balanced:{title:"低单位防线",desc:"精英化 + 职业 + 巨兽 + Queen 分工，优先降低后期场上单位数。",tags:["推荐","PVE","低单位"],state:{playerDefense:true,elite:true,roles:true,colossus:true,egg:false,intercept:false,boss:true,hp:1.8,damage:1.35,capn:20,roleCount:4,chance:.75,roleWeight:4,giantHp:2.5,giantCap:4,eggMult:1.25,aggroDist:1800,aggroChance:1,queenHp:1.5,stagger:3,staggerCost:5000}},
+  elite:{title:"精英虫群",desc:"更少、更硬、更危险的普通虫；避免简单把伤害与血量同比例放大。",tags:["精英","低人口"],state:{playerDefense:true,elite:true,roles:true,colossus:false,egg:false,intercept:false,boss:true,hp:2.5,damage:1.55,capn:12,roleCount:3,chance:.7,roleWeight:3,giantHp:2.5,giantCap:4,eggMult:1.25,aggroDist:1800,aggroChance:1,queenHp:1.5,stagger:3,staggerCost:5000}},
+  colossus:{title:"巨兽挑战",desc:"普通虫更少，中后期依靠 T4 Assault 与 Matriarch 制造压力。",tags:["巨兽","后期"],state:{playerDefense:true,elite:true,roles:true,colossus:true,egg:false,intercept:false,boss:true,hp:1.5,damage:1.25,capn:10,roleCount:3,chance:.7,roleWeight:3,giantHp:4,giantCap:2,eggMult:1.25,aggroDist:1800,aggroChance:1,queenHp:1.75,stagger:3,staggerCost:5000}},
+  economy:{title:"虫卵经济",desc:"启用战利品经济实验，提高 Raptor metalCost，从而影响蛋资源价值。",tags:["经济","回收"],state:{playerDefense:true,elite:true,roles:true,colossus:true,egg:true,intercept:false,boss:true,hp:1.7,damage:1.3,capn:18,roleCount:4,chance:.75,roleWeight:4,giantHp:2.5,giantCap:3,eggMult:1.75,aggroDist:1800,aggroChance:1,queenHp:1.5,stagger:3,staggerCost:5000}}
 };
-function resetState(){return {elite:false,roles:false,colossus:false,egg:false,intercept:false,boss:false,hp:1,damage:1,capn:20,roleCount:4,chance:.75,roleWeight:4,giantHp:2,giantCap:4,eggMult:1,aggroDist:1800,aggroChance:1,queenHp:1,stagger:1,staggerCost:5000}}
+function resetState(){return {playerDefense:false,defenseUnits:[],elite:false,roles:false,colossus:false,egg:false,intercept:false,boss:false,hp:1,damage:1,capn:20,roleCount:4,chance:.75,roleWeight:4,giantHp:2,giantCap:4,eggMult:1,aggroDist:1800,aggroChance:1,queenHp:1,stagger:1,staggerCost:5000}}
 
 function squadLine(name,minA,maxA,behavior,rarity,count,weight,distance,chance){
   return '  setRaptorSquad("'+name+'",'+minA+','+maxA+',"'+behavior+'","'+rarity+'",'+count+','+weight+','+distance+','+chance+')\n';
 }
+function buildDefenseLua(){
+  const rows=[];
+  const add=(id,code)=>{if(enabledDefenseUnits.has(id))rows.push(code)};
+  rows.push('  local function U(n,t) local d=UnitDefs[n] if not d then return end for k,v in pairs(t) do if k=="customparams" then d.customparams=d.customparams or {} for ck,cv in pairs(v) do d.customparams[ck]=cv end else d[k]=v end end end\n');
+  rows.push('  local function W(n,k,t) local d=UnitDefs[n] local w=d and d.weapondefs and d.weapondefs[k] if not w then return end for a,v in pairs(t) do if a=="damage" then w.damage=w.damage or {} for dk,dv in pairs(v) do w.damage[dk]=dv end elseif a=="customparams" then w.customparams=w.customparams or {} for ck,cv in pairs(v) do w.customparams[ck]=cv end else w[a]=v end end end\n');
+
+  add("armclaw",'  U("armclaw",{metalcost=320,health=1450}) W("armclaw","dclaw",{customparams={spark_range="70"}})\n');
+  add("armlwall",'  U("armlwall",{metalcost=980,health=5000}) W("armlwall","lightning",{range=350,reloadtime=1.35,damage={default=60},customparams={spark_maxunits="4",spark_range="100",spark_forkdamage="0.35"}})\n');
+  add("armamb",'  U("armamb",{metalcost=2400,health=4300}) W("armamb","armamb_gun",{reloadtime=1.6,areaofeffect=140,damage={default=330}}) W("armamb","armamb_gun_high",{reloadtime=1.6,areaofeffect=140,damage={default=330}})\n');
+  add("armanni",'  U("armanni",{metalcost=3400,health=6500,customparams={bossstaggermultiplier="2.25"}}) W("armanni","ata",{range=1450})\n');
+  add("armflak",'  U("armflak",{health=2000}) W("armflak","armflak_gun",{reloadtime=0.45,areaofeffect=190,damage={vtol=230}})\n');
+  add("armbrtha",'  U("armbrtha",{buildtime=72250}) W("armbrtha","lrpc",{reloadtime=12})\n');
+
+  add("cormaw",'  U("cormaw",{metalcost=300,health=1700})\n');
+  add("cormwall",'  U("cormwall",{metalcost=1000,health=5400}) W("cormwall","exp_heavyrocket",{range=675,reloadtime=12,burst=6,areaofeffect=110,damage={default=380},customparams={area_onhit_ceg="fire-area-150-repeat",area_onhit_damageceg="burnflamexl-gen",area_onhit_resistance="fire",area_onhit_damage="40",area_onhit_range="125",area_onhit_time="6"}})\n');
+  add("cortoast",'  U("cortoast",{health=4700}) W("cortoast","cortoast_gun",{reloadtime=2.4,areaofeffect=190,damage={default=500}}) W("cortoast","cortoast_gun_high",{reloadtime=2.4,areaofeffect=190,damage={default=500}})\n');
+  add("cordoom",'  U("cordoom",{health=10000})\n');
+  add("corflak",'  U("corflak",{health=2100}) W("corflak","armflak_gun",{reloadtime=0.6,areaofeffect=170,damage={vtol=300}})\n');
+  add("corint",'  U("corint",{buildtime=79305}) W("corint","lrpc",{range=5000,reloadtime=16.5,areaofeffect=180,damage={default=2150}})\n');
+
+  add("legdtr",'  U("legdtr",{metalcost=300,health=1750}) W("legdtr","corlevlr_weapon",{range=410,reloadtime=1.8,areaofeffect=150,impulsefactor=2.4,damage={default=230}})\n');
+  add("legrwall",'  U("legrwall",{metalcost=1150,health=6500}) W("legrwall","railgunt2",{range=925,reloadtime=5,damage={default=1150}})\n');
+  add("legacluster",'  U("legacluster",{health=3900}) W("legacluster","plasma",{reloadtime=3.6,damage={default=420},customparams={cluster_number="6"}}) W("legacluster","plasma_high",{reloadtime=3.6,damage={default=420},customparams={cluster_number="6"}}) W("legacluster","cluster_munition",{damage={default=120}})\n');
+  add("legbastion",'  U("legbastion",{metalcost=4000,health=9500,damagemodifier=0.33}) W("legbastion","t2heatray",{range=1150,damage={default=170}})\n');
+  add("legflak",'  U("legflak",{health=1900}) W("legflak","leg_t2_microflak",{range=900,reloadtime=0.18,areaofeffect=48,burst=3,damage={vtol=55}})\n');
+  add("leglrpc",'  U("leglrpc",{buildtime=79050})\n');
+  return rows.join("");
+}
+
 function buildConfigLua(){
   const s=getConfig(),p=["do\n"];
+  if(s.playerDefense && enabledDefenseUnits.size) p.push(buildDefenseLua());
   if(s.elite){
     p.push('  local hp='+s.hp+' local dmg='+s.damage+' local cap='+Math.max(1,Math.round(s.capn))+'\n');
     p.push('  for name,ud in pairs(UnitDefs) do\n');
@@ -110,10 +168,13 @@ function buildConfigLua(){
 }
 function renderConfig(){
   const lua=buildConfigLua(),key=slotKey($("configSlot").value),cmd="!bset "+key+" "+encode64(lua);
-  $("configLua").textContent=lua;$("configCommand").textContent=cmd;$("configStats").textContent=key+" · Lua "+lua.length+" chars · command "+cmd.length+" chars";
+  const warn=cmd.length>16000?" · ⚠ 命令超过 16000 字符，建议拆分槽位":"";
+  $("configLua").textContent=lua;$("configCommand").textContent=cmd;$("configStats").textContent=key+" · Lua "+lua.length+" chars · command "+cmd.length+" chars"+warn;
+  if($("playerDefenseSummary"))$("playerDefenseSummary").textContent=enabledDefenseUnits.size+" / "+PLAYER_DEFENSES.length+" 已启用";
 }
 CONFIG_IDS.forEach(id=>$(id)?.addEventListener("input",renderConfig));
 $("configSlot").addEventListener("change",renderConfig);
+$("openPlayerDefense")?.addEventListener("click",()=>switchTab("players"));
 qa("[data-config-preset]").forEach(b=>b.addEventListener("click",()=>{const k=b.dataset.configPreset;if(k==="reset")setConfig(resetState());else setConfig(BUILTIN[k].state)}));
 $("copyConfigLua").onclick=()=>copyText($("configLua").textContent,$("copyConfigLua"));
 $("copyConfigCmd").onclick=()=>copyText($("configCommand").textContent,$("copyConfigCmd"));
@@ -136,6 +197,21 @@ $("savePreset").onclick=()=>{const name=$("presetName").value.trim()||("Preset "
 $("clearPresets").onclick=()=>{if(confirm("清空所有本地 Preset？"))writeSaved([])};
 $("exportPresets").onclick=()=>{const blob=new Blob([JSON.stringify(readSaved(),null,2)],{type:"application/json"}),a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="bar-presets.json";a.click();setTimeout(()=>URL.revokeObjectURL(a.href),500)};
 $("importPresets").onclick=()=>{try{const v=JSON.parse($("presetImport").value);if(!Array.isArray(v))throw new Error("JSON 必须是数组");writeSaved(v);alert("导入成功")}catch(e){alert("导入失败："+e.message)}};
+
+function renderPlayerDefenseRows(){
+  if(!$("playerDefenseRows"))return;
+  const q=($("playerDefenseSearch")?.value||"").trim().toLowerCase();
+  const faction=$("playerDefenseFaction")?.value||"";
+  const rows=PLAYER_DEFENSES.filter(x=>(!faction||x.faction===faction)&&(!q||(x.id+" "+x.role+" "+x.faction).toLowerCase().includes(q)));
+  $("playerDefenseRows").innerHTML=rows.map(x=>'<tr><td><input type="checkbox" data-defense-unit="'+x.id+'" '+(enabledDefenseUnits.has(x.id)?"checked":"")+'></td><td><span class="chip">'+x.faction+'</span></td><td>'+x.tier+'</td><td class="mono">'+x.id+'</td><td>'+x.role+'</td><td>'+x.official+'</td><td>'+x.v1+'</td></tr>').join("");
+  $("playerDefenseCount").textContent=enabledDefenseUnits.size+" / "+PLAYER_DEFENSES.length+" 默认启用";
+  if($("playerDefenseSummary"))$("playerDefenseSummary").textContent=enabledDefenseUnits.size+" / "+PLAYER_DEFENSES.length+" 已启用";
+  qa("[data-defense-unit]").forEach(e=>e.addEventListener("change",()=>{if(e.checked)enabledDefenseUnits.add(e.dataset.defenseUnit);else enabledDefenseUnits.delete(e.dataset.defenseUnit);renderPlayerDefenseRows();renderConfig()}));
+}
+$("playerDefenseSearch")?.addEventListener("input",renderPlayerDefenseRows);
+$("playerDefenseFaction")?.addEventListener("change",renderPlayerDefenseRows);
+$("enableAllDefense")?.addEventListener("click",()=>{enabledDefenseUnits=new Set(PLAYER_DEFENSES.map(x=>x.id));$("playerDefense").checked=true;renderPlayerDefenseRows();renderConfig()});
+$("disableAllDefense")?.addEventListener("click",()=>{enabledDefenseUnits.clear();renderPlayerDefenseRows();renderConfig()});
 
 function angerText(x){
   const mins=x.min?.length?x.min.join(" / "):"默认";
@@ -213,5 +289,5 @@ function renderDocs(){
   $("scavParamRows").innerHTML=D.scavParams.map(x=>'<tr><td class="mono">'+x[0]+'</td><td>'+x[1]+'</td><td>'+x[2]+'</td></tr>').join("");
   $("behaviorCards").innerHTML=D.behaviors.map(x=>'<article class="card"><h3 class="mono">'+x.id+'</h3><p><b>'+x.zh+'</b><br>'+x.desc+'</p></article>').join("");
 }
-renderBuiltinPresets();renderSaved();renderRaptors();renderScavs();renderDocs();renderConfig();renderEditor();
+renderBuiltinPresets();renderSaved();renderPlayerDefenseRows();renderRaptors();renderScavs();renderDocs();renderConfig();renderEditor();
 })();
