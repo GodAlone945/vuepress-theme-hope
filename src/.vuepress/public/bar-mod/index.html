@@ -44,8 +44,7 @@
       <button class="btn" data-config-preset="economy">虫卵经济</button>
       <button class="btn" data-config-preset="reset">清空</button>
       <span class="grow"></span>
-      <label class="small muted">输出槽位</label>
-      <select id="configSlot" class="field" style="width:130px"></select>
+      <span class="small muted">模块化输出：ARM 0 · COR 1 · LEG 2 · Raptor 4/5 · Boss 6 · 经济 7 · 终极武器 8 · 联合科技 9</span>
     </div>
 
     <div class="grid2">
@@ -86,10 +85,10 @@
     </div>
 
     <div class="output">
-      <div class="outhead"><div><b>生成命令</b><div id="configStats" class="small muted"></div></div><div class="actions"><button id="sendConfigToEditor" class="btn">发送到 Editor</button><button id="copyConfigLua" class="btn">复制 Lua</button><button id="copyConfigCmd" class="btn primary">复制命令</button></div></div>
+      <div class="outhead"><div><b>模块化命令</b><div id="configStats" class="small muted"></div></div><div class="actions"><button id="sendConfigToEditor" class="btn">发送到 Editor</button><button id="copyConfigLua" class="btn">复制 Lua</button><button id="copyConfigCmd" class="btn primary">复制命令</button></div></div>
       <pre id="configCommand" class="code"></pre>
     </div>
-    <div class="output"><div class="outhead"><b>Lua 预览</b><span class="small muted">官方 tweakdefs 在 UnitDefs 后处理阶段执行</span></div><pre id="configLua" class="code"></pre></div>
+    <div class="output"><div class="outhead"><b>模块 Lua 预览</b><span class="small muted">每个模块独立编码到自己的 tweakdefs 槽位</span></div><pre id="configLua" class="code"></pre></div>
   </section>
 
   <section id="presets" class="panel">
