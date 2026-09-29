@@ -58,28 +58,36 @@ const PLAYER_DEFENSES=[
 ];
 let enabledDefenseUnits=new Set(PLAYER_DEFENSES.map(x=>x.id));
 
-const CONFIG_IDS=["playerDefense","elite","roles","colossus","egg","intercept","boss","hp","damage","capn","roleCount","chance","roleWeight","giantHp","giantCap","eggMult","aggroDist","aggroChance","queenHp","stagger","staggerCost"];
-const BOOL_IDS=new Set(["playerDefense","elite","roles","colossus","egg","intercept","boss"]);
+const CONFIG_IDS=["playerDefense","ultimate","teamColorFx","teamColorMode","armUltRange","armUltDamage","armUltBeam","armUltReload","armUltAoe","corUltRange","corUltDamage","corUltReload","corUltAoe","corUltFireDps","corUltFireRange","corUltFireTime","legUltRange","legUltDamage","legUltBurst","legUltBurstRate","legUltBeam","legUltReload","legUltAoe","elite","roles","colossus","egg","intercept","boss","hp","damage","capn","roleCount","chance","roleWeight","giantHp","giantCap","eggMult","aggroDist","aggroChance","queenHp","stagger","staggerCost"];
+const BOOL_IDS=new Set(["playerDefense","ultimate","teamColorFx","elite","roles","colossus","egg","intercept","boss"]);
+const TEXT_IDS=new Set(["teamColorMode"]);
 function getConfig(){
   const s={};
-  for(const id of CONFIG_IDS){const e=$(id);s[id]=BOOL_IDS.has(id)?e.checked:Number(e.value)}
+  for(const id of CONFIG_IDS){
+    const e=$(id);if(!e)continue;
+    s[id]=BOOL_IDS.has(id)?e.checked:(TEXT_IDS.has(id)?e.value:Number(e.value));
+  }
   s.defenseUnits=[...enabledDefenseUnits];
   return s;
 }
 function setConfig(s){
-  for(const id of CONFIG_IDS){if(s[id]===undefined)continue;const e=$(id);if(BOOL_IDS.has(id))e.checked=!!s[id];else e.value=s[id]}
+  for(const id of CONFIG_IDS){
+    if(s[id]===undefined)continue;
+    const e=$(id);if(!e)continue;
+    if(BOOL_IDS.has(id))e.checked=!!s[id];else e.value=s[id];
+  }
   if(Array.isArray(s.defenseUnits)) enabledDefenseUnits=new Set(s.defenseUnits);
   else if(s.playerDefense===true) enabledDefenseUnits=new Set(PLAYER_DEFENSES.map(x=>x.id));
   renderPlayerDefenseRows();
   renderConfig();
 }
 const BUILTIN={
-  balanced:{title:"低单位防线",desc:"精英化 + 职业 + 巨兽 + Queen 分工，优先降低后期场上单位数。",tags:["推荐","PVE","低单位"],state:{playerDefense:true,elite:true,roles:true,colossus:true,egg:false,intercept:false,boss:true,hp:1.8,damage:1.35,capn:20,roleCount:4,chance:.75,roleWeight:4,giantHp:2.5,giantCap:4,eggMult:1.25,aggroDist:1800,aggroChance:1,queenHp:1.5,stagger:3,staggerCost:5000}},
-  elite:{title:"精英虫群",desc:"更少、更硬、更危险的普通虫；避免简单把伤害与血量同比例放大。",tags:["精英","低人口"],state:{playerDefense:true,elite:true,roles:true,colossus:false,egg:false,intercept:false,boss:true,hp:2.5,damage:1.55,capn:12,roleCount:3,chance:.7,roleWeight:3,giantHp:2.5,giantCap:4,eggMult:1.25,aggroDist:1800,aggroChance:1,queenHp:1.5,stagger:3,staggerCost:5000}},
-  colossus:{title:"巨兽挑战",desc:"普通虫更少，中后期依靠 T4 Assault 与 Matriarch 制造压力。",tags:["巨兽","后期"],state:{playerDefense:true,elite:true,roles:true,colossus:true,egg:false,intercept:false,boss:true,hp:1.5,damage:1.25,capn:10,roleCount:3,chance:.7,roleWeight:3,giantHp:4,giantCap:2,eggMult:1.25,aggroDist:1800,aggroChance:1,queenHp:1.75,stagger:3,staggerCost:5000}},
-  economy:{title:"虫卵经济",desc:"启用战利品经济实验，提高 Raptor metalCost，从而影响蛋资源价值。",tags:["经济","回收"],state:{playerDefense:true,elite:true,roles:true,colossus:true,egg:true,intercept:false,boss:true,hp:1.7,damage:1.3,capn:18,roleCount:4,chance:.75,roleWeight:4,giantHp:2.5,giantCap:3,eggMult:1.75,aggroDist:1800,aggroChance:1,queenHp:1.5,stagger:3,staggerCost:5000}}
+  balanced:{title:"低单位防线",desc:"精英化 + 职业 + 巨兽 + Queen 分工，优先降低后期场上单位数。",tags:["推荐","PVE","低单位"],state:{playerDefense:true,ultimate:true,teamColorFx:true,teamColorMode:"hybrid",armUltRange:6200,armUltDamage:45000,armUltBeam:4,armUltReload:5,armUltAoe:40,corUltRange:6100,corUltDamage:6000,corUltReload:1.05,corUltAoe:260,corUltFireDps:240,corUltFireRange:200,corUltFireTime:9,legUltRange:6100,legUltDamage:2000,legUltBurst:63,legUltBurstRate:.03,legUltBeam:.15,legUltReload:14,legUltAoe:120,elite:true,roles:true,colossus:true,egg:false,intercept:false,boss:true,hp:1.8,damage:1.35,capn:20,roleCount:4,chance:.75,roleWeight:4,giantHp:2.5,giantCap:4,eggMult:1.25,aggroDist:1800,aggroChance:1,queenHp:1.5,stagger:3,staggerCost:5000}},
+  elite:{title:"精英虫群",desc:"更少、更硬、更危险的普通虫；避免简单把伤害与血量同比例放大。",tags:["精英","低人口"],state:{playerDefense:true,ultimate:true,teamColorFx:true,teamColorMode:"hybrid",armUltRange:6200,armUltDamage:45000,armUltBeam:4,armUltReload:5,armUltAoe:40,corUltRange:6100,corUltDamage:6000,corUltReload:1.05,corUltAoe:260,corUltFireDps:240,corUltFireRange:200,corUltFireTime:9,legUltRange:6100,legUltDamage:2000,legUltBurst:63,legUltBurstRate:.03,legUltBeam:.15,legUltReload:14,legUltAoe:120,elite:true,roles:true,colossus:false,egg:false,intercept:false,boss:true,hp:2.5,damage:1.55,capn:12,roleCount:3,chance:.7,roleWeight:3,giantHp:2.5,giantCap:4,eggMult:1.25,aggroDist:1800,aggroChance:1,queenHp:1.5,stagger:3,staggerCost:5000}},
+  colossus:{title:"巨兽挑战",desc:"普通虫更少，中后期依靠 T4 Assault 与 Matriarch 制造压力。",tags:["巨兽","后期"],state:{playerDefense:true,ultimate:true,teamColorFx:true,teamColorMode:"hybrid",armUltRange:6200,armUltDamage:45000,armUltBeam:4,armUltReload:5,armUltAoe:40,corUltRange:6100,corUltDamage:6000,corUltReload:1.05,corUltAoe:260,corUltFireDps:240,corUltFireRange:200,corUltFireTime:9,legUltRange:6100,legUltDamage:2000,legUltBurst:63,legUltBurstRate:.03,legUltBeam:.15,legUltReload:14,legUltAoe:120,elite:true,roles:true,colossus:true,egg:false,intercept:false,boss:true,hp:1.5,damage:1.25,capn:10,roleCount:3,chance:.7,roleWeight:3,giantHp:4,giantCap:2,eggMult:1.25,aggroDist:1800,aggroChance:1,queenHp:1.75,stagger:3,staggerCost:5000}},
+  economy:{title:"虫卵经济",desc:"启用战利品经济实验，提高 Raptor metalCost，从而影响蛋资源价值。",tags:["经济","回收"],state:{playerDefense:true,ultimate:true,teamColorFx:true,teamColorMode:"hybrid",armUltRange:6200,armUltDamage:45000,armUltBeam:4,armUltReload:5,armUltAoe:40,corUltRange:6100,corUltDamage:6000,corUltReload:1.05,corUltAoe:260,corUltFireDps:240,corUltFireRange:200,corUltFireTime:9,legUltRange:6100,legUltDamage:2000,legUltBurst:63,legUltBurstRate:.03,legUltBeam:.15,legUltReload:14,legUltAoe:120,elite:true,roles:true,colossus:true,egg:true,intercept:false,boss:true,hp:1.7,damage:1.3,capn:18,roleCount:4,chance:.75,roleWeight:4,giantHp:2.5,giantCap:3,eggMult:1.75,aggroDist:1800,aggroChance:1,queenHp:1.5,stagger:3,staggerCost:5000}}
 };
-function resetState(){return {playerDefense:false,defenseUnits:[],elite:false,roles:false,colossus:false,egg:false,intercept:false,boss:false,hp:1,damage:1,capn:20,roleCount:4,chance:.75,roleWeight:4,giantHp:2,giantCap:4,eggMult:1,aggroDist:1800,aggroChance:1,queenHp:1,stagger:1,staggerCost:5000}}
+function resetState(){return {playerDefense:false,defenseUnits:[],ultimate:false,teamColorFx:false,teamColorMode:"hybrid",armUltRange:6200,armUltDamage:45000,armUltBeam:4,armUltReload:5,armUltAoe:40,corUltRange:6100,corUltDamage:6000,corUltReload:1.05,corUltAoe:260,corUltFireDps:240,corUltFireRange:200,corUltFireTime:9,legUltRange:6100,legUltDamage:2000,legUltBurst:63,legUltBurstRate:.03,legUltBeam:.15,legUltReload:14,legUltAoe:120,elite:false,roles:false,colossus:false,egg:false,intercept:false,boss:false,hp:1,damage:1,capn:20,roleCount:4,chance:.75,roleWeight:4,giantHp:2,giantCap:4,eggMult:1,aggroDist:1800,aggroChance:1,queenHp:1,stagger:1,staggerCost:5000}}
 
 function squadLine(name,minA,maxA,behavior,rarity,count,weight,distance,chance){
   return '  setRaptorSquad("'+name+'",'+minA+','+maxA+',"'+behavior+'","'+rarity+'",'+count+','+weight+','+distance+','+chance+')\n';
@@ -174,6 +182,26 @@ function buildEggLua(s){
   if(!s.egg)return "";
   return wrapModule('  local eggCostMult='+s.eggMult+'\n  for name,ud in pairs(UnitDefs) do if name:match("^raptor_") and not name:match("^raptor_queen_") and ud.metalcost then ud.metalcost=math.max(1,math.floor(ud.metalcost*eggCostMult)) end end\n');
 }
+function buildUltimateLua(s){
+  if(!s.ultimate)return "";
+  const p=[];
+  const mode=esc(s.teamColorMode||"hybrid");
+  const tag=(kind)=>s.teamColorFx?'{pve_ultimate="1",pve_teamcolor_fx="'+kind+'",pve_teamcolor_fx_mode="'+mode+'"}':'{pve_ultimate="1"}';
+  p.push('  local function U(n,t) local d=UnitDefs[n] if not d then return end for k,v in pairs(t) do if k=="customparams" then d.customparams=d.customparams or {} for ck,cv in pairs(v) do d.customparams[ck]=cv end else d[k]=v end end end\n');
+  p.push('  local function W(n,k,t) local d=UnitDefs[n] local w=d and d.weapondefs and d.weapondefs[k] if not w then return end for a,v in pairs(t) do if a=="damage" then w.damage=w.damage or {} for dk,dv in pairs(v) do w.damage[dk]=dv end elseif a=="customparams" then w.customparams=w.customparams or {} for ck,cv in pairs(v) do w.customparams[ck]=cv end else w[a]=v end end end\n');
+  p.push('  local function T(n) local d=UnitDefs[n] if d and d.weapons and d.weapons[1] then d.weapons[1].badtargetcategory="" end end\n');
+
+  p.push('  U("armvulc",{maxthisunit=1,customparams='+tag("arm_beam")+'})\n');
+  p.push('  W("armvulc","rflrpc",{name="PvE Ragnarok Sustained Beam",weapontype="BeamLaser",gravityaffected=false,range='+Math.round(s.armUltRange)+',reloadtime='+s.armUltReload+',beamtime='+s.armUltBeam+',areaofeffect='+Math.round(s.armUltAoe)+',edgeeffectiveness=0.2,energypershot=125000,weaponvelocity=2200,largebeamlaser=true,thickness=8,corethickness=0.5,laserflaresize=10,texture3="largebeam",tilelength=150,scrollspeed=5,rgbcolor="0.25 0.65 1",rgbcolor2="0.85 0.95 1",explosiongenerator="custom:laserhit-large-blue",damage={default='+Math.round(s.armUltDamage)+',shields='+Math.round(s.armUltDamage*.5)+',subs=0},customparams='+tag("arm_beam")+'}) T("armvulc")\n');
+
+  p.push('  U("corbuzz",{maxthisunit=1,customparams='+tag("cor_inferno")+'})\n');
+  p.push('  W("corbuzz","rflrpc",{name="PvE Calamity Inferno Cannon",range='+Math.round(s.corUltRange)+',reloadtime='+s.corUltReload+',areaofeffect='+Math.round(s.corUltAoe)+',edgeeffectiveness=0.45,energypershot=25000,rgbcolor="1 0.35 0.05",damage={default='+Math.round(s.corUltDamage)+',shields='+Math.round(s.corUltDamage*.5)+',subs='+Math.round(s.corUltDamage*.3)+'},customparams={pve_ultimate="1",pve_teamcolor_fx="'+(s.teamColorFx?"cor_inferno":"")+'",pve_teamcolor_fx_mode="'+mode+'",area_onhit_ceg="fire-area-150-repeat",area_onhit_damageceg="burnflamexl-gen",area_onhit_resistance="fire",area_onhit_damage="'+Math.round(s.corUltFireDps)+'",area_onhit_range="'+Math.round(s.corUltFireRange)+'",area_onhit_time="'+Math.round(s.corUltFireTime)+'"}}) T("corbuzz")\n');
+
+  p.push('  U("legstarfall",{maxthisunit=1,customparams='+tag("leg_heatray")+'})\n');
+  p.push('  W("legstarfall","starfire",{name="PvE Starfall Heat-Ray Array",weapontype="BeamLaser",gravityaffected=false,hightrajectory=false,accuracy=0,range='+Math.round(s.legUltRange)+',burst='+Math.max(1,Math.round(s.legUltBurst))+',burstrate='+s.legUltBurstRate+',reloadtime='+s.legUltReload+',beamtime='+s.legUltBeam+',areaofeffect='+Math.round(s.legUltAoe)+',edgeeffectiveness=0.45,energypershot=360000,weaponvelocity=1800,largebeamlaser=true,thickness=6,corethickness=0.35,laserflaresize=7,texture3="largebeam",tilelength=120,scrollspeed=4,rgbcolor="1 0.55 0.1",rgbcolor2="1 0.92 0.5",explosiongenerator="custom:heatray-huge",damage={default='+Math.round(s.legUltDamage)+',shields='+Math.round(s.legUltDamage*.4)+',subs=0},customparams='+tag("leg_heatray")+'}) T("legstarfall")\n');
+  return wrapModule(p.join(""));
+}
+
 function buildConfigModules(){
   const s=getConfig(),mods=[];
   const push=(slot,title,lua,type="tweakdefs")=>{if(lua&&lua.trim())mods.push({slot,title,lua,type,key:type+(slot===0?"":slot)})};
@@ -186,6 +214,7 @@ function buildConfigModules(){
   push(5,"Raptor 职业与机动迎击",buildRaptorRolesLua(s));
   push(6,"巨兽与 Queen Boss",buildBossLua(s));
   push(7,"虫卵经济",buildEggLua(s));
+  push(8,"终极武器 V1",buildUltimateLua(s));
   return mods;
 }
 function renderConfig(){
@@ -201,9 +230,16 @@ function renderConfig(){
   const over=mods.filter(m=>("!bset "+m.key+" "+encode64(m.lua)).length>16000).length;
   $("configStats").textContent=mods.length+" 个模块 · "+mods.map(m=>m.key).join(" / ")+(over?" · ⚠ "+over+" 个模块超长":"");
   if($("playerDefenseSummary"))$("playerDefenseSummary").textContent=enabledDefenseUnits.size+" / "+PLAYER_DEFENSES.length+" 已启用";
+  if($("ultimatePreview")){
+    const ult=buildUltimateLua(getConfig());
+    $("ultimatePreview").textContent=ult||"-- 终极武器模块未启用";
+  }
 }
 CONFIG_IDS.forEach(id=>$(id)?.addEventListener("input",renderConfig));
 $("openPlayerDefense")?.addEventListener("click",()=>switchTab("players"));
+$("openUltimate")?.addEventListener("click",()=>switchTab("ultimate"));
+$("copyUltimateLua")?.addEventListener("click",()=>copyText(buildUltimateLua(getConfig())||"-- 终极武器模块未启用",$("copyUltimateLua")));
+$("copyUltimateCmd")?.addEventListener("click",()=>{const lua=buildUltimateLua(getConfig());copyText(lua?"!bset tweakdefs8 "+encode64(lua):"-- 终极武器模块未启用",$("copyUltimateCmd"))});
 qa("[data-config-preset]").forEach(b=>b.addEventListener("click",()=>{const k=b.dataset.configPreset;if(k==="reset")setConfig(resetState());else setConfig(BUILTIN[k].state)}));
 $("copyConfigLua").onclick=()=>copyText($("configLua").textContent,$("copyConfigLua"));
 $("copyConfigCmd").onclick=()=>{const cmds=buildConfigModules().map(m=>"!bset "+m.key+" "+encode64(m.lua)).join("\n");copyText(cmds,$("copyConfigCmd"))};
