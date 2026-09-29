@@ -6,7 +6,7 @@ order: 1
 
 # BAR 仅 TweakDefs / TweakUnits 能力清单
 
-本页记录当前低单位数 PVE 方案在 **不新增、不修改 Gadget / LuaRules** 前提下，可依靠房间 `tweakdefs` / `tweakunits` 完成的能力与边界。
+本页以 **Beyond All Reason 官方 master** 为主要参考，个人分支仅用于兼容性核对。记录当前低单位数 PVE 方案在 **不新增、不修改 Gadget / LuaRules** 前提下，可依靠房间 `tweakdefs` / `tweakunits` 完成的能力与边界。
 
 ## 已确认可利用的能力
 
@@ -34,7 +34,8 @@ order: 1
 
 ## 参考代码
 
-- [GodAlone945/Beyond-All-Reason](https://github.com/GodAlone945/Beyond-All-Reason)
+- [Beyond All Reason 官方仓库](https://github.com/beyond-all-reason/Beyond-All-Reason)
+- [GodAlone945/Beyond-All-Reason（兼容性核对）](https://github.com/GodAlone945/Beyond-All-Reason)
 - [Community NuttyB](https://github.com/nuttyb-community/nuttyb)
 
 后续每增加一种玩法，只把已经在 BAR 当前代码里验证过的 UnitDef / CustomParams / WeaponDef 能力加入本表。
