@@ -45,10 +45,11 @@
       <button class="btn" data-config-preset="elite">精英虫群</button>
       <button class="btn" data-config-preset="colossus">巨兽挑战</button>
       <button class="btn good" data-config-preset="performance">性能重构</button>
+      <button class="btn primary" data-config-preset="rise">虫族崛起性能版</button>
       <button class="btn" data-config-preset="economy">虫卵经济</button>
       <button class="btn" data-config-preset="reset">清空</button>
       <span class="grow"></span>
-      <span class="small muted">模块化输出：防御 0/1/2 · Raptor 4/5 · Boss 6 · 经济 7 · 终极武器 8 · 联合科技 9 · 陆军 10/11/12 · T3 13/14/15 · Boss补位 16 · 精英虫巢 17 · 性能 18</span>
+      <span class="small muted">模块化输出：防御 0/1/2 · Raptor 4/5 · Boss 6 · 经济 7 · 终极武器 8 · 联合科技 9 · 陆军 10/11/12 · T3 13/14/15 · Boss补位 16 · 精英虫巢 17 · 虫族崛起 19 · 性能 20</span>
     </div>
 
     <div class="grid2">
@@ -96,6 +97,26 @@
       </article>
 
       <article class="card">
+        <div class="cardhead"><div><h3>虫族崛起 · 性能重构版</h3><p>直接基于你上传的《虫族崛起模组2026.7.4》四组 tweakunits 拆出的独立玩法模块：指挥官、T1→T4治疗虾/经济、防御管子、大小女王、四小龙与三巨龙。</p></div><label class="switch"><input id="risePerf" type="checkbox"><span></span></label></div>
+        <div class="form">
+          <label>强化指挥官</label><label class="switch"><input id="riseCommanders" type="checkbox" checked><span></span></label>
+          <label>T1→T4治疗虾科技链</label><label class="switch"><input id="riseTech" type="checkbox" checked><span></span></label>
+          <label>大小女王投射体系</label><label class="switch"><input id="riseQueens" type="checkbox" checked><span></span></label>
+          <label>四小龙 + 三巨龙</label><label class="switch"><input id="riseDragons" type="checkbox" checked><span></span></label>
+          <label>T4攻击管子</label><label class="switch"><input id="riseDefense" type="checkbox" checked><span></span></label>
+          <label>T4治疗虾场上上限</label><input id="riseHealerCap" type="number" value="8" min="1" step="1">
+          <label>虫草场上上限</label><input id="riseHiveCap" type="number" value="4" min="1" step="1">
+          <label>临时投射单位寿命 / 秒</label><input id="riseSpawnExpire" type="number" value="25" min="5" step="5">
+          <label>小女王投射 Reload / 秒</label><input id="riseQueenReload" type="number" value="10" min="2" step="1">
+          <label>四小龙高频武器最低 Reload</label><input id="riseDragonReload" type="number" value=".2" min=".05" step=".05">
+        </div>
+        <div class="notice"><b>保留原模组：</b>指挥官直接进入虫族科技；T1/T2/T3治疗虾各限1；T4治疗虾产 20 铁 / 600 电；小女王级治疗虾按代码产 550 铁 / 19000 电；虫草产 700 铁 / 45000 电；四小龙、三巨龙各限1。</div>
+        <div class="notice"><b>性能优化：</b>原代码中 T4治疗虾上限100默认压到8；小女王投射列表缩成代表性精英单位并把 60 秒寿命压到25秒；大女王每次只投射1只巨龙；0.01秒 Heat Ray / Flame 改成约0.2秒结算并提高单次伤害；三巨龙 10～11 连发改成1次重击，链雷最大目标压到6。</div>
+        <div class="notice"><b>和“精英虫巢”的关系：</b>此模块里的 <span class="mono">raptor_hive</span> 按原《虫族崛起》定位为纯经济虫草（关闭攻击范围）。如果两个模块同时启用，本模块的虫草定义会后执行并覆盖精英虫巢的战斗火力。</div>
+        <div class="toolbar"><span class="small muted">独立输出 tweakdefs19；全局性能限流继续由 tweakdefs20 最后执行</span><span class="grow"></span><button id="copyRisePerformance" class="btn primary">复制 tweakdefs19</button></div>
+      </article>
+
+      <article class="card">
         <div class="cardhead"><div><h3>精英虫巢</h3><p>把官方 <span class="mono">raptor_hive</span> 从普通虫群巢穴改成少量高价值的经济 / 防御 / 育巢核心，作为性能重构模式的中后期战略目标。</p></div><label class="switch"><input id="eliteHive" type="checkbox"><span></span></label></div>
         <div class="form">
           <label>生命值</label><input id="hiveHealth" type="number" value="120000" min="1000" step="5000">
@@ -138,9 +159,9 @@
           <label>持续区域上限 / 秒</label><input id="perfAreaTime" type="number" value="6" min=".5" step=".5">
           <label>召唤物寿命上限 / 秒</label><input id="perfSpawnExpire" type="number" value="30" min="1" step="1">
         </div>
-        <div class="notice"><b>处理方式：</b>削减 Burst / Projectiles / 过低 Reload 时，会按比例补回单发伤害，优先维持原总输出。该模块输出到 <span class="mono">tweakdefs18</span>，应最后执行。</div>
+        <div class="notice"><b>处理方式：</b>削减 Burst / Projectiles / 过低 Reload 时，会按比例补回单发伤害，优先维持原总输出。该模块输出到 <span class="mono">tweakdefs20</span>，应最后执行。</div>
         <div class="notice"><b>仍需 Gadget 的部分：</b>全局敌军总人口预算、Threat Point 波次导演、Boss 分阶段和按总人口动态升级敌人，无法只靠 tweakdefs 完整实现；这里先负责可由配置器直接生成的性能层。</div>
-        <div class="toolbar"><span class="small muted">推荐与“精英化 + 巨兽化 + 低 Squad 数量”一起使用</span><span class="grow"></span><button id="copyPerformance" class="btn primary">复制 tweakdefs18</button></div>
+        <div class="toolbar"><span class="small muted">推荐与“精英化 + 巨兽化 + 低 Squad 数量”一起使用</span><span class="grow"></span><button id="copyPerformance" class="btn primary">复制 tweakdefs20</button></div>
       </article>
 
       <article class="card">
