@@ -71,6 +71,7 @@ function getConfig(){
   return s;
 }
 function setConfig(s){
+  if(s.performance===undefined&&$("performance"))$("performance").checked=false;
   for(const id of CONFIG_IDS){
     if(s[id]===undefined)continue;
     const e=$(id);if(!e)continue;
