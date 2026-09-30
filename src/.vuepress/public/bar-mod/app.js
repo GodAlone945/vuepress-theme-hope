@@ -450,6 +450,18 @@ function buildFusionLua(s){
 }
 
 function bakaniModule(slot,title,lua,type="tweakdefs"){return {slot,title,lua,type,key:type+(slot===0?"":slot)}}
+function renumberModules(mods){
+  const counts={tweakdefs:0,tweakunits:0};
+  return mods.map(m=>{
+    const type=m.type||"tweakdefs";
+    const index=(counts[type]||0)+1;
+    counts[type]=index;
+    return {...m,originalKey:m.key,key:type+index,slot:index};
+  });
+}
+function commandsFromModules(mods){
+  return renumberModules(mods).map(m=>"!bset "+m.key+" "+encode64(m.lua));
+}
 function buildBakaniPerformanceLua(s){
   if(!s.bakaniPerf)return "";
   const expire=Math.max(5,Number(s.bakaniSpawnExpire)||25);
@@ -699,7 +711,7 @@ function buildConfigModules(){
     push(17,"精英虫巢 · 经济与育巢核心",buildEliteHiveLua(s));
     push(18,s.scavxPerf?"ScavX + 最终性能":"性能重构 · 战斗事件预算",s.scavxPerf?buildScavXFinalLua(s):buildPerformanceLua(s));
   }
-  return mods;
+  return renumberModules(mods);
 }
 function renderConfig(){
   const mods=buildConfigModules();
@@ -744,23 +756,37 @@ $("openPlayerDefense")?.addEventListener("click",()=>switchTab("players"));
 $("openUltimate")?.addEventListener("click",()=>switchTab("ultimate"));
 $("openLand")?.addEventListener("click",()=>switchTab("land"));
 $("openT3")?.addEventListener("click",()=>switchTab("t3"));
-$("copyArmT3")?.addEventListener("click",()=>{const lua=buildArmT3Lua(getConfig());copyText(lua?"!bset tweakdefs13 "+encode64(lua):"-- ARM T3 模块未启用",$("copyArmT3"))});
-$("copyCorT3")?.addEventListener("click",()=>{const lua=buildCorT3Lua(getConfig());copyText(lua?"!bset tweakdefs14 "+encode64(lua):"-- COR T3 模块未启用",$("copyCorT3"))});
-$("copyLegT3")?.addEventListener("click",()=>{const lua=buildLegT3Lua(getConfig());copyText(lua?"!bset tweakdefs15 "+encode64(lua):"-- LEG T3 模块未启用",$("copyLegT3"))});
-$("copyBossSupport")?.addEventListener("click",()=>{const lua=buildBossSupportLua(getConfig());copyText(lua?"!bset tweakdefs16 "+encode64(lua):"-- Boss 补位模块未启用",$("copyBossSupport"))});
-$("copyEliteHive")?.addEventListener("click",()=>{const lua=buildEliteHiveLua(getConfig());copyText(lua?"!bset tweakdefs17 "+encode64(lua):"-- 精英虫巢模块未启用",$("copyEliteHive"))});
-$("copyScavXPerformance")?.addEventListener("click",()=>{const s=getConfig(),lua=buildScavXFinalLua(s);copyText(lua?"!bset tweakdefs18 "+encode64(lua):"-- ScavX 性能版模块未启用",$("copyScavXPerformance"))});
-$("copyRisePerformance")?.addEventListener("click",()=>{const s=getConfig(),lua=buildRiseFinalLua(s);copyText(lua?"!bset tweakdefs18 "+encode64(lua):"-- 虫族崛起性能版模块未启用",$("copyRisePerformance"))});
-$("copyBakani")?.addEventListener("click",()=>{const s=getConfig(),cmds=[];for(const m of buildBakaniModules(s))cmds.push("!bset "+m.key+" "+encode64(m.lua));const rules=buildBakaniRuleLua(s);if(rules)cmds.push("!bset tweakdefs16 "+encode64(rules));const bp=buildBakaniPerformanceLua(s);if(bp)cmds.push("!bset tweakdefs17 "+encode64(bp));const perf=buildPerformanceLua(s);if(perf)cmds.push("!bset tweakdefs18 "+encode64(perf));cmds.push(...buildExtraCommands(s));copyText(cmds.length?cmds.join("\n"):"-- 巴卡妮性能版模块未启用",$("copyBakani"))});
+$("copyArmT3")?.addEventListener("click",()=>{const lua=buildArmT3Lua(getConfig());copyText(lua?"!bset tweakdefs1 "+encode64(lua):"-- ARM T3 模块未启用",$("copyArmT3"))});
+$("copyCorT3")?.addEventListener("click",()=>{const lua=buildCorT3Lua(getConfig());copyText(lua?"!bset tweakdefs1 "+encode64(lua):"-- COR T3 模块未启用",$("copyCorT3"))});
+$("copyLegT3")?.addEventListener("click",()=>{const lua=buildLegT3Lua(getConfig());copyText(lua?"!bset tweakdefs1 "+encode64(lua):"-- LEG T3 模块未启用",$("copyLegT3"))});
+$("copyBossSupport")?.addEventListener("click",()=>{const lua=buildBossSupportLua(getConfig());copyText(lua?"!bset tweakdefs1 "+encode64(lua):"-- Boss 补位模块未启用",$("copyBossSupport"))});
+$("copyEliteHive")?.addEventListener("click",()=>{const lua=buildEliteHiveLua(getConfig());copyText(lua?"!bset tweakdefs1 "+encode64(lua):"-- 精英虫巢模块未启用",$("copyEliteHive"))});
+$("copyScavXPerformance")?.addEventListener("click",()=>{const s=getConfig(),lua=buildScavXFinalLua(s);copyText(lua?"!bset tweakdefs1 "+encode64(lua):"-- ScavX 性能版模块未启用",$("copyScavXPerformance"))});
+$("copyRisePerformance")?.addEventListener("click",()=>{const s=getConfig(),lua=buildRiseFinalLua(s);copyText(lua?"!bset tweakdefs1 "+encode64(lua):"-- 虫族崛起性能版模块未启用",$("copyRisePerformance"))});
+$("copyBakani")?.addEventListener("click",()=>{
+  const s=getConfig(),mods=[...buildBakaniModules(s)];
+  const rules=buildBakaniRuleLua(s);if(rules)mods.push(bakaniModule(0,"巴卡妮 · 虫族规则 + Queen档",rules));
+  const bp=buildBakaniPerformanceLua(s);if(bp)mods.push(bakaniModule(0,"巴卡妮 · 性能覆盖",bp));
+  const perf=buildPerformanceLua(s);if(perf)mods.push(bakaniModule(0,"最终性能",perf));
+  const cmds=[...commandsFromModules(mods),...buildExtraCommands(s)];
+  copyText(cmds.length?cmds.join("\n"):"-- 巴卡妮性能版模块未启用",$("copyBakani"));
+});
 $("copyBakaniShield")?.addEventListener("click",()=>copyText(BK.shieldCommand||"!experimentalshields bounceeverything",$("copyBakaniShield")));
-$("copyFusion")?.addEventListener("click",()=>{const s=getConfig(),cmds=[];for(const m of buildBakaniModules(s))cmds.push("!bset "+m.key+" "+encode64(m.lua));const rise=buildRaptorRisePerformanceLua(s);if(rise)cmds.push("!bset tweakdefs16 "+encode64(rise));const rules=buildBakaniRuleLua(s);if(rules)cmds.push("!bset tweakdefs17 "+encode64(rules));const tail=buildBakaniFinalLua(s,true);if(tail)cmds.push("!bset tweakdefs18 "+encode64(tail));cmds.push(...buildExtraCommands(s));copyText(cmds.length?cmds.join("\n"):"-- 融合性能版未启用",$("copyFusion"))});
-$("copyPerformance")?.addEventListener("click",()=>{const s=getConfig();let lua=buildPerformanceLua(s);if(s.fusionPerf)lua=buildBakaniFinalLua(s,true);else if(s.bakaniPerf)lua=joinLuaParts([buildBakaniPerformanceLua(s),buildPerformanceLua(s)]);else if(s.risePerf)lua=buildRiseFinalLua(s);else if(s.scavxPerf)lua=buildScavXFinalLua(s);copyText(lua?"!bset tweakdefs18 "+encode64(lua):"-- 性能重构模块未启用",$("copyPerformance"))});
-$("copyArmLand")?.addEventListener("click",()=>{const lua=buildArmLandLua(getConfig());copyText(lua?"!bset tweakdefs10 "+encode64(lua):"-- ARM 地面兵种模块未启用",$("copyArmLand"))});
-$("copyCorLand")?.addEventListener("click",()=>{const lua=buildCorLandLua(getConfig());copyText(lua?"!bset tweakdefs11 "+encode64(lua):"-- COR 地面兵种模块未启用",$("copyCorLand"))});
-$("copyLegLand")?.addEventListener("click",()=>{const lua=buildLegLandLua(getConfig());copyText(lua?"!bset tweakdefs12 "+encode64(lua):"-- LEG 地面兵种模块未启用",$("copyLegLand"))});
+$("copyFusion")?.addEventListener("click",()=>{
+  const s=getConfig(),mods=[...buildBakaniModules(s)];
+  const rise=buildRaptorRisePerformanceLua(s);if(rise)mods.push(bakaniModule(0,"虫族崛起 · 融合基础",rise));
+  const rules=buildBakaniRuleLua(s);if(rules)mods.push(bakaniModule(0,"巴卡妮 · 虫族规则 + Queen档",rules));
+  const tail=buildBakaniFinalLua(s,true);if(tail)mods.push(bakaniModule(0,"融合规则 + 最终性能",tail));
+  const cmds=[...commandsFromModules(mods),...buildExtraCommands(s)];
+  copyText(cmds.length?cmds.join("\n"):"-- 融合性能版未启用",$("copyFusion"));
+});
+$("copyPerformance")?.addEventListener("click",()=>{const s=getConfig();let lua=buildPerformanceLua(s);if(s.fusionPerf)lua=buildBakaniFinalLua(s,true);else if(s.bakaniPerf)lua=joinLuaParts([buildBakaniPerformanceLua(s),buildPerformanceLua(s)]);else if(s.risePerf)lua=buildRiseFinalLua(s);else if(s.scavxPerf)lua=buildScavXFinalLua(s);copyText(lua?"!bset tweakdefs1 "+encode64(lua):"-- 性能重构模块未启用",$("copyPerformance"))});
+$("copyArmLand")?.addEventListener("click",()=>{const lua=buildArmLandLua(getConfig());copyText(lua?"!bset tweakdefs1 "+encode64(lua):"-- ARM 地面兵种模块未启用",$("copyArmLand"))});
+$("copyCorLand")?.addEventListener("click",()=>{const lua=buildCorLandLua(getConfig());copyText(lua?"!bset tweakdefs1 "+encode64(lua):"-- COR 地面兵种模块未启用",$("copyCorLand"))});
+$("copyLegLand")?.addEventListener("click",()=>{const lua=buildLegLandLua(getConfig());copyText(lua?"!bset tweakdefs1 "+encode64(lua):"-- LEG 地面兵种模块未启用",$("copyLegLand"))});
 $("copyEmpRework")?.addEventListener("click",()=>copyText("!bset emprework true",$("copyEmpRework")));
 $("copyUltimateLua")?.addEventListener("click",()=>copyText(buildUltimateLua(getConfig())||"-- 终极武器模块未启用",$("copyUltimateLua")));
-$("copyUltimateCmd")?.addEventListener("click",()=>{const lua=buildUltimateLua(getConfig());copyText(lua?"!bset tweakdefs8 "+encode64(lua):"-- 终极武器模块未启用",$("copyUltimateCmd"))});
+$("copyUltimateCmd")?.addEventListener("click",()=>{const lua=buildUltimateLua(getConfig());copyText(lua?"!bset tweakdefs1 "+encode64(lua):"-- 终极武器模块未启用",$("copyUltimateCmd"))});
 qa("[data-config-preset]").forEach(b=>b.addEventListener("click",()=>{const k=b.dataset.configPreset;if(k==="reset")setConfig(resetState());else setConfig(BUILTIN[k].state)}));
 $("copyConfigLua").onclick=()=>copyText($("configLua").textContent,$("copyConfigLua"));
 $("copyConfigCmd").onclick=()=>{const s=getConfig();const cmds=[...buildConfigModules().map(m=>"!bset "+m.key+" "+encode64(m.lua)),...buildExtraCommands(s)].join("\n");copyText(cmds,$("copyConfigCmd"))};
