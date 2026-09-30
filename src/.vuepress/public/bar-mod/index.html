@@ -45,12 +45,13 @@
       <button class="btn" data-config-preset="elite">精英虫群</button>
       <button class="btn" data-config-preset="colossus">巨兽挑战</button>
       <button class="btn good" data-config-preset="performance">性能重构</button>
+      <button class="btn good" data-config-preset="fusion">虫族崛起 × 巴卡妮融合版</button>
       <button class="btn primary" data-config-preset="bakani">巴卡妮三巨龙性能版</button>
       <button class="btn primary" data-config-preset="rise">虫族崛起性能版</button>
       <button class="btn" data-config-preset="economy">虫卵经济</button>
       <button class="btn" data-config-preset="reset">清空</button>
       <span class="grow"></span>
-      <span class="small muted">模块化输出：基础 tweakdefs0-19 · 巴卡妮原码 tweakunits0-9 · 巴卡妮规则 21/22/23 · 最终性能 29</span>
+      <span class="small muted">模块化输出：基础 tweakdefs0-19 · 巴卡妮原码 tweakunits0-9 · 巴卡妮规则 21/22/23 · 融合规则 24 · 最终性能 29</span>
     </div>
 
     <div class="grid2">
@@ -95,6 +96,23 @@
           </select>
         </div>
         <div class="toolbar"><span class="small muted">ARM 长持续激光 · COR 高爆火海 · LEG 多管热能射线</span><span class="grow"></span><button id="openUltimate" class="btn small">查看参数</button></div>
+      </article>
+
+      <article class="card">
+        <div class="cardhead"><div><h3>虫族崛起 × 巴卡妮 · 融合性能版</h3><p>不是简单同时启用两个预设。先加载巴卡妮的玩家科技、T3、超级单位与特色火力，再加载虫族崛起的治疗虾科技、经济和 Queen 生产链，最后用 <span class="mono">tweakdefs24</span> 专门解决重叠 UnitDef。</p></div><label class="switch"><input id="fusionPerf" type="checkbox"><span></span></label></div>
+        <div class="form">
+          <label>虫草低频护卫</label><label class="switch"><input id="fusionHiveGuard" type="checkbox" checked><span></span></label>
+          <label>虫草上限</label><input id="fusionHiveCap" type="number" value="3" min="1" step="1">
+          <label>T4治疗虾上限</label><input id="fusionHealerCap" type="number" value="6" min="1" step="1">
+          <label>普通超级单位单类型上限</label><input id="fusionSuperCap" type="number" value="2" min="1" step="1">
+          <label>临时召唤寿命 / 秒</label><input id="fusionSpawnExpire" type="number" value="20" min="5" step="5">
+          <label>小女王基础 Reload / 秒</label><input id="fusionQueenReload" type="number" value="12" min="2" step="1">
+        </div>
+        <div class="notice"><b>指挥官：</b>以虫族崛起的强化指挥官和 T1 治疗虾入口为基础，再把巴卡妮的朱诺、摸金、高阶炮台、T3/T4 与超级单位入口追加回来，避免两套 buildoptions 相互覆盖。</div>
+        <div class="notice"><b>虫草：</b>保留虫族崛起的 700 铁 / 45000 电经济核心，同时吸收巴卡妮的“虫巢会投射防御单位”思路；性能版默认每 30 秒只投射 1 个 T2 酸液管，召唤物 20 秒后消失，而不是原先高 Burst 连续生成。</div>
+        <div class="notice"><b>Queen：</b>小女王继续负责精英地面/空中单位；大女王只生产四小龙 + 三巨龙；巴卡妮的小蓝 Queen 单独保留企鹅体系。三条生产线各自限量，互不覆盖。</div>
+        <div class="notice"><b>三巨龙：</b>采用巴卡妮的单位/武器基础与虫族崛起的“各限 1 + 高资源消耗”定位，再经过巴卡妮性能层和最终 tweakdefs29 限流，避免 10～11 连发、0.01 秒武器重新制造高事件负载。</div>
+        <div class="toolbar"><span class="small muted">推荐直接点击顶部“融合版”预设；输出 tweakunits0-9 + tweakdefs19/21/22/23/24/29 + 全弹护盾</span><span class="grow"></span><button id="copyFusion" class="btn primary">复制融合版全部命令</button></div>
       </article>
 
       <article class="card">
