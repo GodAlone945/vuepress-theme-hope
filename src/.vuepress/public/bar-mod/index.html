@@ -52,7 +52,7 @@
       <button class="btn" data-config-preset="economy">虫卵经济</button>
       <button class="btn" data-config-preset="reset">清空</button>
       <span class="grow"></span>
-      <span class="small muted">模块化输出：基础 tweakdefs0-19 · ScavX 性能版 18 · 巴卡妮原码 tweakunits0-9 · 巴卡妮规则 20/21 · 融合 + 最终性能 22</span>
+      <span class="small muted">模块化输出：基础 tweakdefs0-15 · 高级模式固定复用 tweakdefs16/17/18 · 巴卡妮原码 tweakunits0-9</span>
     </div>
 
     <div class="grid2">
@@ -121,7 +121,7 @@
       </article>
 
       <article class="card">
-        <div class="cardhead"><div><h3>虫族崛起 × 巴卡妮 · 融合性能版</h3><p>不是简单同时启用两个预设。先加载巴卡妮的玩家科技、T3、超级单位与特色火力，再加载虫族崛起的治疗虾科技、经济和 Queen 生产链，最后由 <span class="mono">tweakdefs22</span> 合并冲突处理与最终性能限流。</p></div><label class="switch"><input id="fusionPerf" type="checkbox"><span></span></label></div>
+        <div class="cardhead"><div><h3>虫族崛起 × 巴卡妮 · 融合性能版</h3><p>不是简单同时启用两个预设。先加载巴卡妮的玩家科技、T3、超级单位与特色火力，再加载虫族崛起的治疗虾科技、经济和 Queen 生产链，最后由 <span class="mono">tweakdefs18</span> 合并巴卡妮性能、融合冲突处理与最终性能限流。</p></div><label class="switch"><input id="fusionPerf" type="checkbox"><span></span></label></div>
         <div class="form">
           <label>虫草低频护卫</label><label class="switch"><input id="fusionHiveGuard" type="checkbox" checked><span></span></label>
           <label>虫草上限</label><input id="fusionHiveCap" type="number" value="3" min="1" step="1">
@@ -133,8 +133,8 @@
         <div class="notice"><b>指挥官：</b>以虫族崛起的强化指挥官和 T1 治疗虾入口为基础，再把巴卡妮的朱诺、摸金、高阶炮台、T3/T4 与超级单位入口追加回来，避免两套 buildoptions 相互覆盖。</div>
         <div class="notice"><b>虫草：</b>保留虫族崛起的 700 铁 / 45000 电经济核心，同时吸收巴卡妮的“虫巢会投射防御单位”思路；性能版默认每 30 秒只投射 1 个 T2 酸液管，召唤物 20 秒后消失，而不是原先高 Burst 连续生成。</div>
         <div class="notice"><b>Queen：</b>小女王继续负责精英地面/空中单位；大女王只生产四小龙 + 三巨龙；巴卡妮的小蓝 Queen 单独保留企鹅体系。三条生产线各自限量，互不覆盖。</div>
-        <div class="notice"><b>三巨龙：</b>采用巴卡妮的单位/武器基础与虫族崛起的“各限 1 + 高资源消耗”定位，再经过巴卡妮性能层和最终 tweakdefs22 限流，避免 10～11 连发、0.01 秒武器重新制造高事件负载。</div>
-        <div class="toolbar"><span class="small muted">推荐直接点击顶部“融合版”预设；输出 tweakunits0-9 + tweakdefs19/20/21/22 + 全弹护盾</span><span class="grow"></span><button id="copyFusion" class="btn primary">复制融合版全部命令</button></div>
+        <div class="notice"><b>三巨龙：</b>采用巴卡妮的单位/武器基础与虫族崛起的“各限 1 + 高资源消耗”定位，再经过巴卡妮性能层和最终 tweakdefs18 限流，避免 10～11 连发、0.01 秒武器重新制造高事件负载。</div>
+        <div class="toolbar"><span class="small muted">推荐直接点击顶部“融合版”预设；输出 tweakunits0-9 + tweakdefs16/17/18 + 全弹护盾</span><span class="grow"></span><button id="copyFusion" class="btn primary">复制融合版全部命令</button></div>
       </article>
 
       <article class="card">
@@ -167,9 +167,9 @@
           <label>普通超级单位单类型上限</label><input id="bakaniSuperCap" type="number" value="3" min="1" step="1">
         </div>
         <div class="notice"><b>原代码完整保留：</b>页面上的 10 个开关分别对应原文档从“蛇怪改防空……”到“小绿T2内鬼大激光……”的 tweakunits / tweakunits1…9；不是重新手写一套近似数值。</div>
-        <div class="notice"><b>性能覆盖：</b>Queen 投射压到单发、限制临时单位寿命；三巨龙的 10～11 连发合并为低事件数重击并按比例补伤害；0.01 秒级武器提高结算间隔；链雷上限 6；高阶虫塔默认每种最多 6，普通超级单位默认每种最多 3。最终还会由 tweakdefs22 再做一次全局 Burst / Projectiles / Reload 限流。</div>
+        <div class="notice"><b>性能覆盖：</b>Queen 投射压到单发、限制临时单位寿命；三巨龙的 10～11 连发合并为低事件数重击并按比例补伤害；0.01 秒级武器提高结算间隔；链雷上限 6；高阶虫塔默认每种最多 6，普通超级单位默认每种最多 3。最终还会由 tweakdefs18 再做一次全局 Burst / Projectiles / Reload 限流。</div>
         <div class="notice"><b>房间设置没有偷偷改：</b>原文档的“20 Queen、3倍虫潮、3倍波量、第一波5倍”等属于房间参数，不在这批 tweak 代码里。性能版先优化单位和武器事件；如果继续使用原来的极端刷怪倍数，后期仍可能被路径寻路和单位总数拖慢。</div>
-        <div class="toolbar"><span class="small muted">原码 tweakunits0-9 · 虫子规则 tweakdefs20 · Queen档+巴卡妮性能 tweakdefs21 · 最终性能 tweakdefs22</span><span class="grow"></span><button id="copyBakaniShield" class="btn">复制全弹护盾</button><button id="copyBakani" class="btn primary">复制巴卡妮性能版</button></div>
+        <div class="toolbar"><span class="small muted">原码 tweakunits0-9 · 虫子规则+Queen档 tweakdefs16 · 巴卡妮性能 tweakdefs17 · 最终性能 tweakdefs18</span><span class="grow"></span><button id="copyBakaniShield" class="btn">复制全弹护盾</button><button id="copyBakani" class="btn primary">复制巴卡妮性能版</button></div>
       </article>
 
       <article class="card">
@@ -189,7 +189,7 @@
         <div class="notice"><b>保留原模组：</b>指挥官直接进入虫族科技；T1/T2/T3治疗虾各限1；T4治疗虾产 20 铁 / 600 电；小女王级治疗虾按代码产 550 铁 / 19000 电；虫草产 700 铁 / 45000 电；四小龙、三巨龙各限1。</div>
         <div class="notice"><b>性能优化：</b>原代码中 T4治疗虾上限100默认压到8；小女王投射列表缩成代表性精英单位并把 60 秒寿命压到25秒；大女王每次只投射1只巨龙；0.01秒 Heat Ray / Flame 改成约0.2秒结算并提高单次伤害；三巨龙 10～11 连发改成1次重击，链雷最大目标压到6。</div>
         <div class="notice"><b>和“精英虫巢”的关系：</b>此模块里的 <span class="mono">raptor_hive</span> 按原《虫族崛起》定位为纯经济虫草（关闭攻击范围）。如果两个模块同时启用，本模块的虫草定义会后执行并覆盖精英虫巢的战斗火力。</div>
-        <div class="toolbar"><span class="small muted">独立输出 tweakdefs19；独立模式由 tweakdefs20 做最终限流；融合模式由 tweakdefs22 最后执行</span><span class="grow"></span><button id="copyRisePerformance" class="btn primary">复制 tweakdefs19</button></div>
+        <div class="toolbar"><span class="small muted">独立使用时虫族崛起与最终限流会合并到 tweakdefs18；融合版则使用 tweakdefs16/17/18</span><span class="grow"></span><button id="copyRisePerformance" class="btn primary">复制 tweakdefs18</button></div>
       </article>
 
       <article class="card">
@@ -235,7 +235,7 @@
           <label>持续区域上限 / 秒</label><input id="perfAreaTime" type="number" value="6" min=".5" step=".5">
           <label>召唤物寿命上限 / 秒</label><input id="perfSpawnExpire" type="number" value="30" min="1" step="1">
         </div>
-        <div class="notice"><b>处理方式：</b>削减 Burst / Projectiles / 过低 Reload 时，会按比例补回单发伤害，优先维持原总输出。普通模式输出到 <span class="mono">tweakdefs20</span>；巴卡妮/融合模式会合并到 <span class="mono">tweakdefs22</span> 最后执行。</div>
+        <div class="notice"><b>处理方式：</b>削减 Burst / Projectiles / 过低 Reload 时，会按比例补回单发伤害，优先维持原总输出。统一限制在 Host 已开放的 <span class="mono">tweakdefs18</span>；巴卡妮/融合模式会把最终性能逻辑合并进该槽。</div>
         <div class="notice"><b>仍需 Gadget 的部分：</b>全局敌军总人口预算、Threat Point 波次导演、Boss 分阶段和按总人口动态升级敌人，无法只靠 tweakdefs 完整实现；这里先负责可由配置器直接生成的性能层。</div>
         <div class="toolbar"><span class="small muted">推荐与“精英化 + 巨兽化 + 低 Squad 数量”一起使用</span><span class="grow"></span><button id="copyPerformance" class="btn primary">复制最终性能层</button></div>
       </article>
