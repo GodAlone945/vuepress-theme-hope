@@ -60,8 +60,8 @@ const PLAYER_DEFENSES=[
 ];
 let enabledDefenseUnits=new Set(PLAYER_DEFENSES.map(x=>x.id));
 
-const CONFIG_IDS=["playerDefense","landUnits","armLand","corLand","legLand","legSlow","t3Units","armT3","corT3","legT3","bossSupport","bossSupportStagger","bossSupportQueenBonus","ultimate","teamColorFx","teamColorMode","armUltRange","armUltDamage","armUltBeam","armUltReload","armUltAoe","corUltRange","corUltDamage","corUltReload","corUltAoe","corUltFireDps","corUltFireRange","corUltFireTime","legUltRange","legUltDamage","legUltBurst","legUltBurstRate","legUltBeam","legUltReload","legUltAoe","fusionPerf","fusionHiveGuard","fusionHiveCap","fusionHealerCap","fusionSuperCap","fusionSpawnExpire","fusionQueenReload","bakaniPerf","bakaniRaptorGlobal","bakaniShieldBounce","bakaniBossProfile","bakaniSpawnExpire","bakaniQueenReload","bakaniTurretCap","bakaniSuperCap","risePerf","riseCommanders","riseTech","riseQueens","riseDragons","riseDefense","riseHealerCap","riseHiveCap","riseSpawnExpire","riseQueenReload","riseDragonReload","eliteHive","hiveHealth","hiveMetalMake","hiveEnergyMake","hiveEnergyStorage","hiveWorkerTime","hiveGroundDamage","hiveGroundReload","hiveGroundBurst","hiveGroundAoe","hiveAaDamage","hiveAaReload","hiveMeteorDamage","hiveMeteorReload","hiveBrood","hiveBroodReload","hiveBroodSpawn","hiveBroodExpire","performance","perfMaxBurst","perfMaxProjectiles","perfMinReload","perfMinBurstRate","perfSparkMax","perfClusterMax","perfAreaTime","perfSpawnExpire","elite","roles","colossus","egg","intercept","boss","hp","damage","capn","roleCount","chance","roleWeight","giantHp","giantCap","eggMult","aggroDist","aggroChance","queenHp","stagger","staggerCost"];
-const BOOL_IDS=new Set(["playerDefense","landUnits","armLand","corLand","legLand","legSlow","t3Units","armT3","corT3","legT3","bossSupport","ultimate","teamColorFx","fusionPerf","fusionHiveGuard","bakaniPerf","bakaniRaptorGlobal","bakaniShieldBounce","risePerf","riseCommanders","riseTech","riseQueens","riseDragons","riseDefense","eliteHive","hiveBrood","performance","elite","roles","colossus","egg","intercept","boss"]);
+const CONFIG_IDS=["playerDefense","landUnits","armLand","corLand","legLand","legSlow","t3Units","armT3","corT3","legT3","bossSupport","bossSupportStagger","bossSupportQueenBonus","ultimate","teamColorFx","teamColorMode","armUltRange","armUltDamage","armUltBeam","armUltReload","armUltAoe","corUltRange","corUltDamage","corUltReload","corUltAoe","corUltFireDps","corUltFireRange","corUltFireTime","legUltRange","legUltDamage","legUltBurst","legUltBurstRate","legUltBeam","legUltReload","legUltAoe","fusionPerf","fusionHiveGuard","fusionHiveCap","fusionHealerCap","fusionSuperCap","fusionSpawnExpire","fusionQueenReload","scavxPerf","scavxEarlyCount","scavxMidCount","scavxHeavyCount","scavxTitanCount","scavxBossCount","scavxHpMult","scavxDamageMult","scavxArtillery","scavxKamikaze","scavxTitans","bakaniPerf","bakaniRaptorGlobal","bakaniShieldBounce","bakaniBossProfile","bakaniSpawnExpire","bakaniQueenReload","bakaniTurretCap","bakaniSuperCap","risePerf","riseCommanders","riseTech","riseQueens","riseDragons","riseDefense","riseHealerCap","riseHiveCap","riseSpawnExpire","riseQueenReload","riseDragonReload","eliteHive","hiveHealth","hiveMetalMake","hiveEnergyMake","hiveEnergyStorage","hiveWorkerTime","hiveGroundDamage","hiveGroundReload","hiveGroundBurst","hiveGroundAoe","hiveAaDamage","hiveAaReload","hiveMeteorDamage","hiveMeteorReload","hiveBrood","hiveBroodReload","hiveBroodSpawn","hiveBroodExpire","performance","perfMaxBurst","perfMaxProjectiles","perfMinReload","perfMinBurstRate","perfSparkMax","perfClusterMax","perfAreaTime","perfSpawnExpire","elite","roles","colossus","egg","intercept","boss","hp","damage","capn","roleCount","chance","roleWeight","giantHp","giantCap","eggMult","aggroDist","aggroChance","queenHp","stagger","staggerCost"];
+const BOOL_IDS=new Set(["playerDefense","landUnits","armLand","corLand","legLand","legSlow","t3Units","armT3","corT3","legT3","bossSupport","ultimate","teamColorFx","fusionPerf","fusionHiveGuard","scavxPerf","scavxArtillery","scavxKamikaze","scavxTitans","bakaniPerf","bakaniRaptorGlobal","bakaniShieldBounce","risePerf","riseCommanders","riseTech","riseQueens","riseDragons","riseDefense","eliteHive","hiveBrood","performance","elite","roles","colossus","egg","intercept","boss"]);
 const TEXT_IDS=new Set(["teamColorMode","hiveBroodSpawn","bakaniBossProfile"]);
 const BAKANI_SECTION_IDS=BK.sections.map((_,i)=>"bakaniS"+i);
 BAKANI_SECTION_IDS.forEach(id=>{CONFIG_IDS.push(id);BOOL_IDS.add(id)});
@@ -78,6 +78,7 @@ function setConfig(s){
   if(s.performance===undefined&&$("performance"))$("performance").checked=false;
   if(s.fusionPerf===undefined&&$("fusionPerf"))$("fusionPerf").checked=false;
   if(s.fusionHiveGuard===undefined&&$("fusionHiveGuard"))$("fusionHiveGuard").checked=false;
+  if(s.scavxPerf===undefined&&$("scavxPerf"))$("scavxPerf").checked=false;
   if(s.bakaniPerf===undefined&&$("bakaniPerf"))$("bakaniPerf").checked=false;
   if(s.bakaniPerf===false)BAKANI_SECTION_IDS.forEach(id=>{if($(id))$(id).checked=false});
   if(s.eliteHive===undefined&&$("eliteHive"))$("eliteHive").checked=false;
@@ -104,12 +105,18 @@ const BUILTIN={
   colossus:{title:"巨兽挑战",desc:"普通虫更少，中后期依靠 T4 Assault 与 Matriarch 制造压力。",tags:["巨兽","后期"],state:{playerDefense:true,landUnits:true,armLand:true,corLand:true,legLand:true,legSlow:true,t3Units:true,armT3:true,corT3:true,legT3:true,bossSupport:true,bossSupportStagger:4.5,bossSupportQueenBonus:1.25,ultimate:true,teamColorFx:true,teamColorMode:"hybrid",armUltRange:6200,armUltDamage:45000,armUltBeam:4,armUltReload:5,armUltAoe:40,corUltRange:6100,corUltDamage:6000,corUltReload:1.05,corUltAoe:260,corUltFireDps:240,corUltFireRange:200,corUltFireTime:9,legUltRange:6100,legUltDamage:2000,legUltBurst:63,legUltBurstRate:.03,legUltBeam:.15,legUltReload:14,legUltAoe:120,elite:true,roles:true,colossus:true,egg:false,intercept:false,boss:true,hp:1.5,damage:1.25,capn:10,roleCount:3,chance:.7,roleWeight:3,giantHp:4,giantCap:2,eggMult:1.25,aggroDist:1800,aggroChance:1,queenHp:1.75,stagger:3,staggerCost:5000}},
   economy:{title:"虫卵经济",desc:"启用战利品经济实验，提高 Raptor metalCost，从而影响蛋资源价值。",tags:["经济","回收"],state:{playerDefense:true,landUnits:true,armLand:true,corLand:true,legLand:true,legSlow:true,t3Units:true,armT3:true,corT3:true,legT3:true,bossSupport:true,bossSupportStagger:4.5,bossSupportQueenBonus:1.25,ultimate:true,teamColorFx:true,teamColorMode:"hybrid",armUltRange:6200,armUltDamage:45000,armUltBeam:4,armUltReload:5,armUltAoe:40,corUltRange:6100,corUltDamage:6000,corUltReload:1.05,corUltAoe:260,corUltFireDps:240,corUltFireRange:200,corUltFireTime:9,legUltRange:6100,legUltDamage:2000,legUltBurst:63,legUltBurstRate:.03,legUltBeam:.15,legUltReload:14,legUltAoe:120,elite:true,roles:true,colossus:true,egg:true,intercept:false,boss:true,hp:1.7,damage:1.3,capn:18,roleCount:4,chance:.75,roleWeight:4,giantHp:2.5,giantCap:3,eggMult:1.75,aggroDist:1800,aggroChance:1,queenHp:1.5,stagger:3,staggerCost:5000}}
 };
-Object.values(BUILTIN).forEach(p=>{p.state.performance=false;p.state.fusionPerf=false;p.state.fusionHiveGuard=false;p.state.eliteHive=false;p.state.hiveBrood=false;p.state.risePerf=false;p.state.riseCommanders=false;p.state.riseTech=false;p.state.riseQueens=false;p.state.riseDragons=false;p.state.riseDefense=false;p.state.bakaniPerf=false;p.state.bakaniRaptorGlobal=false;p.state.bakaniShieldBounce=false;BAKANI_SECTION_IDS.forEach(id=>p.state[id]=false)});
+Object.values(BUILTIN).forEach(p=>{p.state.performance=false;p.state.fusionPerf=false;p.state.fusionHiveGuard=false;p.state.scavxPerf=false;p.state.eliteHive=false;p.state.hiveBrood=false;p.state.risePerf=false;p.state.riseCommanders=false;p.state.riseTech=false;p.state.riseQueens=false;p.state.riseDragons=false;p.state.riseDefense=false;p.state.bakaniPerf=false;p.state.bakaniRaptorGlobal=false;p.state.bakaniShieldBounce=false;BAKANI_SECTION_IDS.forEach(id=>p.state[id]=false)});
 BUILTIN.performance={
   title:"性能重构 · 精英虫潮",
   desc:"继承三巨龙/虫族崛起的高经济与高价值单位思路，用更少单位、更高单体价值和全局武器事件限流替代后期虫海。",
   tags:["性能","独立模式","推荐"],
   state:{playerDefense:true,landUnits:true,armLand:true,corLand:true,legLand:true,legSlow:true,t3Units:true,armT3:true,corT3:true,legT3:true,bossSupport:true,bossSupportStagger:5,bossSupportQueenBonus:1.35,ultimate:true,teamColorFx:true,teamColorMode:"hybrid",armUltRange:6200,armUltDamage:45000,armUltBeam:4,armUltReload:5,armUltAoe:40,corUltRange:6100,corUltDamage:9000,corUltReload:1.6,corUltAoe:250,corUltFireDps:260,corUltFireRange:190,corUltFireTime:6,legUltRange:6100,legUltDamage:14000,legUltBurst:9,legUltBurstRate:.08,legUltBeam:.18,legUltReload:14,legUltAoe:110,eliteHive:true,hiveHealth:120000,hiveMetalMake:700,hiveEnergyMake:45000,hiveEnergyStorage:50000,hiveWorkerTime:2500,hiveGroundDamage:6000,hiveGroundReload:10,hiveGroundBurst:2,hiveGroundAoe:300,hiveAaDamage:2500,hiveAaReload:2.5,hiveMeteorDamage:50000,hiveMeteorReload:15,hiveBrood:true,hiveBroodReload:30,hiveBroodSpawn:"raptor_land_swarmer_brood_t3_v1",hiveBroodExpire:25,performance:true,perfMaxBurst:8,perfMaxProjectiles:4,perfMinReload:.12,perfMinBurstRate:.03,perfSparkMax:6,perfClusterMax:6,perfAreaTime:6,perfSpawnExpire:30,elite:true,roles:true,colossus:true,egg:true,intercept:true,boss:true,hp:2.4,damage:1.6,capn:8,roleCount:2,chance:.65,roleWeight:3,giantHp:4,giantCap:2,eggMult:1.6,aggroDist:1800,aggroChance:.9,queenHp:2.5,stagger:4,staggerCost:4500}
+};
+BUILTIN.scavx={
+  title:"ScavX Inspired · 精英拾荒者性能版",
+  desc:"保留 ScavX 的 Anger 分段和 Raider / Berserk / Artillery / Kamikaze / Titan 压迫感，用独立 scavx_* 精英克隆和低人口小队替代几十单位大编队。",
+  tags:["Scavengers","性能","低人口"],
+  state:{...BUILTIN.performance.state,scavxPerf:true,scavxEarlyCount:6,scavxMidCount:4,scavxHeavyCount:3,scavxTitanCount:2,scavxBossCount:1,scavxHpMult:1.8,scavxDamageMult:1.45,scavxArtillery:true,scavxKamikaze:true,scavxTitans:true,eliteHive:false,hiveBrood:false,risePerf:false,riseCommanders:false,riseTech:false,riseQueens:false,riseDragons:false,riseDefense:false,bakaniPerf:false,bakaniRaptorGlobal:false,bakaniShieldBounce:false,fusionPerf:false,fusionHiveGuard:false,elite:false,roles:false,colossus:false,egg:false,intercept:false,boss:false,bossSupport:false,performance:true,perfMaxBurst:6,perfMaxProjectiles:3,perfMinReload:.15,perfMinBurstRate:.04,perfSparkMax:4,perfClusterMax:4,perfAreaTime:5,perfSpawnExpire:20}
 };
 BUILTIN.rise={title:"虫族崛起 · 性能版",desc:"从上传的《虫族崛起》四组 tweakunits 拆出的独立性能重构：指挥官、T1-T4治疗虾/经济、大小女王、四小龙/三巨龙。",tags:["来源模组","性能","独立模块"],state:{...BUILTIN.performance.state,risePerf:true,riseCommanders:true,riseTech:true,riseQueens:true,riseDragons:true,riseDefense:true,riseHealerCap:8,riseHiveCap:4,riseSpawnExpire:25,riseQueenReload:10,riseDragonReload:.2,eliteHive:false,hiveBrood:false}};
 const BAKANI_PRESET_STATE={...BUILTIN.performance.state,playerDefense:false,landUnits:false,armLand:false,corLand:false,legLand:false,legSlow:false,t3Units:false,armT3:false,corT3:false,legT3:false,bossSupport:false,ultimate:false,eliteHive:false,hiveBrood:false,risePerf:false,riseCommanders:false,riseTech:false,riseQueens:false,riseDragons:false,riseDefense:false,elite:false,roles:false,colossus:false,egg:false,intercept:false,boss:false,bakaniPerf:true,bakaniRaptorGlobal:true,bakaniShieldBounce:true,bakaniBossProfile:"348 2倍血",bakaniSpawnExpire:25,bakaniQueenReload:10,bakaniTurretCap:6,bakaniSuperCap:3,performance:true,perfMaxBurst:6,perfMaxProjectiles:4,perfMinReload:.12,perfMinBurstRate:.03,perfSparkMax:6,perfClusterMax:6,perfAreaTime:6,perfSpawnExpire:25};
@@ -118,7 +125,7 @@ BUILTIN.bakani={title:"巴卡妮三巨龙 · 性能版",desc:"完整保留上传
 const FUSION_PRESET_STATE={...BAKANI_PRESET_STATE,fusionPerf:true,fusionHiveGuard:true,fusionHiveCap:3,fusionHealerCap:6,fusionSuperCap:2,fusionSpawnExpire:20,fusionQueenReload:12,risePerf:true,riseCommanders:true,riseTech:true,riseQueens:true,riseDragons:true,riseDefense:true,riseHealerCap:6,riseHiveCap:3,riseSpawnExpire:20,riseQueenReload:12,riseDragonReload:.2,bakaniSpawnExpire:20,bakaniQueenReload:12,bakaniTurretCap:5,bakaniSuperCap:2,eliteHive:false,hiveBrood:false,performance:true,perfMaxBurst:6,perfMaxProjectiles:3,perfMinReload:.15,perfMinBurstRate:.04,perfSparkMax:6,perfClusterMax:5,perfAreaTime:5,perfSpawnExpire:20};
 BAKANI_SECTION_IDS.forEach(id=>FUSION_PRESET_STATE[id]=true);
 BUILTIN.fusion={title:"虫族崛起 × 巴卡妮 · 融合性能版",desc:"巴卡妮负责玩家科技、T3/超级单位和特色火力；虫族崛起负责治疗虾科技、经济与 Queen 生产链；融合层专门处理指挥官、虫草、Queen 和三巨龙冲突。",tags:["融合","性能","推荐"],state:FUSION_PRESET_STATE};
-function resetState(){return {playerDefense:false,defenseUnits:[],landUnits:false,armLand:false,corLand:false,legLand:false,legSlow:false,t3Units:false,armT3:false,corT3:false,legT3:false,bossSupport:false,bossSupportStagger:4.5,bossSupportQueenBonus:1.25,ultimate:false,teamColorFx:false,teamColorMode:"hybrid",armUltRange:6200,armUltDamage:45000,armUltBeam:4,armUltReload:5,armUltAoe:40,corUltRange:6100,corUltDamage:6000,corUltReload:1.05,corUltAoe:260,corUltFireDps:240,corUltFireRange:200,corUltFireTime:9,legUltRange:6100,legUltDamage:2000,legUltBurst:63,legUltBurstRate:.03,legUltBeam:.15,legUltReload:14,legUltAoe:120,fusionPerf:false,fusionHiveGuard:false,fusionHiveCap:3,fusionHealerCap:6,fusionSuperCap:2,fusionSpawnExpire:20,fusionQueenReload:12,bakaniPerf:false,bakaniRaptorGlobal:false,bakaniShieldBounce:false,bakaniBossProfile:"",bakaniSpawnExpire:25,bakaniQueenReload:10,bakaniTurretCap:6,bakaniSuperCap:3,risePerf:false,riseCommanders:false,riseTech:false,riseQueens:false,riseDragons:false,riseDefense:false,riseHealerCap:8,riseHiveCap:4,riseSpawnExpire:25,riseQueenReload:10,riseDragonReload:.2,eliteHive:false,hiveHealth:120000,hiveMetalMake:700,hiveEnergyMake:45000,hiveEnergyStorage:50000,hiveWorkerTime:2500,hiveGroundDamage:6000,hiveGroundReload:10,hiveGroundBurst:2,hiveGroundAoe:300,hiveAaDamage:2500,hiveAaReload:2.5,hiveMeteorDamage:50000,hiveMeteorReload:15,hiveBrood:false,hiveBroodReload:30,hiveBroodSpawn:"raptor_land_swarmer_brood_t3_v1",hiveBroodExpire:25,performance:false,perfMaxBurst:8,perfMaxProjectiles:4,perfMinReload:.12,perfMinBurstRate:.03,perfSparkMax:6,perfClusterMax:6,perfAreaTime:6,perfSpawnExpire:30,elite:false,roles:false,colossus:false,egg:false,intercept:false,boss:false,hp:1,damage:1,capn:20,roleCount:4,chance:.75,roleWeight:4,giantHp:2,giantCap:4,eggMult:1,aggroDist:1800,aggroChance:1,queenHp:1,stagger:1,staggerCost:5000}}
+function resetState(){return {playerDefense:false,defenseUnits:[],landUnits:false,armLand:false,corLand:false,legLand:false,legSlow:false,t3Units:false,armT3:false,corT3:false,legT3:false,bossSupport:false,bossSupportStagger:4.5,bossSupportQueenBonus:1.25,ultimate:false,teamColorFx:false,teamColorMode:"hybrid",armUltRange:6200,armUltDamage:45000,armUltBeam:4,armUltReload:5,armUltAoe:40,corUltRange:6100,corUltDamage:6000,corUltReload:1.05,corUltAoe:260,corUltFireDps:240,corUltFireRange:200,corUltFireTime:9,legUltRange:6100,legUltDamage:2000,legUltBurst:63,legUltBurstRate:.03,legUltBeam:.15,legUltReload:14,legUltAoe:120,fusionPerf:false,fusionHiveGuard:false,fusionHiveCap:3,fusionHealerCap:6,fusionSuperCap:2,fusionSpawnExpire:20,fusionQueenReload:12,scavxPerf:false,scavxEarlyCount:6,scavxMidCount:4,scavxHeavyCount:3,scavxTitanCount:2,scavxBossCount:1,scavxHpMult:1.8,scavxDamageMult:1.45,scavxArtillery:true,scavxKamikaze:true,scavxTitans:true,bakaniPerf:false,bakaniRaptorGlobal:false,bakaniShieldBounce:false,bakaniBossProfile:"",bakaniSpawnExpire:25,bakaniQueenReload:10,bakaniTurretCap:6,bakaniSuperCap:3,risePerf:false,riseCommanders:false,riseTech:false,riseQueens:false,riseDragons:false,riseDefense:false,riseHealerCap:8,riseHiveCap:4,riseSpawnExpire:25,riseQueenReload:10,riseDragonReload:.2,eliteHive:false,hiveHealth:120000,hiveMetalMake:700,hiveEnergyMake:45000,hiveEnergyStorage:50000,hiveWorkerTime:2500,hiveGroundDamage:6000,hiveGroundReload:10,hiveGroundBurst:2,hiveGroundAoe:300,hiveAaDamage:2500,hiveAaReload:2.5,hiveMeteorDamage:50000,hiveMeteorReload:15,hiveBrood:false,hiveBroodReload:30,hiveBroodSpawn:"raptor_land_swarmer_brood_t3_v1",hiveBroodExpire:25,performance:false,perfMaxBurst:8,perfMaxProjectiles:4,perfMinReload:.12,perfMinBurstRate:.03,perfSparkMax:6,perfClusterMax:6,perfAreaTime:6,perfSpawnExpire:30,elite:false,roles:false,colossus:false,egg:false,intercept:false,boss:false,hp:1,damage:1,capn:20,roleCount:4,chance:.75,roleWeight:4,giantHp:2,giantCap:4,eggMult:1,aggroDist:1800,aggroChance:1,queenHp:1,stagger:1,staggerCost:5000}}
 
 function squadLine(name,minA,maxA,behavior,rarity,count,weight,distance,chance){
   return '  setRaptorSquad("'+name+'",'+minA+','+maxA+',"'+behavior+'","'+rarity+'",'+count+','+weight+','+distance+','+chance+')\n';
@@ -562,6 +569,52 @@ function buildEliteHiveLua(s){
   return wrapModule(p.join(""));
 }
 
+function buildScavXPerformanceLua(s){
+  if(!s.scavxPerf)return "";
+  const early=Math.max(1,Math.min(16,Math.round(s.scavxEarlyCount||6)));
+  const mid=Math.max(1,Math.min(12,Math.round(s.scavxMidCount||4)));
+  const heavy=Math.max(1,Math.min(8,Math.round(s.scavxHeavyCount||3)));
+  const titan=Math.max(1,Math.min(5,Math.round(s.scavxTitanCount||2)));
+  const boss=Math.max(1,Math.min(3,Math.round(s.scavxBossCount||1)));
+  const hp=Math.max(1,Math.min(6,Number(s.scavxHpMult)||1.8));
+  const dmg=Math.max(1,Math.min(5,Number(s.scavxDamageMult)||1.45));
+  const profiles=[
+    ["armfast","scavx_armfast",5,35,"berserk","basic",early,100,1000,1],
+    ["legstr","scavx_legstr",15,50,"raider","basic",early,115,700,1],
+    ["leginc","scavx_leginc",20,55,"raider","basic",early,95,700,1],
+    ["cordemon","scavx_cordemon",30,70,"berserk","basic",mid,120,1800,1],
+    ["legerailtank","scavx_legerailtank",20,65,"berserk","basic",mid,100,1800,1],
+    ["armbanth","scavx_armbanth",40,95,"raider","special",heavy,115,1800,1],
+    ["armpwt4","scavx_armpwt4",50,1000,"berserk","special",heavy,105,1900,1],
+    ["legmost3","scavx_legmost3",45,1000,"berserk","special",heavy,95,1800,1]
+  ];
+  if(s.scavxArtillery){
+    profiles.push(["armvang","scavx_armvang",20,65,"artillery","special",mid,95,1200,1]);
+  }
+  if(s.scavxKamikaze){
+    profiles.push(["leghovertank","scavx_leghovertank",25,70,"kamikaze","special",mid,85,1000,1]);
+  }
+  if(s.scavxTitans){
+    profiles.push(
+      ["armrattet4","scavx_armrattet4",55,85,"berserk","special",titan,110,1100,1],
+      ["corjugg","scavx_corjugg",70,1000,"berserk","special",titan,120,1800,1],
+      ["legfortt4","scavx_legfortt4",65,1000,"berserk","special",titan,115,1100,1],
+      ["armsptkt4","scavx_armsptkt4",85,1000,"artillery","special",boss,85,1600,1]
+    );
+  }
+  const p=[];
+  p.push('  -- ScavX Inspired performance rebuild: low-count elite scavenger squads.\\n');
+  p.push('  local hpMul='+hp+' local dmgMul='+dmg+'\\n');
+  p.push('  local function copy(v,seen) if type(v)~="table" then return v end seen=seen or {} if seen[v] then return seen[v] end local o={} seen[v]=o for k,x in pairs(v) do o[copy(k,seen)]=copy(x,seen) end return o end\\n');
+  p.push('  local function clampParam(q,k,n) local v=q and tonumber(q[k]) if v and v>n then q[k]=tostring(n) end end\\n');
+  p.push('  local function tuneWeapon(w) if not w then return end local mult=dmgMul if type(w.burst)=="number" and w.burst>6 then mult=mult*(w.burst/6) w.burst=6 end if type(w.projectiles)=="number" and w.projectiles>3 then mult=mult*(w.projectiles/3) w.projectiles=3 end if type(w.reloadtime)=="number" and w.reloadtime>0 and w.reloadtime<0.2 then mult=mult*(0.2/w.reloadtime) w.reloadtime=0.2 end if type(w.burstrate)=="number" and w.burstrate>0 and w.burstrate<0.04 then w.burstrate=0.04 end if w.damage then for k,v in pairs(w.damage) do if type(v)=="number" then w.damage[k]=v*mult end end end local q=w.customparams if q then clampParam(q,"spark_maxunits",4) clampParam(q,"cluster_number",4) clampParam(q,"area_onhit_time",5) clampParam(q,"area_ondeath_time",5) if q.spawns_name then q.spawns_expire="20" end end end\\n');
+  p.push('  local function C(src,dst,minA,maxA,behavior,rarity,amount,weight,distance,chance) local base=UnitDefs[src] if not base or UnitDefs[dst] then return end local u=copy(base) UnitDefs[dst]=u if UnitDefNames then UnitDefNames[dst]=u end u.maxthisunit=nil if type(u.health)=="number" then u.health=u.health*hpMul end u.customparams=u.customparams or {} local q=u.customparams q.scavcustomsquad="1" q.scavsquadunitsamount=tostring(amount) q.scavsquadminanger=tostring(minA) q.scavsquadmaxanger=tostring(maxA) q.scavsquadweight=tostring(weight) q.scavsquadrarity=rarity q.scavsquadbehavior=behavior q.scavsquadbehaviordistance=tostring(distance) q.scavsquadbehaviorchance=tostring(chance) q.scavsquadsurface="land" q.scavx_perf="1" q.scavx_source=src q.i18n_en_humanname="ScavX Elite "..src q.i18n_zh_humanname="ScavX精英 "..src for _,w in pairs(u.weapondefs or {}) do tuneWeapon(w) end end\\n');
+  for(const x of profiles){
+    p.push('  C("'+x[0]+'","'+x[1]+'",'+x[2]+','+x[3]+',"'+x[4]+'","'+x[5]+'",'+x[6]+','+x[7]+','+x[8]+','+x[9]+')\\n');
+  }
+  return wrapModule(p.join(""));
+}
+
 function buildPerformanceLua(s){
   if(!s.performance)return "";
   const maxBurst=Math.max(1,Math.round(s.perfMaxBurst||8));
@@ -611,6 +664,7 @@ function buildConfigModules(){
   push(15,"LEG T3 · 持续压制",buildLegT3Lua(s));
   push(16,"公共 Boss 补位 · Scavenger",buildBossSupportLua(s));
   push(17,"精英虫巢 · 经济与育巢核心",buildEliteHiveLua(s));
+  push(18,"ScavX Inspired · 精英拾荒者性能版",buildScavXPerformanceLua(s));
   push(19,"虫族崛起 · 性能重构版",buildRaptorRisePerformanceLua(s));
   mods.push(...buildBakaniModules(s));
   push(24,"虫族崛起 × 巴卡妮 · 融合规则",buildFusionLua(s));
@@ -665,6 +719,7 @@ $("copyCorT3")?.addEventListener("click",()=>{const lua=buildCorT3Lua(getConfig(
 $("copyLegT3")?.addEventListener("click",()=>{const lua=buildLegT3Lua(getConfig());copyText(lua?"!bset tweakdefs15 "+encode64(lua):"-- LEG T3 模块未启用",$("copyLegT3"))});
 $("copyBossSupport")?.addEventListener("click",()=>{const lua=buildBossSupportLua(getConfig());copyText(lua?"!bset tweakdefs16 "+encode64(lua):"-- Boss 补位模块未启用",$("copyBossSupport"))});
 $("copyEliteHive")?.addEventListener("click",()=>{const lua=buildEliteHiveLua(getConfig());copyText(lua?"!bset tweakdefs17 "+encode64(lua):"-- 精英虫巢模块未启用",$("copyEliteHive"))});
+$("copyScavXPerformance")?.addEventListener("click",()=>{const s=getConfig(),lua=buildScavXPerformanceLua(s),cmds=[];if(lua)cmds.push("!bset tweakdefs18 "+encode64(lua));if(s.performance){const p=buildPerformanceLua(s);if(p)cmds.push("!bset tweakdefs29 "+encode64(p))}copyText(cmds.length?cmds.join("\\n"):"-- ScavX 性能版模块未启用",$("copyScavXPerformance"))});
 $("copyRisePerformance")?.addEventListener("click",()=>{const lua=buildRaptorRisePerformanceLua(getConfig());copyText(lua?"!bset tweakdefs19 "+encode64(lua):"-- 虫族崛起性能版模块未启用",$("copyRisePerformance"))});
 $("copyBakani")?.addEventListener("click",()=>{const s=getConfig(),mods=buildBakaniModules(s);let cmds=[...mods.map(m=>"!bset "+m.key+" "+encode64(m.lua)),...buildExtraCommands(s)];if(s.performance){const p=buildPerformanceLua(s);if(p)cmds.push("!bset tweakdefs29 "+encode64(p))}copyText(cmds.length?cmds.join("\n"):"-- 巴卡妮性能版模块未启用",$("copyBakani"))});
 $("copyBakaniShield")?.addEventListener("click",()=>copyText(BK.shieldCommand||"!experimentalshields bounceeverything",$("copyBakaniShield")));
