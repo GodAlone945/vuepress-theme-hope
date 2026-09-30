@@ -45,13 +45,14 @@
       <button class="btn" data-config-preset="elite">精英虫群</button>
       <button class="btn" data-config-preset="colossus">巨兽挑战</button>
       <button class="btn good" data-config-preset="performance">性能重构</button>
+      <button class="btn good" data-config-preset="scavx">ScavX 精英拾荒性能版</button>
       <button class="btn good" data-config-preset="fusion">虫族崛起 × 巴卡妮融合版</button>
       <button class="btn primary" data-config-preset="bakani">巴卡妮三巨龙性能版</button>
       <button class="btn primary" data-config-preset="rise">虫族崛起性能版</button>
       <button class="btn" data-config-preset="economy">虫卵经济</button>
       <button class="btn" data-config-preset="reset">清空</button>
       <span class="grow"></span>
-      <span class="small muted">模块化输出：基础 tweakdefs0-19 · 巴卡妮原码 tweakunits0-9 · 巴卡妮规则 21/22/23 · 融合规则 24 · 最终性能 29</span>
+      <span class="small muted">模块化输出：基础 tweakdefs0-17/19 · ScavX 性能版 18 · 巴卡妮原码 tweakunits0-9 · 巴卡妮规则 21/22/23 · 融合规则 24 · 最终性能 29</span>
     </div>
 
     <div class="grid2">
@@ -96,6 +97,27 @@
           </select>
         </div>
         <div class="toolbar"><span class="small muted">ARM 长持续激光 · COR 高爆火海 · LEG 多管热能射线</span><span class="grow"></span><button id="openUltimate" class="btn small">查看参数</button></div>
+      </article>
+
+      <article class="card">
+        <div class="cardhead"><div><h3>ScavX Inspired · 精英拾荒者性能版</h3><p>参考 ScavX v2.7 的 Anger 分段、Raider / Berserk / Artillery / Kamikaze 编队和 Titan 压迫感，但把 30～70 单位大编队重构成低人口精英小队。</p></div><label class="switch"><input id="scavxPerf" type="checkbox"><span></span></label></div>
+        <div class="form">
+          <label>前期编队数量</label><input id="scavxEarlyCount" type="number" value="6" min="1" max="16" step="1">
+          <label>中期编队数量</label><input id="scavxMidCount" type="number" value="4" min="1" max="12" step="1">
+          <label>重装编队数量</label><input id="scavxHeavyCount" type="number" value="3" min="1" max="8" step="1">
+          <label>Titan 编队数量</label><input id="scavxTitanCount" type="number" value="2" min="1" max="5" step="1">
+          <label>Boss 编队数量</label><input id="scavxBossCount" type="number" value="1" min="1" max="3" step="1">
+          <label>精英生命倍率</label><input id="scavxHpMult" type="number" value="1.8" min="1" max="6" step=".1">
+          <label>精英伤害倍率</label><input id="scavxDamageMult" type="number" value="1.45" min="1" max="5" step=".05">
+          <label>启用炮兵编队</label><label class="switch"><input id="scavxArtillery" type="checkbox" checked><span></span></label>
+          <label>启用自爆 / 冲锋编队</label><label class="switch"><input id="scavxKamikaze" type="checkbox" checked><span></span></label>
+          <label>启用后期 Titan</label><label class="switch"><input id="scavxTitans" type="checkbox" checked><span></span></label>
+        </div>
+        <div class="notice"><b>低人口重构：</b>不复制 ScavX 的 50 Zipper、70 Bantha、40 Juggernaut 或 30 Titaniator。性能版将同类压力压缩为少量强化单位，并按 Anger 5～100 分阶段加入刷怪池。</div>
+        <div class="notice"><b>隔离玩家单位：</b>从 ScavX 使用过的 BAR 单位克隆出独立 <span class="mono">scavx_*</span> UnitDef，再设置 <span class="mono">scavcustomsquad</span>；因此精英 HP / 伤害不会顺带强化玩家建造的原单位。</div>
+        <div class="notice"><b>双层限流：</b>本模块自身把克隆武器压到 Burst≤6、Projectiles≤3、Reload≥0.2s、Spark/Cluster≤4，并按比例补偿单次伤害；推荐同时开启 tweakdefs29 做全局最终事件预算。</div>
+        <div class="notice"><b>使用条件：</b>这是 Scavengers AI 模式模块，不是 Raptor 模式模块。玩家侧火力直接复用当前配置器的三阵营防御、T3 与终极武器，不再额外复制 ScavX 的 29 个高频超级单位。</div>
+        <div class="toolbar"><span class="small muted">独立输出 tweakdefs18 · 推荐与 tweakdefs29 配合</span><span class="grow"></span><button id="copyScavXPerformance" class="btn primary">复制 ScavX 性能版</button></div>
       </article>
 
       <article class="card">
