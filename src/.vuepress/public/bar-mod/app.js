@@ -8,7 +8,7 @@ const num=(id,d)=>{const v=Number($(id)?.value);return Number.isFinite(v)?v:d};
 const esc=s=>String(s??"").replace(/\\/g,"\\\\").replace(/"/g,'\\"');
 
 function slotKey(slot){const n=Number(slot)||0;return "tweakdefs"+(n===0?"":n)}
-function fillSlots(el){if(!el)return;el.innerHTML="";for(let i=0;i<=18;i++){const o=document.createElement("option");o.value=i;o.textContent=i===0?"tweakdefs":"tweakdefs"+i;el.appendChild(o)}}
+function fillSlots(el){if(!el)return;el.innerHTML="";for(let i=1;i<=18;i++){const o=document.createElement("option");o.value=i;o.textContent="tweakdefs"+i;el.appendChild(o)}}
 ["configSlot","b64Slot","editorSlot"].forEach(id=>fillSlots($(id)));
 
 function encode64(text){
@@ -734,19 +734,19 @@ function renderConfig(){
   if($("landPreview")){
     const s=getConfig();
     const parts=[
-      ["tweakdefs10 · ARM",buildArmLandLua(s)],
-      ["tweakdefs11 · COR",buildCorLandLua(s)],
-      ["tweakdefs12 · LEG",buildLegLandLua(s)]
+      ["ARM 地面兵种",buildArmLandLua(s)],
+      ["COR 地面兵种",buildCorLandLua(s)],
+      ["LEG 地面兵种",buildLegLandLua(s)]
     ].filter(x=>x[1]).map(x=>"-- "+x[0]+"\n"+x[1]);
     $("landPreview").textContent=parts.join("\n\n")||"-- 地面兵种模块未启用";
   }
   if($("t3Preview")){
     const s=getConfig();
     const parts=[
-      ["tweakdefs13 · ARM T3",buildArmT3Lua(s)],
-      ["tweakdefs14 · COR T3",buildCorT3Lua(s)],
-      ["tweakdefs15 · LEG T3",buildLegT3Lua(s)],
-      ["tweakdefs16 · Boss 补位",buildBossSupportLua(s)]
+      ["ARM T3",buildArmT3Lua(s)],
+      ["COR T3",buildCorT3Lua(s)],
+      ["LEG T3",buildLegT3Lua(s)],
+      ["Boss 补位",buildBossSupportLua(s)]
     ].filter(x=>x[1]).map(x=>"-- "+x[0]+"\n"+x[1]);
     $("t3Preview").textContent=parts.join("\n\n")||"-- T3 模块未启用";
   }
