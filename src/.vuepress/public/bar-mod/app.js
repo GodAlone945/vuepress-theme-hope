@@ -527,11 +527,11 @@ function buildRaptorRisePerformanceLua(s){
   p.push('  local function builds(n,t) local u=U(n) if u then u.buildoptions=t end end\n');
   if(s.riseCommanders){
     p.push('  local commonBuild={"armsolar","raptor_turret_antiair_t2_v1","raptor_land_swarmer_heal_t1_v1","raptor_turret_basic_t2_v1","corbhmth","armfort","raptor_turret_antiair_t4_v1","raptor_turret_emp_t4_v1","raptor_air_scout_basic_t4_v1","raptor_turret_basic_t3_v1","raptor_turret_emp_t3_v1"}\n');
-    p.push('  local ch={armcom=100000,corcom=130000,legcom=115000} for n,h in pairs(ch) do local u=U(n) if u then u.autoheal=5000 u.builddistance=500 u.energymake=3000 u.energystorage=99999999 u.metalmake=20 u.metalstorage=99999999 u.health=h u.speed=200 u.turnrate=3000 u.workertime=8000 u.maxslope=360 u.buildoptions=commonBuild end end\n');
+    p.push('  local ch={armcom=100000,corcom=130000,legcom=115000} for n,h in pairs(ch) do local u=U(n) if u then u.autoheal=5000 u.builddistance=500 u.energymake=3000 u.energystorage=50000 u.metalmake=20 u.metalstorage=5000 u.health=h u.speed=200 u.turnrate=3000 u.workertime=8000 u.maxslope=360 u.buildoptions=commonBuild end end\n');
     p.push('  local a=W("armcom","old_armsnipe_weapon") if a then a.projectiles=1 a.reloadtime=1.2 a.range=1500 dmg(a,{default=30000,commanders=6000}) end\n');
     p.push('  local c=W("corcom","dmaw") if c then c.burst=2 c.burstrate=.08 c.reloadtime=.25 c.range=1280 dmg(c,{default=9500,subs=9500,commanders=3500}) end\n');
     p.push('  local l=W("legcom","leg_t2_microflak") if l then l.burst=2 l.burstrate=.06 l.reloadtime=.28 l.range=1390 dmg(l,{default=2320,vtol=2320,commanders=720}) end\n');
-    p.push('  local sol=U("armsolar") if sol then sol.energyupkeep=20 sol.energystorage=99999999 sol.metalstorage=99999999 end local geo=U("corbhmth") if geo then geo.energymake=450 end local wall=U("armfort") if wall then wall.energycost=0 wall.metalcost=0 end\n');
+    p.push('  local sol=U("armsolar") if sol then sol.energyupkeep=20 end local geo=U("corbhmth") if geo then geo.energymake=450 end local wall=U("armfort") if wall then wall.energycost=0 wall.metalcost=0 end\n');
   }
   if(s.riseTech){
     p.push('  local t1=U("raptor_land_swarmer_heal_t1_v1") if t1 then t1.canreclaim=true t1.maxthisunit=1 t1.energymake=25 end builds("raptor_land_swarmer_heal_t1_v1",{"raptor_turret_basic_t2_v1","raptor_turret_antiair_t2_v1","raptor_land_swarmer_heal_t2_v1"})\n');
