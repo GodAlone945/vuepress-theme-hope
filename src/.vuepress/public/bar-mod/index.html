@@ -48,7 +48,7 @@
       <button class="btn" data-config-preset="economy">虫卵经济</button>
       <button class="btn" data-config-preset="reset">清空</button>
       <span class="grow"></span>
-      <span class="small muted">模块化输出：防御 0/1/2 · Raptor 4/5 · Boss 6 · 经济 7 · 终极武器 8 · 联合科技 9 · 陆军 10/11/12 · T3 13/14/15 · Boss补位 16 · 性能 17</span>
+      <span class="small muted">模块化输出：防御 0/1/2 · Raptor 4/5 · Boss 6 · 经济 7 · 终极武器 8 · 联合科技 9 · 陆军 10/11/12 · T3 13/14/15 · Boss补位 16 · 精英虫巢 17 · 性能 18</span>
     </div>
 
     <div class="grid2">
@@ -96,6 +96,37 @@
       </article>
 
       <article class="card">
+        <div class="cardhead"><div><h3>精英虫巢</h3><p>把官方 <span class="mono">raptor_hive</span> 从普通虫群巢穴改成少量高价值的经济 / 防御 / 育巢核心，作为性能重构模式的中后期战略目标。</p></div><label class="switch"><input id="eliteHive" type="checkbox"><span></span></label></div>
+        <div class="form">
+          <label>生命值</label><input id="hiveHealth" type="number" value="120000" min="1000" step="5000">
+          <label>Metal / 秒</label><input id="hiveMetalMake" type="number" value="700" min="0" step="50">
+          <label>Energy / 秒</label><input id="hiveEnergyMake" type="number" value="45000" min="0" step="1000">
+          <label>Energy Storage</label><input id="hiveEnergyStorage" type="number" value="50000" min="0" step="5000">
+          <label>建造力</label><input id="hiveWorkerTime" type="number" value="2500" min="0" step="100">
+          <label>对地单发伤害</label><input id="hiveGroundDamage" type="number" value="6000" min="1" step="250">
+          <label>对地 Reload</label><input id="hiveGroundReload" type="number" value="10" min=".1" step=".5">
+          <label>对地 Burst</label><input id="hiveGroundBurst" type="number" value="2" min="1" step="1">
+          <label>对地 AoE</label><input id="hiveGroundAoe" type="number" value="300" min="1" step="10">
+          <label>防空伤害</label><input id="hiveAaDamage" type="number" value="2500" min="1" step="100">
+          <label>防空 Reload</label><input id="hiveAaReload" type="number" value="2.5" min=".1" step=".1">
+          <label>陨石伤害</label><input id="hiveMeteorDamage" type="number" value="50000" min="1" step="1000">
+          <label>陨石 Reload</label><input id="hiveMeteorReload" type="number" value="15" min=".1" step="1">
+          <label>启用精英育巢炮</label><label class="switch"><input id="hiveBrood" type="checkbox"><span></span></label>
+          <label>育巢炮 Reload</label><input id="hiveBroodReload" type="number" value="30" min="1" step="1">
+          <label>生成精英单位</label>
+          <select id="hiveBroodSpawn" class="field">
+            <option value="raptor_land_swarmer_brood_t3_v1" selected>T3 Brood Swarmer</option>
+            <option value="raptor_land_assault_basic_t4_v1">T4 Assault</option>
+            <option value="raptor_land_swarmer_brood_t2_v1">T2 Brood Swarmer</option>
+          </select>
+          <label>生成物寿命 / 秒</label><input id="hiveBroodExpire" type="number" value="25" min="1" step="1">
+        </div>
+        <div class="notice"><b>默认性能版：</b>沿用成熟模组的高阶经济思路，虫巢设为 700 Metal / 45000 Energy；育巢炮从原版 32 连发改成单发低频生成，默认只生成 1 个高价值虫，避免重新制造虫海。</div>
+        <div class="notice"><b>说明：</b><span class="mono">raptor_hive</span> 仍由 Raptor 原有刷巢逻辑负责出现；这里修改的是巢穴 UnitDef 本身。严格控制“全场只存在几个虫巢”仍需要波次 / 刷巢 Gadget 配合。</div>
+        <div class="toolbar"><span class="small muted">独立输出 tweakdefs17</span><span class="grow"></span><button id="copyEliteHive" class="btn primary">复制 tweakdefs17</button></div>
+      </article>
+
+      <article class="card">
         <div class="cardhead"><div><h3>性能重构 · 战斗事件预算</h3><p>作为独立模式的最后一道限流层：减少超高 Burst、多弹丸、0.01 秒级武器、过多链雷与 Cluster，并限制持续区域和召唤物寿命。</p></div><label class="switch"><input id="performance" type="checkbox"><span></span></label></div>
         <div class="form">
           <label>最大 Burst</label><input id="perfMaxBurst" type="number" value="8" min="1" step="1">
@@ -107,9 +138,9 @@
           <label>持续区域上限 / 秒</label><input id="perfAreaTime" type="number" value="6" min=".5" step=".5">
           <label>召唤物寿命上限 / 秒</label><input id="perfSpawnExpire" type="number" value="30" min="1" step="1">
         </div>
-        <div class="notice"><b>处理方式：</b>削减 Burst / Projectiles / 过低 Reload 时，会按比例补回单发伤害，优先维持原总输出。该模块输出到 <span class="mono">tweakdefs17</span>，应最后执行。</div>
+        <div class="notice"><b>处理方式：</b>削减 Burst / Projectiles / 过低 Reload 时，会按比例补回单发伤害，优先维持原总输出。该模块输出到 <span class="mono">tweakdefs18</span>，应最后执行。</div>
         <div class="notice"><b>仍需 Gadget 的部分：</b>全局敌军总人口预算、Threat Point 波次导演、Boss 分阶段和按总人口动态升级敌人，无法只靠 tweakdefs 完整实现；这里先负责可由配置器直接生成的性能层。</div>
-        <div class="toolbar"><span class="small muted">推荐与“精英化 + 巨兽化 + 低 Squad 数量”一起使用</span><span class="grow"></span><button id="copyPerformance" class="btn primary">复制 tweakdefs17</button></div>
+        <div class="toolbar"><span class="small muted">推荐与“精英化 + 巨兽化 + 低 Squad 数量”一起使用</span><span class="grow"></span><button id="copyPerformance" class="btn primary">复制 tweakdefs18</button></div>
       </article>
 
       <article class="card">
