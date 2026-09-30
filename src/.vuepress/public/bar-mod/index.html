@@ -44,10 +44,11 @@
       <button class="btn primary" data-config-preset="balanced">低单位防线</button>
       <button class="btn" data-config-preset="elite">精英虫群</button>
       <button class="btn" data-config-preset="colossus">巨兽挑战</button>
+      <button class="btn good" data-config-preset="performance">性能重构</button>
       <button class="btn" data-config-preset="economy">虫卵经济</button>
       <button class="btn" data-config-preset="reset">清空</button>
       <span class="grow"></span>
-      <span class="small muted">模块化输出：防御 0/1/2 · Raptor 4/5 · Boss 6 · 经济 7 · 终极武器 8 · 联合科技 9 · 陆军 10/11/12 · T3 13/14/15 · Boss补位 16</span>
+      <span class="small muted">模块化输出：防御 0/1/2 · Raptor 4/5 · Boss 6 · 经济 7 · 终极武器 8 · 联合科技 9 · 陆军 10/11/12 · T3 13/14/15 · Boss补位 16 · 性能 17</span>
     </div>
 
     <div class="grid2">
@@ -92,6 +93,23 @@
           </select>
         </div>
         <div class="toolbar"><span class="small muted">ARM 长持续激光 · COR 高爆火海 · LEG 多管热能射线</span><span class="grow"></span><button id="openUltimate" class="btn small">查看参数</button></div>
+      </article>
+
+      <article class="card">
+        <div class="cardhead"><div><h3>性能重构 · 战斗事件预算</h3><p>作为独立模式的最后一道限流层：减少超高 Burst、多弹丸、0.01 秒级武器、过多链雷与 Cluster，并限制持续区域和召唤物寿命。</p></div><label class="switch"><input id="performance" type="checkbox"><span></span></label></div>
+        <div class="form">
+          <label>最大 Burst</label><input id="perfMaxBurst" type="number" value="8" min="1" step="1">
+          <label>最大 Projectiles</label><input id="perfMaxProjectiles" type="number" value="4" min="1" step="1">
+          <label>最小 Reload</label><input id="perfMinReload" type="number" value=".12" min=".01" step=".01">
+          <label>最小 BurstRate</label><input id="perfMinBurstRate" type="number" value=".03" min=".001" step=".01">
+          <label>链雷最大目标</label><input id="perfSparkMax" type="number" value="6" min="1" step="1">
+          <label>Cluster 最大子弹</label><input id="perfClusterMax" type="number" value="6" min="1" step="1">
+          <label>持续区域上限 / 秒</label><input id="perfAreaTime" type="number" value="6" min=".5" step=".5">
+          <label>召唤物寿命上限 / 秒</label><input id="perfSpawnExpire" type="number" value="30" min="1" step="1">
+        </div>
+        <div class="notice"><b>处理方式：</b>削减 Burst / Projectiles / 过低 Reload 时，会按比例补回单发伤害，优先维持原总输出。该模块输出到 <span class="mono">tweakdefs17</span>，应最后执行。</div>
+        <div class="notice"><b>仍需 Gadget 的部分：</b>全局敌军总人口预算、Threat Point 波次导演、Boss 分阶段和按总人口动态升级敌人，无法只靠 tweakdefs 完整实现；这里先负责可由配置器直接生成的性能层。</div>
+        <div class="toolbar"><span class="small muted">推荐与“精英化 + 巨兽化 + 低 Squad 数量”一起使用</span><span class="grow"></span><button id="copyPerformance" class="btn primary">复制 tweakdefs17</button></div>
       </article>
 
       <article class="card">
