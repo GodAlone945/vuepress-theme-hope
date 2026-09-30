@@ -592,7 +592,7 @@ function buildScavXPerformanceLua(s){
     profiles.push(["armvang","scavx_armvang",20,65,"artillery","special",mid,95,1200,1]);
   }
   if(s.scavxKamikaze){
-    profiles.push(["leghovertank","scavx_leghovertank",25,70,"kamikaze","special",mid,85,1000,1]);
+    profiles.push(["legehovertank","scavx_legehovertank",25,70,"kamikaze","special",mid,85,1000,1]);
   }
   if(s.scavxTitans){
     profiles.push(
