@@ -58,8 +58,8 @@ const PLAYER_DEFENSES=[
 ];
 let enabledDefenseUnits=new Set(PLAYER_DEFENSES.map(x=>x.id));
 
-const CONFIG_IDS=["playerDefense","landUnits","armLand","corLand","legLand","legSlow","t3Units","armT3","corT3","legT3","bossSupport","bossSupportStagger","bossSupportQueenBonus","ultimate","teamColorFx","teamColorMode","armUltRange","armUltDamage","armUltBeam","armUltReload","armUltAoe","corUltRange","corUltDamage","corUltReload","corUltAoe","corUltFireDps","corUltFireRange","corUltFireTime","legUltRange","legUltDamage","legUltBurst","legUltBurstRate","legUltBeam","legUltReload","legUltAoe","elite","roles","colossus","egg","intercept","boss","hp","damage","capn","roleCount","chance","roleWeight","giantHp","giantCap","eggMult","aggroDist","aggroChance","queenHp","stagger","staggerCost"];
-const BOOL_IDS=new Set(["playerDefense","landUnits","armLand","corLand","legLand","legSlow","t3Units","armT3","corT3","legT3","bossSupport","ultimate","teamColorFx","elite","roles","colossus","egg","intercept","boss"]);
+const CONFIG_IDS=["playerDefense","landUnits","armLand","corLand","legLand","legSlow","t3Units","armT3","corT3","legT3","bossSupport","bossSupportStagger","bossSupportQueenBonus","ultimate","teamColorFx","teamColorMode","armUltRange","armUltDamage","armUltBeam","armUltReload","armUltAoe","corUltRange","corUltDamage","corUltReload","corUltAoe","corUltFireDps","corUltFireRange","corUltFireTime","legUltRange","legUltDamage","legUltBurst","legUltBurstRate","legUltBeam","legUltReload","legUltAoe","performance","perfMaxBurst","perfMaxProjectiles","perfMinReload","perfMinBurstRate","perfSparkMax","perfClusterMax","perfAreaTime","perfSpawnExpire","elite","roles","colossus","egg","intercept","boss","hp","damage","capn","roleCount","chance","roleWeight","giantHp","giantCap","eggMult","aggroDist","aggroChance","queenHp","stagger","staggerCost"];
+const BOOL_IDS=new Set(["playerDefense","landUnits","armLand","corLand","legLand","legSlow","t3Units","armT3","corT3","legT3","bossSupport","ultimate","teamColorFx","performance","elite","roles","colossus","egg","intercept","boss"]);
 const TEXT_IDS=new Set(["teamColorMode"]);
 function getConfig(){
   const s={};
@@ -87,7 +87,14 @@ const BUILTIN={
   colossus:{title:"巨兽挑战",desc:"普通虫更少，中后期依靠 T4 Assault 与 Matriarch 制造压力。",tags:["巨兽","后期"],state:{playerDefense:true,landUnits:true,armLand:true,corLand:true,legLand:true,legSlow:true,t3Units:true,armT3:true,corT3:true,legT3:true,bossSupport:true,bossSupportStagger:4.5,bossSupportQueenBonus:1.25,ultimate:true,teamColorFx:true,teamColorMode:"hybrid",armUltRange:6200,armUltDamage:45000,armUltBeam:4,armUltReload:5,armUltAoe:40,corUltRange:6100,corUltDamage:6000,corUltReload:1.05,corUltAoe:260,corUltFireDps:240,corUltFireRange:200,corUltFireTime:9,legUltRange:6100,legUltDamage:2000,legUltBurst:63,legUltBurstRate:.03,legUltBeam:.15,legUltReload:14,legUltAoe:120,elite:true,roles:true,colossus:true,egg:false,intercept:false,boss:true,hp:1.5,damage:1.25,capn:10,roleCount:3,chance:.7,roleWeight:3,giantHp:4,giantCap:2,eggMult:1.25,aggroDist:1800,aggroChance:1,queenHp:1.75,stagger:3,staggerCost:5000}},
   economy:{title:"虫卵经济",desc:"启用战利品经济实验，提高 Raptor metalCost，从而影响蛋资源价值。",tags:["经济","回收"],state:{playerDefense:true,landUnits:true,armLand:true,corLand:true,legLand:true,legSlow:true,t3Units:true,armT3:true,corT3:true,legT3:true,bossSupport:true,bossSupportStagger:4.5,bossSupportQueenBonus:1.25,ultimate:true,teamColorFx:true,teamColorMode:"hybrid",armUltRange:6200,armUltDamage:45000,armUltBeam:4,armUltReload:5,armUltAoe:40,corUltRange:6100,corUltDamage:6000,corUltReload:1.05,corUltAoe:260,corUltFireDps:240,corUltFireRange:200,corUltFireTime:9,legUltRange:6100,legUltDamage:2000,legUltBurst:63,legUltBurstRate:.03,legUltBeam:.15,legUltReload:14,legUltAoe:120,elite:true,roles:true,colossus:true,egg:true,intercept:false,boss:true,hp:1.7,damage:1.3,capn:18,roleCount:4,chance:.75,roleWeight:4,giantHp:2.5,giantCap:3,eggMult:1.75,aggroDist:1800,aggroChance:1,queenHp:1.5,stagger:3,staggerCost:5000}}
 };
-function resetState(){return {playerDefense:false,defenseUnits:[],landUnits:false,armLand:false,corLand:false,legLand:false,legSlow:false,t3Units:false,armT3:false,corT3:false,legT3:false,bossSupport:false,bossSupportStagger:4.5,bossSupportQueenBonus:1.25,ultimate:false,teamColorFx:false,teamColorMode:"hybrid",armUltRange:6200,armUltDamage:45000,armUltBeam:4,armUltReload:5,armUltAoe:40,corUltRange:6100,corUltDamage:6000,corUltReload:1.05,corUltAoe:260,corUltFireDps:240,corUltFireRange:200,corUltFireTime:9,legUltRange:6100,legUltDamage:2000,legUltBurst:63,legUltBurstRate:.03,legUltBeam:.15,legUltReload:14,legUltAoe:120,elite:false,roles:false,colossus:false,egg:false,intercept:false,boss:false,hp:1,damage:1,capn:20,roleCount:4,chance:.75,roleWeight:4,giantHp:2,giantCap:4,eggMult:1,aggroDist:1800,aggroChance:1,queenHp:1,stagger:1,staggerCost:5000}}
+Object.values(BUILTIN).forEach(p=>{p.state.performance=false});
+BUILTIN.performance={
+  title:"性能重构 · 精英虫潮",
+  desc:"继承三巨龙/虫族崛起的高经济与高价值单位思路，用更少单位、更高单体价值和全局武器事件限流替代后期虫海。",
+  tags:["性能","独立模式","推荐"],
+  state:{playerDefense:true,landUnits:true,armLand:true,corLand:true,legLand:true,legSlow:true,t3Units:true,armT3:true,corT3:true,legT3:true,bossSupport:true,bossSupportStagger:5,bossSupportQueenBonus:1.35,ultimate:true,teamColorFx:true,teamColorMode:"hybrid",armUltRange:6200,armUltDamage:45000,armUltBeam:4,armUltReload:5,armUltAoe:40,corUltRange:6100,corUltDamage:9000,corUltReload:1.6,corUltAoe:250,corUltFireDps:260,corUltFireRange:190,corUltFireTime:6,legUltRange:6100,legUltDamage:14000,legUltBurst:9,legUltBurstRate:.08,legUltBeam:.18,legUltReload:14,legUltAoe:110,performance:true,perfMaxBurst:8,perfMaxProjectiles:4,perfMinReload:.12,perfMinBurstRate:.03,perfSparkMax:6,perfClusterMax:6,perfAreaTime:6,perfSpawnExpire:30,elite:true,roles:true,colossus:true,egg:true,intercept:true,boss:true,hp:2.4,damage:1.6,capn:8,roleCount:2,chance:.65,roleWeight:3,giantHp:4,giantCap:2,eggMult:1.6,aggroDist:1800,aggroChance:.9,queenHp:2.5,stagger:4,staggerCost:4500}
+};
+function resetState(){return {playerDefense:false,defenseUnits:[],landUnits:false,armLand:false,corLand:false,legLand:false,legSlow:false,t3Units:false,armT3:false,corT3:false,legT3:false,bossSupport:false,bossSupportStagger:4.5,bossSupportQueenBonus:1.25,ultimate:false,teamColorFx:false,teamColorMode:"hybrid",armUltRange:6200,armUltDamage:45000,armUltBeam:4,armUltReload:5,armUltAoe:40,corUltRange:6100,corUltDamage:6000,corUltReload:1.05,corUltAoe:260,corUltFireDps:240,corUltFireRange:200,corUltFireTime:9,legUltRange:6100,legUltDamage:2000,legUltBurst:63,legUltBurstRate:.03,legUltBeam:.15,legUltReload:14,legUltAoe:120,performance:false,perfMaxBurst:8,perfMaxProjectiles:4,perfMinReload:.12,perfMinBurstRate:.03,perfSparkMax:6,perfClusterMax:6,perfAreaTime:6,perfSpawnExpire:30,elite:false,roles:false,colossus:false,egg:false,intercept:false,boss:false,hp:1,damage:1,capn:20,roleCount:4,chance:.75,roleWeight:4,giantHp:2,giantCap:4,eggMult:1,aggroDist:1800,aggroChance:1,queenHp:1,stagger:1,staggerCost:5000}}
 
 function squadLine(name,minA,maxA,behavior,rarity,count,weight,distance,chance){
   return '  setRaptorSquad("'+name+'",'+minA+','+maxA+',"'+behavior+'","'+rarity+'",'+count+','+weight+','+distance+','+chance+')\n';
@@ -380,6 +387,34 @@ function buildUltimateLua(s){
   return wrapModule(p.join(""));
 }
 
+function buildPerformanceLua(s){
+  if(!s.performance)return "";
+  const maxBurst=Math.max(1,Math.round(s.perfMaxBurst||8));
+  const maxProjectiles=Math.max(1,Math.round(s.perfMaxProjectiles||4));
+  const minReload=Math.max(.01,Number(s.perfMinReload)||.12);
+  const minBurstRate=Math.max(.001,Number(s.perfMinBurstRate)||.03);
+  const sparkMax=Math.max(1,Math.round(s.perfSparkMax||6));
+  const clusterMax=Math.max(1,Math.round(s.perfClusterMax||6));
+  const areaTime=Math.max(.5,Number(s.perfAreaTime)||6);
+  const spawnExpire=Math.max(1,Number(s.perfSpawnExpire)||30);
+  const p=[];
+  p.push('  local maxBurst='+maxBurst+' local maxProjectiles='+maxProjectiles+' local minReload='+minReload+' local minBurstRate='+minBurstRate+' local sparkMax='+sparkMax+' local clusterMax='+clusterMax+' local areaTime='+areaTime+' local spawnExpire='+spawnExpire+'\n');
+  p.push('  local function scaleDamage(w,m) if not w.damage or m==1 then return end for k,v in pairs(w.damage) do if type(v)=="number" then w.damage[k]=v*m end end end\n');
+  p.push('  local function clampParam(q,key,limit) local v=q and tonumber(q[key]) if v and v>limit then q[key]=tostring(limit) end end\n');
+  p.push('  for _,ud in pairs(UnitDefs) do\n');
+  p.push('    for _,wd in pairs(ud.weapondefs or {}) do\n');
+  p.push('      local mult=1\n');
+  p.push('      if type(wd.burst)=="number" and wd.burst>maxBurst then mult=mult*(wd.burst/maxBurst) wd.burst=maxBurst end\n');
+  p.push('      if type(wd.projectiles)=="number" and wd.projectiles>maxProjectiles then mult=mult*(wd.projectiles/maxProjectiles) wd.projectiles=maxProjectiles end\n');
+  p.push('      if type(wd.reloadtime)=="number" and wd.reloadtime>0 and wd.reloadtime<minReload then mult=mult*(minReload/wd.reloadtime) wd.reloadtime=minReload end\n');
+  p.push('      if type(wd.burstrate)=="number" and wd.burstrate>0 and wd.burstrate<minBurstRate then wd.burstrate=minBurstRate end\n');
+  p.push('      scaleDamage(wd,mult)\n');
+  p.push('      local q=wd.customparams if q then clampParam(q,"spark_maxunits",sparkMax) clampParam(q,"cluster_number",clusterMax) clampParam(q,"area_onhit_time",areaTime) clampParam(q,"area_ondeath_time",areaTime) clampParam(q,"spawns_expire",spawnExpire) end\n');
+  p.push('    end\n');
+  p.push('  end\n');
+  return wrapModule(p.join(""));
+}
+
 function buildConfigModules(){
   const s=getConfig(),mods=[];
   const push=(slot,title,lua,type="tweakdefs")=>{if(lua&&lua.trim())mods.push({slot,title,lua,type,key:type+(slot===0?"":slot)})};
@@ -400,6 +435,7 @@ function buildConfigModules(){
   push(14,"COR T3 · 移动要塞",buildCorT3Lua(s));
   push(15,"LEG T3 · 持续压制",buildLegT3Lua(s));
   push(16,"公共 Boss 补位 · Scavenger",buildBossSupportLua(s));
+  push(17,"性能重构 · 战斗事件预算",buildPerformanceLua(s));
   return mods;
 }
 function renderConfig(){
@@ -448,6 +484,7 @@ $("copyArmT3")?.addEventListener("click",()=>{const lua=buildArmT3Lua(getConfig(
 $("copyCorT3")?.addEventListener("click",()=>{const lua=buildCorT3Lua(getConfig());copyText(lua?"!bset tweakdefs14 "+encode64(lua):"-- COR T3 模块未启用",$("copyCorT3"))});
 $("copyLegT3")?.addEventListener("click",()=>{const lua=buildLegT3Lua(getConfig());copyText(lua?"!bset tweakdefs15 "+encode64(lua):"-- LEG T3 模块未启用",$("copyLegT3"))});
 $("copyBossSupport")?.addEventListener("click",()=>{const lua=buildBossSupportLua(getConfig());copyText(lua?"!bset tweakdefs16 "+encode64(lua):"-- Boss 补位模块未启用",$("copyBossSupport"))});
+$("copyPerformance")?.addEventListener("click",()=>{const lua=buildPerformanceLua(getConfig());copyText(lua?"!bset tweakdefs17 "+encode64(lua):"-- 性能重构模块未启用",$("copyPerformance"))});
 $("copyArmLand")?.addEventListener("click",()=>{const lua=buildArmLandLua(getConfig());copyText(lua?"!bset tweakdefs10 "+encode64(lua):"-- ARM 地面兵种模块未启用",$("copyArmLand"))});
 $("copyCorLand")?.addEventListener("click",()=>{const lua=buildCorLandLua(getConfig());copyText(lua?"!bset tweakdefs11 "+encode64(lua):"-- COR 地面兵种模块未启用",$("copyCorLand"))});
 $("copyLegLand")?.addEventListener("click",()=>{const lua=buildLegLandLua(getConfig());copyText(lua?"!bset tweakdefs12 "+encode64(lua):"-- LEG 地面兵种模块未启用",$("copyLegLand"))});
