@@ -21,19 +21,19 @@ a{color:#8cc7ff}a:hover{color:white}.wrap{max-width:1130px;margin:auto;padding:0
 <body>
 <header class="top"><div class="wrap"><a class="logo" href="/"><span class="brand">⌘</span> Beyond All Reason · 模组指令库</a><nav class="links"><a href="/guide/bar/">BAR 专区</a><a href="/">返回主页</a></nav></div></header>
 <main class="wrap">
-<section class="hero"><div class="eyebrow">Original mod presets · BAR</div><h1>只保留 <em>两个原始模组</em></h1><p class="lead">巴卡妮三巨龙（2026.10.9）与虫族崛起（2026.7.4）。直接使用上传的原始房间命令，不混入旧版低人口重构、融合方案或实验性改数值配置。</p><div class="metadata"><span class="pill">完整保留原始指令</span><span class="pill">一键复制</span><span class="pill">女王血量互斥切换</span><span class="pill">武器穿盾分析</span></div>
+<section class="hero"><div class="eyebrow">Original mod presets · BAR</div><h1>只保留 <em>两个原始模组</em></h1><p class="lead">巴卡妮三巨龙（2026.10.25）与虫族崛起（2026.7.4）。直接使用上传的原始房间命令，不混入旧版低人口重构、融合方案或实验性改数值配置。</p><div class="metadata"><span class="pill">完整保留原始指令</span><span class="pill">一键复制</span><span class="pill">女王血量互斥切换</span><span class="pill">武器穿盾分析</span></div>
 <div class="notice"><strong>使用提醒：</strong>这两份文本提供的是房间 <code>!bset</code> 命令，并非客户端安装包。不同游戏版本/战斗 Preset 对 <code>tweakunits</code>、<code>tweakdefs</code> 槽位的支持可能不同。以下分析基于静态配置，不代表已经完成游戏内实战验证。</div>
 </section>
 <section aria-label="选择模组"><div class="sectionhead"><h2>01 / 两个模组</h2><p>选择版本后查看玩法说明、复制完整命令或单独复制某个配置段。</p></div>
 <div class="switch" role="tablist" aria-label="模组版本">
-<button type="button" class="tab active" data-mod="bakani" role="tab" aria-selected="true">⚡ 巴卡妮三巨龙 · 10.9</button>
+<button type="button" class="tab active" data-mod="bakani" role="tab" aria-selected="true">⚡ 巴卡妮三巨龙 · 10.25</button>
 <button type="button" class="tab" data-mod="rise" role="tab" aria-selected="false">🦖 虫族崛起 · 7.4</button></div>
 <div id="bakani" class="modpanel active" role="tabpanel">
 <div class="grid">
 <article class="card"><h3>巴卡妮三巨龙</h3><p>原作者：<strong>Hz996</strong>。面向高强度 Raptor 女王挑战，扩展 ARM / COR / LEG 阵营科技、改进防空与重型火力、超级单位、三巨龙等。原作者注明「个人为爱发电，禁止售卖」。</p>
 <div class="stat"><div><strong>10</strong><small>tweakunits 模块</small></div><div><strong>1</strong><small>tweakdefs 规则模块</small></div><div><strong>5 选 1</strong><small>女王血量方案</small></div></div>
 <div class="formrow"><label for="boss-choice">女王血量（仅加载一个 tweakdefs1）</label><select class="field" id="boss-choice"><option>正在读取原始配置…</option></select><p class="tip">原始文件含 5 条同名 tweakdefs1，不能五条全部执行；默认优先 560 万版本。</p></div>
-<div class="actions"><button class="btn primary" id="bakani-all" disabled>复制当前完整命令</button><a class="btn" href="./mods/bakani-2026-10-09.txt" download="巴卡妮三巨龙模组2026.10.9.txt">下载原始 TXT</a></div>
+<div class="actions"><button class="btn primary" id="bakani-all" disabled>复制当前完整命令</button><a class="btn" href="./mods/bakani-2026-10-25.txt" download="巴卡妮三巨龙模组2026.10.25.txt">下载原始 TXT</a></div>
 </article><aside class="card"><h3>原文建议的单人房设置</h3><ul class="explain"><li>挑战 20 个女王，普通小虫血量 ×2。</li><li>虫潮数量 ×3、波量 ×3，第一波 ×5。</li><li>准备时间 ×3；女王时间 1.2。</li><li>原文建议适度增强指挥官、小飞机与纳米建造能力。</li><li>默认护盾倍率 1 倍，并执行“盾全弹”命令。</li><li>组队模式可按人数、熟练度调整女王血量和建造力。</li></ul></aside></div>
 <div class="sectionhead"><h2>巴卡妮命令模块</h2><p>每条命令独立复制；完整复制时使用当前所选女王血量配置。</p></div>
 <div class="card"><div id="bakani-commands" aria-live="polite">正在读取原始文件…</div></div>
@@ -66,7 +66,7 @@ a{color:#8cc7ff}a:hover{color:white}.wrap{max-width:1130px;margin:auto;padding:0
 (function(){
 "use strict";
 var configs={
- bakani:{url:"./mods/bakani-2026-10-09.txt",loaded:false,commands:[],shield:""},
+ bakani:{url:"./mods/bakani-2026-10-25.txt",loaded:false,commands:[],shield:""},
  rise:{url:"./mods/rise-2026-07-04.txt",loaded:false,commands:[],shield:""}
 };
 var toastTimer;
