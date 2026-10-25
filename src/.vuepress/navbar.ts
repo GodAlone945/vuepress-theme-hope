@@ -18,8 +18,8 @@ export default navbar([
     children: [
       { text: "BAR 首页", icon: "house", link: "" },
       {
-        text: "PVE 配置器",
-        icon: "sliders",
+        text: "巴卡妮 / 虫族崛起",
+        icon: "gamepad",
         link: "https://godalone945.github.io/bar-mod/",
       },
       {
